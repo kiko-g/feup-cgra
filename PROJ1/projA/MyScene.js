@@ -83,7 +83,7 @@ class MyScene extends CGFscene
         this.setDefaultAppearance();
         
         // ---- BEGIN Primitive drawing section =====================================================================================
-
+        
         this.treeGroupPatch.display();        
         
         // ---- END Primitive drawing section =======================================================================================

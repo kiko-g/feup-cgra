@@ -55,15 +55,13 @@ class MyTree extends CGFobject
     {
         var q = 0.15*this.trunkHeight;       // Helpful variables
 
-        this.scene.pushMatrix();
+        this.scene.pushMatrix();    //PUSH IT
         this.M1.apply();
         this.cilinder.display();    //DISPLAY CILINDER
         this.scene.translate(0, this.trunkHeight - q, 0);
         this.M2.apply();
         this.cone.display();        //DISPLAY CONE
-        
-        this.scene.popMatrix();
-        this.scene.pushMatrix();
+        this.scene.popMatrix();     //POP IT
     }
     enableNormalViz()
     {
