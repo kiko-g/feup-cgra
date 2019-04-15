@@ -40,9 +40,6 @@ class MyUnitCubeQuad extends CGFobject
     
     display()
     {
-        var n1 = Math.cos((Math.PI) / 4);
-        var n2 = Math.sin((Math.PI) / 4);
-        var n3 = Math.sqrt(2)/2;
         var n4 = (Math.PI/2);      
         
         this.scene.pushMatrix();

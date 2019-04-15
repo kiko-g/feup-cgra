@@ -17,7 +17,7 @@ class MyPrism extends CGFobject
         this.vertices   = [];
         this.indices    = [];
         this.normals    = [];
-        this.texCoords = [];
+        this.texCoords  = [];
         
         var ang = 0;
         var theta = 2 * Math.PI / this.slices;

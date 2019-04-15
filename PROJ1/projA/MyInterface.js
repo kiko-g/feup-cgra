@@ -13,13 +13,15 @@ class MyInterface extends CGFinterface
     {
         // call CGFinterface init
         super.init(application);
+        this.gui = new dat.GUI();
+        var obj = this;
         // init GUI. For more information on the methods, check:
         // http://workshop.chromeexperiments.com/examples/gui
         
-        this.gui = new dat.GUI();
-        //this.gui.add(this.scene, 'faceNr', 3, 400, 1).name('Number of Faces').onChange();
-        
-        var obj = this;
+        //Checkbox element in GUI
+        this.gui.add(this.scene, 'nearest').name('Activate Nearest');
+
+
 
         return true;
     }
