@@ -5,18 +5,20 @@
  */
 class MyTreeGroupPatch extends CGFobject
 {
-    constructor(scene, trunkHeight, trunkRadius, treeTopHeight, treeTopRadius)
+    constructor(scene, trunkHeight, trunkRadius, treeTopHeight, treeTopRadius, trunkTexture, treeTopTexture)
     {
         super(scene);
+        this.tree = new MyTree(scene, trunkHeight, trunkRadius, treeTopHeight, treeTopRadius, trunkTexture, treeTopTexture);
 
-        this.cone = new MyCone(scene, 10, treeTopHeight, treeTopRadius);
-        this.cilinder = new MyCilinder(scene, 10, trunkHeight, trunkRadius);
-        this.trunkHeight = trunkHeight;
-        //this.trunkTexture = trunkTexture;
-        //this.treeTopTexture = treeTopTexture;
+        this.init();
     }
 
-    initBuffers() {
+    init()
+    {
+    }
+
+    initBuffers()
+    {
         this.vertices = [];
         this.indices = [];
         this.normals = [];
@@ -25,18 +27,17 @@ class MyTreeGroupPatch extends CGFobject
         this.primitiveType = this.scene.gl.TRIANGLES;
         this.initGLBuffers();
     }
-    display() {
-        var q = 0.1 * this.trunkHeight       // Helpful variables
 
+    display()
+    {
         this.scene.pushMatrix();
-        // aplicar material tronco
-        this.cilinder.display();
+        
 
-        // aplicar material treetop
-        this.scene.translate(0, this.trunkHeight - q, 0);
-        this.cone.display();
-
-        this.scene.popMatrix();
-        this.scene.pushMatrix();
+    }
+    
+    enableNormalViz()
+    {
+        this.cone.enableNormalViz();
+        this.cilinder.enableNormalViz();
     }
 }

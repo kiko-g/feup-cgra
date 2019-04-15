@@ -20,10 +20,10 @@ class MyScene extends CGFscene
         this.gl.enable(this.gl.CULL_FACE);
         this.gl.depthFunc(this.gl.LEQUAL);
         this.enableTextures(true);
-        
+
         //Initialize scene objects
         this.axis = new CGFaxis(this);
-        this.tree = new MyTree(this, 2, 0.4, 1.5, 0.8, 'images/wood.jpg', 'images/leaves.jpg');
+        this.treeGroupPatch = new MyTreeGroupPatch(this, 2, 0.4, 1.5, 0.8, 'images/wood.jpg', 'images/leaves.jpg');
 
         // Objects connected to MyInterface
         this.selectedObject = 3;
@@ -84,7 +84,7 @@ class MyScene extends CGFscene
         
         // ---- BEGIN Primitive drawing section =====================================================================================
 
-        this.tree.display();        
+        this.treeGroupPatch.display();        
         
         // ---- END Primitive drawing section =======================================================================================
 
