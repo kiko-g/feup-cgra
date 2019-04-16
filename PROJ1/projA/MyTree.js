@@ -24,17 +24,17 @@ class MyTree extends CGFobject
     init()
     {
         this.M1 = new CGFappearance(this.scene);
-        this.M1.setAmbient(0.4, 0.3, 0.2, 1);
-        this.M1.setSpecular(0.2, 0.4, 0.5, 1);
-        this.M1.setSpecular(0.1, 0.1, 0.1, 1);
+        this.M1.setAmbient(1, 1, 1, 1);
+        this.M1.setDiffuse(1, 1, 1, 1);
+        this.M1.setSpecular(1, 1, 1, 1);
         this.M1.setShininess(10);
         this.M1.loadTexture(this.trunkTexture);
         this.M1.setTextureWrap('REPEAT', 'REPEAT');
 
         this.M2 = new CGFappearance(this.scene);
-        this.M2.setAmbient(0.4, 0.3, 0.2, 1);
-        this.M2.setSpecular(0.2, 0.4, 0.5, 1);
-        this.M2.setSpecular(0.1, 0.1, 0.1, 1);
+        this.M2.setAmbient(1, 1, 1, 1);
+        this.M2.setDiffuse(1, 1, 1, 1);
+        this.M2.setSpecular(1, 1, 1, 1);
         this.M2.setShininess(10);
         this.M2.loadTexture(this.treeTopTexture);
         this.M2.setTextureWrap('REPEAT', 'REPEAT');

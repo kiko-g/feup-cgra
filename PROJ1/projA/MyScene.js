@@ -21,11 +21,6 @@ class MyScene extends CGFscene
         this.gl.depthFunc(this.gl.LEQUAL);
         this.enableTextures(true);
 
-        //Initialize scene objects
-        this.axis = new CGFaxis(this);
-        this.treeRowPatch = new MyTreeRowPatch(this, 2, 0.4, 1.5, 0.8, 'images/wood.jpg', 'images/leaves.jpg');
-        this.cube = new MyUnitCubeQuad(this, 'images/moussa.jpg');
-
         // Objects connected to MyInterface
         this.selectedObject = 3;
         this.selectedMaterial = 3;
@@ -33,6 +28,11 @@ class MyScene extends CGFscene
         this.displayNormals = true;
         this.nearest = true;
         this.objectComplexity = 0.5;
+
+        //Initialize scene objects
+        this.axis = new CGFaxis(this);
+        this.house = new MyHouse(this, 'images/oak.jpg', 'images/birch.jpg', 'images/door.png', 'images/window.jpg');
+
     }
 
     initLights()
@@ -70,7 +70,7 @@ class MyScene extends CGFscene
         
         // ---- BEGIN Primitive drawing section =====================================================================================
 
-        this.cube.display();
+        this.house.display();
         
         // ---- END Primitive drawing section =======================================================================================
 

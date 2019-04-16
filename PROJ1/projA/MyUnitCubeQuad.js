@@ -32,10 +32,10 @@ class MyUnitCubeQuad extends CGFobject
     init()
     {
         this.T = new CGFappearance(this.scene);
-        this.T.setAmbient(0.4, 0.3, 0.2, 1);
-        this.T.setSpecular(0.2, 0.4, 0.5, 1);
-        this.T.setSpecular(0.1, 0.1, 0.1, 1);
-        this.T.setShininess(10);
+        this.T.setAmbient(1, 1, 1, 1);
+        this.T.setDiffuse(1, 1, 1, 1);
+        this.T.setSpecular(1, 1, 1, 1);
+        this.T.setShininess(20);
         this.T.loadTexture(this.tex);
         this.T.setTextureWrap('REPEAT', 'REPEAT');
     }

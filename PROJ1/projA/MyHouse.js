@@ -5,22 +5,44 @@
  */
 class MyHouse extends CGFobject
 {
-    constructor(scene, trunkHeight, trunkRadius, treeTopHeight, treeTopRadius, trunkTexture, treeTopTexture)
+    constructor(scene, mainT, topT, doorT, windowT)
     {
         super(scene);
-        this.cube = new MyUnitCubeQuad()
-        this.TTR = treeTopRadius;
-        this.treeRandT = []; this.treeRandS = [];
-        for(var k=0; k<9; k++)
-        {
-            this.treeRandT.push(Math.random() * 0.3 + 1);      // MAX 1.3, MIN 1
-            this.treeRandS.push(Math.random() * 0.4 + 0.8);    // MAX 1.2, MIN 0.8
-        }
+        this.cube = new MyUnitCubeQuad(scene, mainT);
+        this.pyramid = new MyPyramid(scene, 4, 1);
+        this.prism = new MyPrism(scene, 6, 1);
+        this.door = new MyQuad(scene);
+        this.pyramidTex = topT;
+        this.doorTex = doorT;
+        this.windowTex = windowT;
         this.init();
     }
 
     init()
     {
+        this.pyramidtex = new CGFappearance(this.scene);
+        this.pyramidtex.setAmbient(1, 1, 1, 1);
+        this.pyramidtex.setDiffuse(1, 1, 1, 1);
+        this.pyramidtex.setSpecular(1, 1, 1, 1);
+        this.pyramidtex.setShininess(20);
+        this.pyramidtex.loadTexture(this.pyramidTex);
+        this.pyramidtex.setTextureWrap('REPEAT', 'REPEAT');
+
+        this.doortex = new CGFappearance(this.scene);
+        this.doortex.setAmbient(1, 1, 1, 1);
+        this.doortex.setDiffuse(1, 1, 1, 1);
+        this.doortex.setSpecular(1, 1, 1, 1);
+        this.doortex.setShininess(20);
+        this.doortex.loadTexture(this.doorTex);
+        this.doortex.setTextureWrap('REPEAT', 'REPEAT');
+
+        this.windowtex = new CGFappearance(this.scene);
+        this.windowtex.setAmbient(1, 1, 1, 1);
+        this.windowtex.setDiffuse(1, 1, 1, 1);
+        this.windowtex.setSpecular(1, 1, 1, 1);
+        this.windowtex.setShininess(20);
+        this.windowtex.loadTexture(this.windowTex);
+        this.windowtex.setTextureWrap('REPEAT', 'REPEAT');   
     }
 
     initBuffers()
@@ -29,7 +51,6 @@ class MyHouse extends CGFobject
         this.indices = [];
         this.normals = [];
         this.texCoords = [];
-        this.trees = [];
 
         this.primitiveType = this.scene.gl.TRIANGLES;
         this.initGLBuffers();
@@ -37,22 +58,38 @@ class MyHouse extends CGFobject
 
     display()
     {
-        var help1=0;
+        var DTR = Math.PI/180;
+        var n1 = Math.sqrt(2) / 2;
         this.scene.pushMatrix();
-        for(var j=0; j<3; j++)
-        {
-            for(var i=0; i<3; i++)
-            {
-                this.scene.translate(1, 0, 1);
-                this.scene.translate(this.treeRandT[help1] * i * this.TTR*2, 0, this.treeRandT[help1] * j * this.TTR*2);
-                this.scene.scale(this.treeRandS[help1], this.treeRandS[help1], this.treeRandS[help1]);
-                this.tree.display();
-                this.scene.popMatrix();
-                this.scene.pushMatrix();
-                help1++;
+        this.scene.scale(6, 6, 6);                 //BASE
+        this.cube.display();
 
-            }
-        }
+        this.scene.popMatrix();
+        this.scene.pushMatrix();
+
+        this.scene.translate(4.5, 2, 6.01);        //DOOR
+        this.scene.scale(2, 4, 2);
+        this.doortex.apply();
+        this.door.display();
+
+        this.scene.popMatrix();
+        this.scene.pushMatrix();
+
+        this.scene.translate(1.5, 3, 6.01);        //WINDOW
+        this.scene.scale(1.7, 2, 1.7);
+        this.windowtex.apply();
+        this.door.display();
+
+        this.scene.popMatrix();
+        this.scene.pushMatrix();
+
+        this.scene.translate(3, 5.8, 3);           //TOP
+        this.scene.scale(5.5, 4.5, 5.5);
+        this.scene.rotate(45*DTR, 0, 1, 0);
+        this.pyramidtex.apply();
+        this.pyramid.display();
+        
+        this.scene.popMatrix();
     }
     
     enableNormalViz()
