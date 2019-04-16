@@ -46,8 +46,8 @@ class MyUnitCubeQuad extends CGFobject
 
         this.scene.scale(1, 1, 1);
         this.scene.translate(0.5, 0.5, 0);
-        if (!this.scene.displayQuadMaterial) this.scene.sideMine.apply();
-        if (this.scene.nearest) this.scene.gl.texParameteri(this.scene.gl.TEXTURE_2D, this.scene.gl.TEXTURE_MAG_FILTER, this.scene.gl.NEAREST);
+        this.scene.sideMine.apply();
+        if(this.scene.nearest) this.scene.gl.texParameteri(this.scene.gl.TEXTURE_2D, this.scene.gl.TEXTURE_MAG_FILTER, this.scene.gl.NEAREST);
         else this.scene.gl.texParameteri(this.scene.gl.TEXTURE_2D, this.scene.gl.TEXTURE_MAG_FILTER, this.scene.gl.LINEAR);
         this.quad.display();
         
@@ -87,7 +87,7 @@ class MyUnitCubeQuad extends CGFobject
         this.scene.translate(0.5, 0, 0.5);
         this.scene.rotate(-n4, 1, 0, 0);
         if(!this.scene.displayQuadMaterial) this.scene.bottomMine.apply();
-        if (this.scene.nearest) this.scene.gl.texParameteri(this.scene.gl.TEXTURE_2D, this.scene.gl.TEXTURE_MAG_FILTER, this.scene.gl.NEAREST);
+        if(this.scene.nearest) this.scene.gl.texParameteri(this.scene.gl.TEXTURE_2D, this.scene.gl.TEXTURE_MAG_FILTER, this.scene.gl.NEAREST);
         else this.scene.gl.texParameteri(this.scene.gl.TEXTURE_2D, this.scene.gl.TEXTURE_MAG_FILTER, this.scene.gl.LINEAR);
         this.quad.display();
     }

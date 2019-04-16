@@ -26,12 +26,13 @@ class MyScene extends CGFscene
         this.selectedMaterial = 3;
         this.displayAxis = true;
         this.displayNormals = true;
-        this.nearest = true;
         this.objectComplexity = 0.5;
+        this.nearestVoxel = true;
 
         //Initialize scene objects
         this.axis = new CGFaxis(this);
         this.house = new MyHouse(this, 'images/oak.jpg', 'images/birch.jpg', 'images/door.png', 'images/window.jpg');
+        this.vh = new MyVoxelHill(this, 'images/mineSide.png', 'images/mineBottom.png', 'images/mineTop.png' );
 
     }
 
@@ -70,11 +71,8 @@ class MyScene extends CGFscene
         
         // ---- BEGIN Primitive drawing section =====================================================================================
 
-        this.house.display();
+        this.vh.display();
         
         // ---- END Primitive drawing section =======================================================================================
-
-        if (this.nearest) this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MAG_FILTER, this.gl.NEAREST);
-        else this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MAG_FILTER, this.gl.LINEAR);
     }
 }

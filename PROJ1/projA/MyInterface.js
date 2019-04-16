@@ -19,7 +19,7 @@ class MyInterface extends CGFinterface
         // http://workshop.chromeexperiments.com/examples/gui
         
         //Checkbox element in GUI
-        this.gui.add(this.scene, 'nearest').name('Activate Nearest');
+        this.gui.add(this.scene, 'nearestVoxel').name('Nearest for Voxel');
 
 
 

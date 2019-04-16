@@ -8,7 +8,7 @@ class MyHouse extends CGFobject
     constructor(scene, mainT, topT, doorT, windowT)
     {
         super(scene);
-        this.cube = new MyUnitCubeQuad(scene, mainT);
+        this.cube = new MyUnitCubeQuad(scene, mainT, mainT, mainT);
         this.pyramid = new MyPyramid(scene, 4, 1);
         this.prism = new MyPrism(scene, 6, 1);
         this.door = new MyQuad(scene);
