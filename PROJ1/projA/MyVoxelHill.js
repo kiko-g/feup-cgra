@@ -5,13 +5,14 @@
  */
 class MyVoxelHill extends CGFobject
 {
-    constructor(scene, side, bottom, top)
+    constructor(scene, side, bottom, top, N)
     {
         super(scene);
         this.cube = new MyUnitCubeQuad(scene, side, bottom, top);
         this.sideTex = side;
         this.bottomTex = bottom;
         this.topTex = top;
+        this.levels = N;
         this.init();
     }
 
@@ -55,10 +56,28 @@ class MyVoxelHill extends CGFobject
 
     display()
     {
-        var DTR = Math.PI/180;
-        this.scene.pushMatrix();
-        this.cube.display();
-        //this.scene.popMatrix();
+        var L = this.levels;
+        var NL = 0;  //Number of pieces per line
+        
+        for(var i=L; i>0; i--)
+        {
+            this.scene.pushMatrix();
+            NL = (2*i - 1);
+            this.scene.translate(L-i, L-i, L-i); //Start point for each layer
+            for(var j=0; j < NL; j++)
+            {
+                this.scene.pushMatrix();
+                for(var k=0; k < NL; k++)
+                {
+                    this.scene.pushMatrix();
+                    this.scene.translate(j, 0, k);
+                    this.cube.display();
+                    this.scene.popMatrix();
+                }
+                this.scene.popMatrix();
+            }
+            this.scene.popMatrix();
+        }
     }
     
     enableNormalViz()

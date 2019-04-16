@@ -32,7 +32,7 @@ class MyScene extends CGFscene
         //Initialize scene objects
         this.axis = new CGFaxis(this);
         this.house = new MyHouse(this, 'images/oak.jpg', 'images/birch.jpg', 'images/door.png', 'images/window.jpg');
-        this.vh = new MyVoxelHill(this, 'images/mineSide.png', 'images/mineBottom.png', 'images/mineTop.png' );
+        this.vh = new MyVoxelHill(this, 'images/mineSide.png', 'images/mineBottom.png', 'images/mineTop.png', 5);
 
     }
 
