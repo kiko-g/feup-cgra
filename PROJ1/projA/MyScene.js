@@ -23,7 +23,7 @@ class MyScene extends CGFscene
 
         //Initialize scene objects
         this.axis = new CGFaxis(this);
-        this.treeGroupPatch = new MyTreeGroupPatch(this, 2, 0.4, 1.5, 0.8, 'images/wood.jpg', 'images/leaves.jpg');
+        this.treeRowPatch = new MyTreeRowPatch(this, 2, 0.4, 1.5, 0.8, 'images/wood.jpg', 'images/leaves.jpg');
 
         // Objects connected to MyInterface
         this.selectedObject = 3;
@@ -59,7 +59,7 @@ class MyScene extends CGFscene
 
     initCameras()
     {
-        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
+        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 25, 15), vec3.fromValues(0, 0, 0));
     }
 
     setDefaultAppearance() //Pinkish appearance
@@ -83,8 +83,8 @@ class MyScene extends CGFscene
         this.setDefaultAppearance();
         
         // ---- BEGIN Primitive drawing section =====================================================================================
-        
-        this.treeGroupPatch.display();        
+
+        this.treeRowPatch.display();        
         
         // ---- END Primitive drawing section =======================================================================================
 
