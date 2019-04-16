@@ -58,6 +58,7 @@ class MyTreeRowPatch extends CGFobject
             this.scene.pushMatrix();
             help1++;
         }
+        this.scene.popMatrix();
     }
     
     enableNormalViz()

@@ -20,18 +20,32 @@
 var c = 0.5;
 class MyUnitCubeQuad extends CGFobject
 {
-    constructor(scene)
+    constructor(scene, SideTex)
     {
         super(scene);
-        this.initBuffers();
 
         this.quad = new MyQuad(scene);
+        this.tex = SideTex;
+        this.init();
     }
+
+    init()
+    {
+        this.T = new CGFappearance(this.scene);
+        this.T.setAmbient(0.4, 0.3, 0.2, 1);
+        this.T.setSpecular(0.2, 0.4, 0.5, 1);
+        this.T.setSpecular(0.1, 0.1, 0.1, 1);
+        this.T.setShininess(10);
+        this.T.loadTexture(this.tex);
+        this.T.setTextureWrap('REPEAT', 'REPEAT');
+    }
+
     initBuffers()
     {
         this.vertices = [];
         this.indices = [];
         this.normals = [];
+        this.texCoords = [];
 
         this.primitiveType = this.scene.gl.TRIANGLES;
         this.initGLBuffers();
@@ -40,18 +54,12 @@ class MyUnitCubeQuad extends CGFobject
     
     display()
     {
-        var n1 = Math.cos((Math.PI) / 4);
-        var n2 = Math.sin((Math.PI) / 4);
-        var n3 = Math.sqrt(2)/2;
-        var n4 = (Math.PI/2);      
+        var DTR = Math.PI/180; // DEG TO RAD
         
         this.scene.pushMatrix();
-
-        this.scene.scale(1, 1, 1);
+        this.T.apply();
         this.scene.translate(0.5, 0.5, 0);
-        if (!this.scene.displayQuadMaterial) this.scene.sideMine.apply();
-        if (this.scene.nearest) this.scene.gl.texParameteri(this.scene.gl.TEXTURE_2D, this.scene.gl.TEXTURE_MAG_FILTER, this.scene.gl.NEAREST);
-        else this.scene.gl.texParameteri(this.scene.gl.TEXTURE_2D, this.scene.gl.TEXTURE_MAG_FILTER, this.scene.gl.LINEAR);
+        this.scene.scale(1, 1, 1);
         this.quad.display();
         
         this.scene.popMatrix();
@@ -64,34 +72,34 @@ class MyUnitCubeQuad extends CGFobject
         this.scene.pushMatrix();
 
         this.scene.translate(0, 0.5, 0.5);
-        this.scene.rotate(n4, 0, 1, 0);
+        this.scene.rotate(90 * DTR, 0, 1, 0);
         this.quad.display();
 
         this.scene.popMatrix();
         this.scene.pushMatrix();
 
         this.scene.translate(1, 0.5, 0.5);
-        this.scene.rotate(n4, 0, 1, 0);
+        this.scene.rotate(90 * DTR, 0, 1, 0);
         this.quad.display();
 
         this.scene.popMatrix();
         this.scene.pushMatrix();
 
         this.scene.translate(0.5, 1, 0.5);
-        this.scene.rotate(-n4, 1, 0, 0);
-        if(!this.scene.displayQuadMaterial) this.scene.topMine.apply();
-        if (this.scene.nearest) this.scene.gl.texParameteri(this.scene.gl.TEXTURE_2D, this.scene.gl.TEXTURE_MAG_FILTER, this.scene.gl.NEAREST);
-        else this.scene.gl.texParameteri(this.scene.gl.TEXTURE_2D, this.scene.gl.TEXTURE_MAG_FILTER, this.scene.gl.LINEAR);
+        this.scene.rotate(-90 * DTR, 1, 0, 0);
         this.quad.display();
 
         this.scene.popMatrix();
         this.scene.pushMatrix();
 
         this.scene.translate(0.5, 0, 0.5);
-        this.scene.rotate(-n4, 1, 0, 0);
-        if(!this.scene.displayQuadMaterial) this.scene.bottomMine.apply();
-        if (this.scene.nearest) this.scene.gl.texParameteri(this.scene.gl.TEXTURE_2D, this.scene.gl.TEXTURE_MAG_FILTER, this.scene.gl.NEAREST);
-        else this.scene.gl.texParameteri(this.scene.gl.TEXTURE_2D, this.scene.gl.TEXTURE_MAG_FILTER, this.scene.gl.LINEAR);
+        this.scene.rotate(-90 * DTR, 1, 0, 0);
         this.quad.display();
+        this.scene.popMatrix();
+    }
+
+    enableNormalViz()
+    {
+        this.quad.enableNormalViz();
     }
 }

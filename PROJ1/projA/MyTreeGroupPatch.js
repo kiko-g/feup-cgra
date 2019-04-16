@@ -50,9 +50,9 @@ class MyTreeGroupPatch extends CGFobject
                 this.scene.popMatrix();
                 this.scene.pushMatrix();
                 help1++;
-
             }
         }
+        this.scene.popMatrix();
     }
     
     enableNormalViz()

@@ -10,8 +10,14 @@ class MyQuad extends CGFobject
 		super(scene);
 		this.initBuffers();
         if (coords != undefined) this.updateTexCoords(coords);
+        
+        this.init();
 	}
-	
+    
+    init()
+    {
+    }
+
     initBuffers()
     {
         this.vertices = 
@@ -75,6 +81,7 @@ class MyQuad extends CGFobject
 		this.initGLBuffers();
 	}
 
+    
 	/**
 	 * @method updateTexCoords
 	 * Updates the list of texture coordinates of the quad

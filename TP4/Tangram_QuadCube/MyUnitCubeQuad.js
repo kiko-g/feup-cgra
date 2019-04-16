@@ -12,7 +12,7 @@
 // F contains vortexes (6 7 4 5)
 //
 /**
- * My Unit Cube
+ * MyUnitCubeQuad
  * @constructor
  * @param scene - Reference to MyScene object
  */

@@ -24,6 +24,7 @@ class MyScene extends CGFscene
         //Initialize scene objects
         this.axis = new CGFaxis(this);
         this.treeRowPatch = new MyTreeRowPatch(this, 2, 0.4, 1.5, 0.8, 'images/wood.jpg', 'images/leaves.jpg');
+        this.cube = new MyUnitCubeQuad(this, 'images/moussa.jpg');
 
         // Objects connected to MyInterface
         this.selectedObject = 3;
@@ -32,21 +33,6 @@ class MyScene extends CGFscene
         this.displayNormals = true;
         this.nearest = true;
         this.objectComplexity = 0.5;
-
-        this.mat1 = new CGFappearance(this);
-        this.mat1.setAmbient(0.4, 0.3, 0.2, 1);
-        this.mat1.setSpecular(0.2, 0.4, 0.5, 1); 
-        this.mat1.loadTexture('images/wood.jpg');
-        this.mat1.setTextureWrap('REPEAT', 'REPEAT');
-
-        this.mat2 = new CGFappearance(this);
-        this.mat2.setAmbient(0.4, 0.3, 0.2, 1);
-        this.mat2.setSpecular(0.2, 0.4, 0.5, 1);
-        this.mat2.loadTexture('images/leaves.jpg');
-        this.mat2.setTextureWrap('REPEAT', 'REPEAT');
-
-
-        this.materials = [this.mat1, this.mat2, this.mat3, this.mat4];
     }
 
     initLights()
@@ -84,7 +70,7 @@ class MyScene extends CGFscene
         
         // ---- BEGIN Primitive drawing section =====================================================================================
 
-        this.treeRowPatch.display();        
+        this.cube.display();
         
         // ---- END Primitive drawing section =======================================================================================
 
