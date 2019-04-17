@@ -27,7 +27,7 @@
  * @param scene - Reference to MyScene object
  */
 
-var c = 10;
+var c = 40;
 class MyCubeMap extends CGFobject
 {
     constructor(scene)
@@ -116,7 +116,7 @@ class MyCubeMap extends CGFobject
          -1,-1, 1,
         ];
 
-        
+        var h = 0.02;
         this.texCoords =
         [
             1/4,    1,       //0
