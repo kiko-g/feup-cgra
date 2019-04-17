@@ -32,8 +32,17 @@ class MyScene extends CGFscene
 
         //Initialize scene objects
         this.axis = new CGFaxis(this);
-        this.house = new MyHouse(this, 'images/oak2.jpg', 'images/oak.jpg', 'images/door.png', 'images/window.jpg', 'images/pillar.jpg');
+        this.house = new MyHouse(this, 'images/oak2.jpg', 'images/oak.jpg', 'images/door.png', 'images/window.jpg', 'images/pillar2.jpg');
         this.vh = new MyVoxelHill(this, 'images/mineSide.png', 'images/mineBottom.png', 'images/mineTop.png', 5);
+        this.amb = new MyCubeMap(this);
+
+        this.M1 = new CGFappearance(this);
+        this.M1.setAmbient(1, 1, 1, 1);
+        this.M1.setDiffuse(1, 1, 1, 1);
+        this.M1.setSpecular(1, 1, 1, 1);
+        this.M1.setShininess(10);
+        this.M1.loadTexture('images/cubemaptex.png');
+        this.M1.setTextureWrap('REPEAT', 'REPEAT');
 
     }
 
@@ -45,9 +54,10 @@ class MyScene extends CGFscene
         this.lights[0].update();
     }
 
+    //15, 25, 15
     initCameras()
     {
-        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 25, 15), vec3.fromValues(0, 0, 0));
+        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(150, 250, 150), vec3.fromValues(0, 0, 0));
     }
 
     setDefaultAppearance() //Pinkish appearance
@@ -73,7 +83,8 @@ class MyScene extends CGFscene
         // ---- BEGIN Primitive drawing section =====================================================================================
 
         this.house.display();
-        //this.vh.display();
+        this.M1.apply();
+        this.amb.display();
         
         // ---- END Primitive drawing section =======================================================================================
         if(this.enableTex) this.enableTextures(true);

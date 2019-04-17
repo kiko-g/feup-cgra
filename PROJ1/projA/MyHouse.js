@@ -146,7 +146,6 @@ class MyHouse extends CGFobject
         this.columntex.apply();
         this.prism.display();
 
-
         this.scene.popMatrix();
     }
     
