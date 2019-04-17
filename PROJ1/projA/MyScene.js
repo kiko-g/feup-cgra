@@ -19,6 +19,7 @@ class MyScene extends CGFscene
         this.gl.enable(this.gl.DEPTH_TEST);
         this.gl.enable(this.gl.CULL_FACE);
         this.gl.depthFunc(this.gl.LEQUAL);
+        this.enableTex = true;
         this.enableTextures(true);
 
         // Objects connected to MyInterface
@@ -31,7 +32,7 @@ class MyScene extends CGFscene
 
         //Initialize scene objects
         this.axis = new CGFaxis(this);
-        this.house = new MyHouse(this, 'images/oak.jpg', 'images/birch.jpg', 'images/door.png', 'images/window.jpg');
+        this.house = new MyHouse(this, 'images/oak2.jpg', 'images/oak.jpg', 'images/door.png', 'images/window.jpg', 'images/pillar.jpg');
         this.vh = new MyVoxelHill(this, 'images/mineSide.png', 'images/mineBottom.png', 'images/mineTop.png', 5);
 
     }
@@ -71,8 +72,11 @@ class MyScene extends CGFscene
         
         // ---- BEGIN Primitive drawing section =====================================================================================
 
-        this.vh.display();
+        this.house.display();
+        //this.vh.display();
         
         // ---- END Primitive drawing section =======================================================================================
+        if(this.enableTex) this.enableTextures(true);
+        else this.enableTextures(false);
     }
 }
