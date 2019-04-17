@@ -57,7 +57,7 @@ class MyScene extends CGFscene
     //15, 25, 15
     initCameras()
     {
-        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(150, 250, 150), vec3.fromValues(0, 0, 0));
+        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(30, 50, 30), vec3.fromValues(0, 0, 0));
     }
 
     setDefaultAppearance() //Pinkish appearance
@@ -82,12 +82,16 @@ class MyScene extends CGFscene
         
         // ---- BEGIN Primitive drawing section =====================================================================================
 
-        this.house.display();
+        //this.house.display();
         this.M1.apply();
         this.amb.display();
         
         // ---- END Primitive drawing section =======================================================================================
         if(this.enableTex) this.enableTextures(true);
         else this.enableTextures(false);
+    }
+    enableNormalViz()
+    {
+        this.amb.enableNormalViz();
     }
 }

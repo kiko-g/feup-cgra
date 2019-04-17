@@ -1,18 +1,25 @@
-//                                                          2 ---------------3  
+//                                                          6 ---------------7  
 // Let's define the 6 faces of                             /                /|
 // the Unit Cube as A, B, C, D, E and F                   /                / |
-// A, B, C and D are the side faces                      /                /  |
-// E is the top face and F is the bottom face           0 -------------- 1   |
+// C, D, E and F are the side faces                      /                /  |
+// B is the top face and A is the bottom face           2 -------------- 3   |
 //                                                      |                |   |
-// A contains vortexes (0 1 4 5)                        |                |   |
-// B contains vortexes (1 3 5 7)                        |    6           |   7   
-// C contains vortexes (2 3 6 7)                        |                |  /    
-// D contains vortexes (0 2 4 6)                        |                | /  
-// E contains vortexes (2 3 0 1)                        4 -------------- 5    
-// F contains vortexes (6 7 4 5)
+// A contains vortexes (0 1 4 5) bottom                 |                |   |
+// B contains vortexes (2 3 6 7) top                    |    4           |   5   
+// C contains vortexes (0 1 2 3)                        |                |  /    
+// D contains vortexes (1 5 3 7)                        |                | /  
+// E contains vortexes (5 4 7 6)                        0 -------------- 1    
+// F contains vortexes (0 4 2 6)
 //
 
-//0,  
+//  ----------> XX
+// |
+// |
+// |
+// |
+// v
+// ZZ
+
 
 /**
  * MyCubeMap
@@ -20,7 +27,7 @@
  * @param scene - Reference to MyScene object
  */
 
-var c = 20;
+var c = 10;
 class MyCubeMap extends CGFobject
 {
     constructor(scene)
@@ -63,82 +70,101 @@ class MyCubeMap extends CGFobject
         //Counter-clockwise reference of vertices
         this.indices = 
         [
-            1, 4, 0,        //Face A
-            1, 5, 4,
-            3, 5, 1,        //Face B
-            3, 7, 5,
-            2, 6, 3,        //Face C
-            6, 7, 3,
-            0, 4, 2,        //Face D
-            4, 6, 2,
-            2, 1, 0,        //Face E
-            2, 3, 1,
-            4, 5, 6,        //Face F
-            5, 7, 6,
-
-        ];
-
-        this.normals = 
-        [
-          -c, 0, 0,
-           c, 0, 0,
-          -c, 0, 0,
-           c, 0, 0, 
-          -c, 0, 0,
-           c, 0, 0, 
-          -c, 0, 0,
-           c, 0, 0,
-
-           0,-c, 0, 
-           0,-c, 0,  
-           0, c, 0, 
-           0, c, 0,  
-           0,-c, 0,
-           0,-c, 0, 
-           0, c, 0,
-           0, c, 0,
-           
-           0, 0, c,
-           0, 0, c,  
-           0, 0, c, 
-           0, 0, c,  
-           0, 0,-c,
-           0, 0,-c, 
-           0, 0,-c,
-           0, 0,-c,    
-        ];
-
-
-        this.texCoords =
-        [
-            1/4, 2/3,       //0
-            1/4, 2/3,       //1
-            1/4, 2/3,       //2
-            0,   2/3,       //3
-            1/4,   1,       //4
-            1,   2/3,       //5
-            1/4, 1/3,       //6
-            1/4, 1/3,       //7
-            1/4, 1/3,       //8
-            0,   1/3,       //9
-            1/4,   0,       //10
-            1,   1/3,       //11
-            2/4, 2/3,       //12
-            2/4, 2/3,       //13
-            2/4, 2/3,       //14
-            3/4, 2/3,       //15
-            2/4,   1,       //16
-            3/4, 2/3,       //17
-            2/4, 1/3,       //18
-            2/4, 1/3,       //19
-            2/4, 1/3,       //20
-            3/4, 1/3,       //21
-            2/4,   0,       //22
-            3/4, 1/3,       //23
+             4, 1,   5,          //Face A
+             4, 0,   1,
+             3, 2,   6,          //Face B
+             7, 3,   6,
+            11, 9,  10,          //Face C
+             9, 8,  10,
+            23, 21, 19,          //Face D
+            21, 17, 19,
+            14, 13, 15,          //Face E
+            14, 12, 13,
+            18, 20, 22,          //Face F
+            18, 16, 20,
+            
             
         ];
+        
+        this.normals = 
+        [
+          1, 1,-1,
+         -1, 1,-1,
+          1,-1,-1,
+         -1,-1,-1, 
+          1, 1, 1,
+         -1, 1, 1,
+          1,-1, 1,
+         -1,-1, 1,
 
+          1, 1,-1,
+         -1, 1,-1,
+          1,-1,-1,
+         -1,-1,-1, 
+          1, 1, 1,
+         -1, 1, 1,
+          1,-1, 1,
+         -1,-1, 1,
+         
+          1, 1,-1,
+         -1, 1,-1,
+          1,-1,-1,
+         -1,-1,-1, 
+          1, 1, 1,
+         -1, 1, 1,
+          1,-1, 1,
+         -1,-1, 1,
+        ];
+
+        
+        this.texCoords =
+        [
+            1/4,    1,       //0
+            2/4,    1,       //1
+            1/4,    0,       //2
+            2/4,    0,       //3
+            1/4,  2/3,       //4
+            2/4,  2/3,       //5
+            1/4,  1/3,       //6
+            2/4,  1/3,       //7
+            1,    2/3,       //0
+            3/4,  2/3,       //1
+            1,    1/3,       //2
+            3/4,  1/3,       //3
+            1/4,  2/3,       //4
+            2/4,  2/3,       //5
+            1/4,  1/3,       //6
+            2/4,  1/3,       //7
+              0,  2/3,       //0
+            3/4,  2/3,       //1
+              0,  1/3,       //2
+            3/4,  1/3,       //3
+            1/4,  2/3,       //4
+            2/4,  2/3,       //5
+            1/4,  1/3,       //6
+            2/4,  1/3,       //7 
+
+        ];
+        
         this.primitiveType = this.scene.gl.TRIANGLES;
         this.initGLBuffers();
     }
+    enableNormalViz()
+    {
+    }
 }
+
+/*
+1, 0, 4,        //Face A
+1, 4, 5,
+3, 5, 1,        //Face B
+3, 7, 5,
+2, 6, 3,        //Face C
+6, 7, 3,
+0, 4, 2,        //Face D
+4, 6, 2,
+2, 1, 0,        //Face E
+2, 3, 1,
+4, 5, 6,        //Face F
+5, 7, 6,
+*/

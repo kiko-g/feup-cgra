@@ -29,7 +29,6 @@ class MyTreeGroupPatch extends CGFobject
         this.indices = [];
         this.normals = [];
         this.texCoords = [];
-        this.trees = [];
 
         this.primitiveType = this.scene.gl.TRIANGLES;
         this.initGLBuffers();
