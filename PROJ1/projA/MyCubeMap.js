@@ -116,7 +116,7 @@ class MyCubeMap extends CGFobject
          -1,-1, 1,
         ];
 
-        var h = 0.02;
+        
         this.texCoords =
         [
             1/4,    1,       //0
