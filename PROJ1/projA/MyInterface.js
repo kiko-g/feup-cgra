@@ -21,7 +21,7 @@ class MyInterface extends CGFinterface
         //Checkbox element in GUI
         this.gui.add(this.scene, 'nearestVoxel').name('Nearest for Voxel');
         this.gui.add(this.scene, 'enableTex').name('Enable Textures');
-        this.gui.add(this.scene, 'day_night').name('Toggle day/night');
+        this.gui.add(this.scene, 'day_night').name('Toggle day/night').onChange(this.scene.initLights.bind(this.scene));
 
 
         return true;

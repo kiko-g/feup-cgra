@@ -13,8 +13,8 @@ class MyTreeGroupPatch extends CGFobject
         this.treeRandT = []; this.treeRandS = [];
         for(var k=0; k<9; k++)
         {
-            this.treeRandT.push(Math.random() * 0.3 + 1);      // MAX 1.3, MIN 1
-            this.treeRandS.push(Math.random() * 0.4 + 0.8);    // MAX 1.2, MIN 0.8
+            this.treeRandT.push(Math.random() * 0.2 + 1);      // MAX 1.2, MIN 1
+            this.treeRandS.push(Math.random() * 0.25 + 0.9);    // MAX 1.15, MIN 0.9
         }
         this.init();
     }

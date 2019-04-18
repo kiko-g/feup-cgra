@@ -29,8 +29,7 @@ class MyScene extends CGFscene
         this.displayNormals = true;
         this.objectComplexity = 0.5;
         this.nearestVoxel = true;
-
-        this.day_night = true;
+        this.day_night = false;
 
         //Initialize scene objects
         this.axis = new CGFaxis(this);
@@ -38,14 +37,13 @@ class MyScene extends CGFscene
         this.vh1 = new MyVoxelHill(this, 'images/mineSide.png', 'images/mineBottom.png', 'images/mineTop.png', 5);
         this.vh2 = new MyVoxelHill(this, 'images/mineSide.png', 'images/mineBottom.png', 'images/mineTop.png', 7);
         this.amb = new MyCubeMap(this);
-        this.ground = new MyQuad(this);
-        this.treegroup1 = new MyTreeGroupPatch(this, 2, 1, 5, 3, 'images/wood.jpg', 'images/leaves.jpg');
-        this.treegroup2 = new MyTreeGroupPatch(this, 2, 1, 5, 3, 'images/wood.jpg', 'images/leaves.jpg'); 
-        this.treerow1 = new MyTreeRowPatch(this, 2, 1, 5, 3, 'images/wood.jpg', 'images/leaves.jpg');
-        this.treerow2 = new MyTreeRowPatch(this, 2, 1, 5, 3 , 'images/wood.jpg', 'images/leaves.jpg'); 
+        this.ground = new MyGround(this);
+        this.treegroup = new MyTreeGroupPatch(this, 4, 1, 5, 3, 'images/wood.jpg', 'images/leaves2.jpg');
+        this.treerow = new MyTreeRowPatch(this, 4, 1, 5, 3, 'images/wood.jpg', 'images/leaves2.jpg');
         this.fire = new MyCone(this, 7, 0.7, 0.7);
-
-
+        this.seats = new MyUnitCubeQuad(this, 'images/oak2.jpg', 'images/mineBottom.png', 'images/oak.jpg');
+        
+        //Initializing Materials
         this.McubeDay = new CGFappearance(this);
         this.McubeDay.setAmbient(1, 1, 1, 1);
         this.McubeDay.setDiffuse(1, 1, 1, 1);
@@ -62,51 +60,85 @@ class MyScene extends CGFscene
         this.McubeNight.loadTexture('images/cubemaptexnight.png');
         this.McubeNight.setTextureWrap('REPEAT', 'REPEAT');
 
-        this.M2 = new CGFappearance(this);
-        this.M2.setAmbient(1, 1, 1, 1);
-        this.M2.setDiffuse(1, 1, 1, 1);
-        this.M2.setSpecular(1, 1, 1, 1);
-        this.M2.setShininess(10);
-        this.M2.loadTexture('images/mineTop.png');
-        this.M2.setTextureWrap('REPEAT', 'REPEAT');
+        this.groundtex = new CGFappearance(this);
+        this.groundtex.setAmbient(1, 1, 1, 1);
+        this.groundtex.setDiffuse(1, 1, 1, 1);
+        this.groundtex.setSpecular(1, 1, 1, 1);
+        this.groundtex.setShininess(10);
+        this.groundtex.loadTexture('images/grass.jpg');
+        this.groundtex.setTextureWrap('REPEAT', 'REPEAT');
 
-        this.M3 = new CGFappearance(this);
-        this.M3.setAmbient(1, 1, 1, 1);
-        this.M3.setDiffuse(1, 1, 1, 1);
-        this.M3.setSpecular(1, 1, 1, 1);
-        this.M3.setShininess(10);
-        this.M3.loadTexture('images/fire.jpg');
-        this.M3.setTextureWrap('REPEAT', 'REPEAT');
+        this.firetex = new CGFappearance(this);
+        this.firetex.setAmbient(1, 1, 1, 1);
+        this.firetex.setDiffuse(1, 1, 1, 1);
+        this.firetex.setSpecular(1, 1, 1, 1);
+        this.firetex.setShininess(10);
+        this.firetex.loadTexture('images/fire.jpg');
+        this.firetex.setTextureWrap('REPEAT', 'REPEAT');
     }
 
 
     initLights()
     {
-        if(this.day_night){ 
+        this.setGlobalAmbientLight(0.15, 0.15, 0.15, 1);
+        if(this.day_night)
+        {
+            console.log("TOUP DAY");
             //SUNLIGHT
-            this.lights[0].setPosition(0, 2, 5, 1);
-            this.lights[0].setDiffuse(1.0, 1.0, 1.0, 1.0);
-            this.lights[0].setSpecular(1.0, 1.0, 1.0, 1.0);
+            this.lights[0].setPosition(20, 15, -20, 1);
+            this.lights[0].setAmbient(1, 1, 1, 1);
+            this.lights[0].setDiffuse(1, 1, 1, 1);
+            this.lights[0].setSpecular(1, 1, 1, 1);
             this.lights[0].enable();
             this.lights[0].update();
+            this.lights[0].setLinearAttenuation(1);
+
+            this.lights[1].setPosition(20, 15, 20, 0);
+            this.lights[1].setAmbient(1, 1, 1, 1);
+            this.lights[1].setDiffuse(1, 1, 1, 1);
+            this.lights[1].setSpecular(1, 1, 1, 1);
+            this.lights[1].enable();
+            this.lights[1].update();
+            this.lights[1].setLinearAttenuation(1);
+
+
         }
-        else{
+
+        else
+        {
+            console.log("TOUP NIGHT");
             //MOONLIGHT
-            this.lights[0].setPosition(0, 2, 5, 1);
+            this.lights[0].setPosition(20, 15, -20, 1);
+            this.lights[0].setAmbient(0, 0, 0, 1);
             this.lights[0].setDiffuse(1.0, 1.0, 1.0, 1.0);
             this.lights[0].setSpecular(1.0, 1.0, 1.0, 1.0);
             this.lights[0].enable();
             this.lights[0].update();
+            this.lights[0].setLinearAttenuation(1);
+
+            this.lights[1].setPosition(20, 15, 20, 0);
+            this.lights[1].setAmbient(0, 0, 0, 1);
+            this.lights[1].setDiffuse(0, 0, 0, 1.0);
+            this.lights[1].setSpecular(0, 0, 0, 1.0);
+            this.lights[1].enable();
+            this.lights[1].update();
+            this.lights[1].setLinearAttenuation(1);
+
+            this.lights[2].setPosition(-20, 10, -10, 0);
+            this.lights[2].setAmbient(0, 0, 0, 1);
+            this.lights[2].setDiffuse(0, 0, 0, 1);
+            this.lights[2].setSpecular(0, 0, 0, 1);
+            this.lights[2].enable();
+            this.lights[2].update();
+            this.lights[2].setLinearAttenuation(1);
 
             //CAMPFIRE LIGHT
-            this.lights[0].setPosition(0, 2, 5, 1);
-            this.lights[0].setDiffuse(1.0, 1.0, 1.0, 1.0);
-            this.lights[0].setSpecular(1.0, 1.0, 1.0, 1.0);
-            this.lights[0].enable();
-            this.lights[0].update();
-
+            this.lights[3].setPosition(0, 2, 5, 1);
+            this.lights[3].setDiffuse(1, 1, 1, 1);
+            this.lights[3].setSpecular(1, 1, 1, 1);
+            this.lights[3].enable();
+            this.lights[3].update();
         }
-
     }
 
     //15, 25, 15
@@ -133,88 +165,143 @@ class MyScene extends CGFscene
         this.updateProjectionMatrix();
         this.loadIdentity();
         this.applyViewMatrix();
+        this.pushMatrix(); 
+        this.scale(2, 2, 2);
         this.axis.display();
         this.setDefaultAppearance();
         
+        this.lights[0].update();
+        this.lights[1].update();
+        this.lights[2].update();
+        this.lights[3].update();
+
         // ---- BEGIN Primitive drawing section =====================================================================================
+        
+        this.popMatrix();
         this.pushMatrix(); 
+
+        //DISPLAY CENTER HOUSE (NEEDED)
+        this.scale(1, 0.7, 1);
+        this.translate(0, 0, 0);
+        this.house.display();
+        this.popMatrix();
+        this.pushMatrix();
+
+        //DISPLAY OUTSIDE SEATS
+        this.translate(18, 0, 10);
+        this.seats.display();
+        this.popMatrix();
+        this.pushMatrix();
+        this.translate(18, 0, 8);
+        this.seats.display();
+        this.popMatrix();
+        this.pushMatrix();
+        this.translate(12, 0, 10);
+        this.seats.display();
+        this.popMatrix();
+        this.pushMatrix();
+        this.translate(12, 0, 8);
+        this.seats.display();
+        this.popMatrix();
+        this.pushMatrix();
+        this.translate(14, 0, 6);
+        this.seats.display();
+        this.popMatrix();
+        this.pushMatrix();
+        this.translate(16, 0, 6);
+        this.seats.display();
+        this.popMatrix();
+        this.pushMatrix();
+        this.translate(14, 0, 12);
+        this.seats.display();
+        this.popMatrix();
+        this.pushMatrix();
+        this.translate(16, 0, 12);
+        this.seats.display();
+        this.popMatrix();
+        this.pushMatrix();
+        
         
         // --- DRAW HOUSE
-        this.popMatrix();
-        this.pushMatrix();
-        this.M2.apply();
-        this.scale(0.5,0.5,0.5);
-        this.translate(15, 0, 20);
+        this.scale(0.9, 0.9, 0.9);
+        this.translate(-3, 0, -32);
         this.house.display();
-
-        // --- DRAW TREES
         this.popMatrix();
         this.pushMatrix();
-        this.scale(0.5,0.5,0.5);
-        this.translate(-8, 0, 20);
-        this.treegroup1.display();
 
+        // DRAW TREE GROUPS
+        this.translate(-36, 0, -12);
+        this.scale(0.5, 0.5, 0.5);
+        this.treegroup.display();
         this.popMatrix();
         this.pushMatrix();
-        this.scale(0.5,0.5,0.5);
-        this.translate(28, 0, 20);
-        this.treegroup2.display();
-
+        this.translate(28, 0, -12);
+        this.scale(0.5, 0.5, 0.5);
+        this.treegroup.display();
         this.popMatrix();
         this.pushMatrix();
-        this.scale(0.5,0.5,0.5);
-        this.rotate(1,0, -75*DTR, 0);
-        this.translate(0, 0, -30);
-        this.treerow1.display();
 
+        // DRAW TREE ROWS
+        this.translate(-8, 0, -36);
+        this.scale(0.5, 0.5, 0.5);
+        this.rotate(0, 0, 1, 0);
+        this.treerow.display();
         this.popMatrix();
         this.pushMatrix();
-        this.scale(0.5,0.5,0.5);
-        this.rotate(1,0, 75*DTR, 0);
-        this.translate(-10, 0, 0); 
-        this.treerow2.display();
-
-        // --- DRAW VOXEL
-
+        this.translate(7, 0, -18); 
+        this.scale(0.5, 0.5, 0.5);
+        this.rotate(90 * DTR, 0, 1, 0);
+        this.treerow.display();
         this.popMatrix();
         this.pushMatrix();
-        this.translate(-20, 0, -6);
-        this.vh1.display();
+        this.translate(-8, 0, -18);
+        this.scale(0.5, 0.5, 0.5);
+        this.rotate(90 * DTR, 0, 1, 0);
+        this.treerow.display();
 
-        
+        // VOXEL 1
         this.popMatrix();
         this.pushMatrix();
-        this.translate(30, 0, -15);
-        this.rotate(1,0, -15*DTR, 0)
+        this.translate(-37, 0, -30);
+        this.rotate(15 * DTR, 0, 1, 0)
         this.vh2.display();
-
-        // --- DRAW FIRE
+                
+        // VOXEL 2
         this.popMatrix();
         this.pushMatrix();
-        this.translate(10, 0, 0);
-        this.M3.apply();
+        this.translate(25, 0, -35);
+        this.rotate(-15 * DTR,0, 1, 0)
+        this.vh2.display();
+        
+        // CAMPFIRE
+        this.popMatrix();
+        this.pushMatrix();
+        this.translate(15.5, 0, 9.5);
+        this.scale(1.5, 1.3, 1.5);
+        this.firetex.apply();
         this.fire.display();
-
-
-        // --- DRAW GROUND
+        
+        // GROUND
         this.popMatrix();
         this.pushMatrix();
-        this.M2.apply();
-        this.rotate(90 * DTR,90 * DTR, 0, 0);
-        this.scale(100,100,1);
+        this.rotate(90 * DTR, 1, 0, 0);
+        this.scale(80,80,80);
+        this.groundtex.apply();
         this.ground.display(); 
-        // --- DRAW OUTSIDE CUBE
+
         this.popMatrix();
         this.pushMatrix(); 
-        this.translate(0, 20,0);
-        
-        if(this.day_night)
-            this.McubeDay.apply();
-        else
-            this.McubeNight.apply();
 
+        // CUBE MAP
+        this.translate(0, 30, 0);
+        if(this.day_night) this.McubeDay.apply();
+        else this.McubeNight.apply();
         this.amb.display();
+
+
         // ---- END Primitive drawing section =======================================================================================
+
+
         if(this.enableTex) this.enableTextures(true);
         else this.enableTextures(false);
     }
