@@ -42,6 +42,7 @@ class MyScene extends CGFscene
         this.treerow = new MyTreeRowPatch(this, 4, 1, 5, 3, 'images/wood.jpg', 'images/leaves2.jpg');
         this.fire = new MyCone(this, 7, 0.7, 0.7);
         this.seats = new MyUnitCubeQuad(this, 'images/oak2.jpg', 'images/mineBottom.png', 'images/oak.jpg');
+        this.campfire = new MyUnitCubeQuad(this, 'images/stone.jpg', 'images/stone.jpg', 'images/stone.jpg');
         
         //Initializing Materials
         this.McubeDay = new CGFappearance(this);
@@ -75,6 +76,14 @@ class MyScene extends CGFscene
         this.firetex.setShininess(10);
         this.firetex.loadTexture('images/fire.jpg');
         this.firetex.setTextureWrap('REPEAT', 'REPEAT');
+
+        this.stonetex = new CGFappearance(this);
+        this.stonetex.setAmbient(1, 1, 1, 1);
+        this.stonetex.setDiffuse(1, 1, 1, 1);
+        this.stonetex.setSpecular(1, 1, 1, 1);
+        this.stonetex.setShininess(10);
+        this.stonetex.loadTexture('images/stone.jpg');
+        this.stonetex.setTextureWrap('REPEAT', 'REPEAT');
     }
 
 
@@ -83,10 +92,9 @@ class MyScene extends CGFscene
         this.setGlobalAmbientLight(0.15, 0.15, 0.15, 1);
         if(this.day_night)
         {
-            console.log("TOUP DAY");
             //SUNLIGHT
             this.lights[0].setPosition(20, 15, -20, 1);
-            this.lights[0].setAmbient(1, 1, 1, 1);
+            this.lights[0].setAmbient(0.3, 0.3, 0.3, 1);
             this.lights[0].setDiffuse(1, 1, 1, 1);
             this.lights[0].setSpecular(1, 1, 1, 1);
             this.lights[0].enable();
@@ -94,7 +102,7 @@ class MyScene extends CGFscene
             this.lights[0].setLinearAttenuation(1);
 
             this.lights[1].setPosition(20, 15, 20, 0);
-            this.lights[1].setAmbient(1, 1, 1, 1);
+            this.lights[1].setAmbient(0.3, 0.3, 0.3, 1);
             this.lights[1].setDiffuse(1, 1, 1, 1);
             this.lights[1].setSpecular(1, 1, 1, 1);
             this.lights[1].enable();
@@ -106,7 +114,6 @@ class MyScene extends CGFscene
 
         else
         {
-            console.log("TOUP NIGHT");
             //MOONLIGHT
             this.lights[0].setPosition(20, 15, -20, 1);
             this.lights[0].setAmbient(0, 0, 0, 1);
@@ -117,23 +124,21 @@ class MyScene extends CGFscene
             this.lights[0].setLinearAttenuation(1);
 
             this.lights[1].setPosition(20, 15, 20, 0);
-            this.lights[1].setAmbient(0, 0, 0, 1);
+            this.lights[1].setAmbient(0.03, 0.03, 0.03, 1);
             this.lights[1].setDiffuse(0, 0, 0, 1.0);
             this.lights[1].setSpecular(0, 0, 0, 1.0);
             this.lights[1].enable();
             this.lights[1].update();
             this.lights[1].setLinearAttenuation(1);
 
-            this.lights[2].setPosition(-20, 10, -10, 0);
-            this.lights[2].setAmbient(0, 0, 0, 1);
-            this.lights[2].setDiffuse(0, 0, 0, 1);
-            this.lights[2].setSpecular(0, 0, 0, 1);
+            //CAMPFIRE LIGHT
+            this.lights[2].setPosition(14, 0.5, 8, 1);
+            this.lights[2].setDiffuse(1, 1, 1, 1);
+            this.lights[2].setSpecular(1, 1, 1, 1);
             this.lights[2].enable();
             this.lights[2].update();
-            this.lights[2].setLinearAttenuation(1);
 
-            //CAMPFIRE LIGHT
-            this.lights[3].setPosition(0, 2, 5, 1);
+            this.lights[3].setPosition(16, 0.5, 10, 1);
             this.lights[3].setDiffuse(1, 1, 1, 1);
             this.lights[3].setSpecular(1, 1, 1, 1);
             this.lights[3].enable();
@@ -276,16 +281,22 @@ class MyScene extends CGFscene
         // CAMPFIRE
         this.popMatrix();
         this.pushMatrix();
-        this.translate(15.5, 0, 9.5);
-        this.scale(1.5, 1.3, 1.5);
+        this.translate(15.5, 0.21, 9.5);
+        this.scale(1.2, 1.4, 1.2);
         this.firetex.apply();
-        this.fire.display();
+        if(!this.day_night) this.fire.display();
+        this.popMatrix();
+        this.pushMatrix();
+        this.translate(14.5, 0, 8.5);
+        this.scale(2, 0.2, 2);
+        this.stonetex.apply();
+        this.campfire.display();
         
         // GROUND
         this.popMatrix();
         this.pushMatrix();
-        this.rotate(90 * DTR, 1, 0, 0);
-        this.scale(80,80,80);
+        this.rotate(90 * DTR, 1, 0, 0);         // (ANGLE, X, Y, Z) --> Angle and around which axis
+        this.scale(c*2,c*2,c*2);                // c is a global variable, represents hald the side of the huge cube
         this.groundtex.apply();
         this.ground.display(); 
 
