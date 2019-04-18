@@ -22,6 +22,7 @@ class MyInterface extends CGFinterface
         this.gui.add(this.scene, 'nearestVoxel').name('Nearest for Voxel');
         this.gui.add(this.scene, 'enableTex').name('Enable Textures');
         this.gui.add(this.scene, 'day_night').name('Toggle day/night').onChange(this.scene.initLights.bind(this.scene));
+        this.gui.add(this.scene, 'campfire_lights').name('Campfire light').onChange(this.scene.initLights.bind(this.scene));
 
 
         return true;

@@ -5,7 +5,7 @@
  */
 class MyTree extends CGFobject
 {//, trunkTexture, treeTopTexture
-    constructor(scene, trunkHeight, trunkRadius, treeTopHeight, treeTopRadius, trunkTexture, treeTopTexture)
+    constructor(scene, trunkHeight, trunkRadius, treeTopHeight, treeTopRadius, trunkTexture, treeTopTexture, lowerCone)
     {
         super(scene);
 
@@ -17,6 +17,7 @@ class MyTree extends CGFobject
         this.treeTopRadius = treeTopRadius;
         this.trunkTexture = trunkTexture;
         this.treeTopTexture = treeTopTexture;
+        this.atten = lowerCone;
         
         this.init();
     }   
@@ -53,12 +54,10 @@ class MyTree extends CGFobject
     
     display()
     {
-        var q = 0.15*this.trunkHeight;       // Helpful variables
-
         this.scene.pushMatrix();    //PUSH IT
         this.M1.apply();
         this.cilinder.display();    //DISPLAY CILINDER
-        this.scene.translate(0, this.trunkHeight - q, 0);
+        this.scene.translate(0, this.trunkHeight - this.atten, 0);
         this.M2.apply();
         this.cone.display();        //DISPLAY CONE
         this.scene.popMatrix();     //POP IT

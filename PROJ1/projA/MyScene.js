@@ -30,6 +30,7 @@ class MyScene extends CGFscene
         this.objectComplexity = 0.5;
         this.nearestVoxel = true;
         this.day_night = false;
+        this.campfire_lights = false;
 
         //Initialize scene objects
         this.axis = new CGFaxis(this);
@@ -38,11 +39,19 @@ class MyScene extends CGFscene
         this.vh2 = new MyVoxelHill(this, 'images/mineSide.png', 'images/mineBottom.png', 'images/mineTop.png', 7);
         this.amb = new MyCubeMap(this);
         this.ground = new MyGround(this);
-        this.treegroup = new MyTreeGroupPatch(this, 4, 1, 5, 3, 'images/wood.jpg', 'images/leaves2.jpg');
-        this.treerow = new MyTreeRowPatch(this, 4, 1, 5, 3, 'images/wood.jpg', 'images/leaves2.jpg');
+        this.treegroupdark = new MyTreeGroupPatch(this, 4, 1, 5, 3, 'images/wood.jpg', 'images/leaves2.jpg', 0.15);
+        this.treegrouplight = new MyTreeGroupPatch(this, 5, 1, 4, 3, 'images/wood2.jpg', 'images/leaves.jpg', 0.15);
+        this.treerow = new MyTreeRowPatch(this, 4, 1, 5, 3, 'images/wood.jpg', 'images/leaves2.jpg', 0.15);
         this.fire = new MyCone(this, 7, 0.7, 0.7);
         this.seats = new MyUnitCubeQuad(this, 'images/oak2.jpg', 'images/mineBottom.png', 'images/oak.jpg');
         this.campfire = new MyUnitCubeQuad(this, 'images/stone.jpg', 'images/stone.jpg', 'images/stone.jpg');
+        this.sidewalk = new MyUnitCubeQuad(this, 'images/pillar2.jpg', 'images/pillar2.jpg', 'images/pillar2.jpg');
+        this.welcome = new MyUnitCubeQuad(this, 'images/oak2.jpg', 'images/oak2.jpg', 'images/welcome.jpg');
+        this.water = new MyUnitCubeQuad2(this, 'images/water.jpg', 'images/water.jpg', 'images/water.jpg');
+        this.tower = new MyTree(this, 5, 0.6, 1.5, 1, 'images/oak2.jpg', 'images/brick.jpg', 0);
+        this.walls = new MyUnitCubeQuad(this, 'images/oak2.jpg', 'images/stone.jpg', 'images/oak.jpg');
+        this.prism = new MyPrism(this, 5, 1);
+        this.godlycube = new MyUnitCubeQuad(this, 'images/portugal.png', 'images/oak.jpg', 'images/default_eder.jpg');
         
         //Initializing Materials
         this.McubeDay = new CGFappearance(this);
@@ -61,13 +70,21 @@ class MyScene extends CGFscene
         this.McubeNight.loadTexture('images/cubemaptexnight.png');
         this.McubeNight.setTextureWrap('REPEAT', 'REPEAT');
 
-        this.groundtex = new CGFappearance(this);
-        this.groundtex.setAmbient(1, 1, 1, 1);
-        this.groundtex.setDiffuse(1, 1, 1, 1);
-        this.groundtex.setSpecular(1, 1, 1, 1);
-        this.groundtex.setShininess(10);
-        this.groundtex.loadTexture('images/grass.jpg');
-        this.groundtex.setTextureWrap('REPEAT', 'REPEAT');
+        this.groundtexday = new CGFappearance(this);
+        this.groundtexday.setAmbient(0.8, 0.8, 0.8, 1);
+        this.groundtexday.setDiffuse(1, 1, 1, 1);
+        this.groundtexday.setSpecular(1, 1, 1, 1);
+        this.groundtexday.setShininess(10);
+        this.groundtexday.loadTexture('images/grass.jpg');
+        this.groundtexday.setTextureWrap('REPEAT', 'REPEAT');
+
+        this.groundtexnight = new CGFappearance(this);
+        this.groundtexnight.setAmbient(0.4, 0.4, 0.4, 1);
+        this.groundtexnight.setDiffuse(1, 1, 1, 1);
+        this.groundtexnight.setSpecular(1, 1, 1, 1);
+        this.groundtexnight.setShininess(10);
+        this.groundtexnight.loadTexture('images/grass.jpg');
+        this.groundtexnight.setTextureWrap('REPEAT', 'REPEAT');
 
         this.firetex = new CGFappearance(this);
         this.firetex.setAmbient(1, 1, 1, 1);
@@ -84,6 +101,22 @@ class MyScene extends CGFscene
         this.stonetex.setShininess(10);
         this.stonetex.loadTexture('images/stone.jpg');
         this.stonetex.setTextureWrap('REPEAT', 'REPEAT');
+
+        this.watertex = new CGFappearance(this);
+        this.watertex.setAmbient(1, 1, 1, 1);
+        this.watertex.setDiffuse(0, 0, 0, 0);
+        this.watertex.setSpecular(1, 1, 1, 1);
+        this.watertex.setShininess(10);
+        this.watertex.loadTexture('images/water.jpg');
+        this.watertex.setTextureWrap('REPEAT', 'REPEAT');
+
+        this.galaxytex = new CGFappearance(this);
+        this.galaxytex.setAmbient(1, 1, 1, 1);
+        this.galaxytex.setDiffuse(0, 0, 0, 0);
+        this.galaxytex.setSpecular(1, 1, 1, 1);
+        this.galaxytex.setShininess(10);
+        this.galaxytex.loadTexture('images/funkybg.jpg');
+        this.galaxytex.setTextureWrap('REPEAT', 'REPEAT');
     }
 
 
@@ -94,7 +127,7 @@ class MyScene extends CGFscene
         {
             //SUNLIGHT
             this.lights[0].setPosition(20, 15, -20, 1);
-            this.lights[0].setAmbient(0.3, 0.3, 0.3, 1);
+            this.lights[0].setAmbient(0.1, 0.1, 0.1, 1);
             this.lights[0].setDiffuse(1, 1, 1, 1);
             this.lights[0].setSpecular(1, 1, 1, 1);
             this.lights[0].enable();
@@ -102,47 +135,97 @@ class MyScene extends CGFscene
             this.lights[0].setLinearAttenuation(1);
 
             this.lights[1].setPosition(20, 15, 20, 0);
-            this.lights[1].setAmbient(0.3, 0.3, 0.3, 1);
+            this.lights[1].setAmbient(0.1, 0.1, 0.1, 1);
             this.lights[1].setDiffuse(1, 1, 1, 1);
             this.lights[1].setSpecular(1, 1, 1, 1);
             this.lights[1].enable();
             this.lights[1].update();
             this.lights[1].setLinearAttenuation(1);
+            
+            //FOUNTAIN LIGHTS
+            this.lights[2].setPosition(-36, 10, 0, 0);
+            this.lights[2].setAmbient(0.2, 0.2, 0.2, 1);
+            this.lights[2].setDiffuse(1, 1, 1, 1);
+            this.lights[2].setSpecular(1, 1, 1, 1);
+            this.lights[2].enable();
+            this.lights[2].update();
+            this.lights[2].setLinearAttenuation(0);
 
-
+            this.lights[3].setPosition(28, 10, 0, 0);
+            this.lights[3].setAmbient(0.2, 0.2, 0.2, 1);
+            this.lights[3].setDiffuse(1, 1, 1, 1);
+            this.lights[3].setSpecular(1, 1, 1, 1);
+            this.lights[3].enable();
+            this.lights[3].update();
+            this.lights[3].setLinearAttenuation(0);
         }
 
         else
         {
             //MOONLIGHT
             this.lights[0].setPosition(20, 15, -20, 1);
-            this.lights[0].setAmbient(0, 0, 0, 1);
-            this.lights[0].setDiffuse(1.0, 1.0, 1.0, 1.0);
-            this.lights[0].setSpecular(1.0, 1.0, 1.0, 1.0);
+            this.lights[0].setAmbient(0.05, 0.05, 0.05, 1);
+            this.lights[0].setDiffuse(0, 0, 0, 1);
+            this.lights[0].setSpecular(0, 0, 0, 1);
             this.lights[0].enable();
             this.lights[0].update();
             this.lights[0].setLinearAttenuation(1);
 
             this.lights[1].setPosition(20, 15, 20, 0);
-            this.lights[1].setAmbient(0.03, 0.03, 0.03, 1);
-            this.lights[1].setDiffuse(0, 0, 0, 1.0);
-            this.lights[1].setSpecular(0, 0, 0, 1.0);
+            this.lights[1].setAmbient(0.05, 0.05, 0.05, 1);
+            this.lights[1].setDiffuse(0, 0, 0, 1);
+            this.lights[1].setSpecular(0, 0, 0, 1);
             this.lights[1].enable();
             this.lights[1].update();
             this.lights[1].setLinearAttenuation(1);
 
-            //CAMPFIRE LIGHT
-            this.lights[2].setPosition(14, 0.5, 8, 1);
-            this.lights[2].setDiffuse(1, 1, 1, 1);
-            this.lights[2].setSpecular(1, 1, 1, 1);
-            this.lights[2].enable();
-            this.lights[2].update();
+            //CAMPFIRE LIGHTS
+            if(this.campfire_lights)
+            {
+                this.lights[2].setPosition(15, 0.5, 9, 1);       // Y --> 0.5
+                this.lights[2].setAmbient(0.2, 0.2, 0.2, 1);
+                this.lights[2].setDiffuse(1, 1, 1, 1);
+                this.lights[2].setSpecular(0, 0, 0, 0);
+                this.lights[2].enable();
+                this.lights[2].update();
+                this.lights[2].setLinearAttenuation(0);
+            }
+            else
+            {
+                this.lights[2].setPosition(14, 0.5, 8, 1);      // Y --> 0.5
+                this.lights[2].setDiffuse(0, 0, 0, 0);
+                this.lights[2].setSpecular(0, 0, 0, 0);
+                this.lights[2].enable();
+                this.lights[2].update();
+                this.lights[2].setLinearAttenuation(0);
 
-            this.lights[3].setPosition(16, 0.5, 10, 1);
-            this.lights[3].setDiffuse(1, 1, 1, 1);
-            this.lights[3].setSpecular(1, 1, 1, 1);
+                // PORTUGAL CUBE LIGHTS
+                this.lights[5].setPosition(-19, 11, 11, 0);
+                this.lights[5].setAmbient(0.05, 0.05, 0.05, 1);
+                this.lights[5].setDiffuse(0, 0, 0, 0);
+                this.lights[5].setSpecular(0, 0, 0, 0);
+                this.lights[5].enable();
+                this.lights[5].update();
+                this.lights[5].setLinearAttenuation(0);
+            }
+
+            //FOUNTAIN LIGHTS
+            this.lights[3].setPosition(28, 10, 0, 0);
+            this.lights[3].setAmbient(0.02, 0.02, 0.02, 1);
+            this.lights[3].setDiffuse(0, 0, 0, 0);
+            this.lights[3].setSpecular(0, 0, 0, 0);
             this.lights[3].enable();
             this.lights[3].update();
+            this.lights[3].setLinearAttenuation(1);
+
+            this.lights[4].setPosition(-36, 10, 0, 0);
+            this.lights[4].setAmbient(0.02, 0.02, 0.02, 1);
+            this.lights[4].setDiffuse(0, 0, 0, 0);
+            this.lights[4].setSpecular(0, 0, 0, 0);
+            this.lights[4].enable();
+            this.lights[4].update();
+            this.lights[4].setLinearAttenuation(1);
+
         }
     }
 
@@ -179,6 +262,8 @@ class MyScene extends CGFscene
         this.lights[1].update();
         this.lights[2].update();
         this.lights[3].update();
+        this.lights[4].update();
+        this.lights[5].update();
 
         // ---- BEGIN Primitive drawing section =====================================================================================
         
@@ -237,16 +322,62 @@ class MyScene extends CGFscene
         // DRAW TREE GROUPS
         this.translate(-36, 0, -12);
         this.scale(0.5, 0.5, 0.5);
-        this.treegroup.display();
+        this.treegroupdark.display();
         this.popMatrix();
         this.pushMatrix();
         this.translate(28, 0, -12);
         this.scale(0.5, 0.5, 0.5);
-        this.treegroup.display();
+        this.treegroupdark.display();
         this.popMatrix();
         this.pushMatrix();
+        this.translate(28, 0, 12);
+        this.scale(0.5, 0.5, 0.5);
+        this.treegrouplight.display();
+        this.popMatrix();
+        this.pushMatrix();
+        this.translate(-36, 0, 12);
+        this.scale(0.5, 0.5, 0.5);
+        this.treegrouplight.display();
+        this.popMatrix();
+        this.pushMatrix();
+        this.translate(23, 0, 27);
+        this.scale(0.5, 0.5, 0.5);
+        this.treegrouplight.display();
+        this.popMatrix();
+        this.pushMatrix();
+        this.translate(-29, 0, 27);
+        this.scale(0.5, 0.5, 0.5);
+        this.treegrouplight.display();
+
+        //DRAW FOUNTAINS
+        this.popMatrix();
+        this.pushMatrix();
+        this.translate(28, 0, 0);
+        this.scale(8, 0.3, 8);
+        this.campfire.display();
+        this.popMatrix();
+        this.pushMatrix();
+        this.translate(-36, 0, 0);
+        this.scale(8, 0.3, 8);
+        this.campfire.display();
+        this.popMatrix();
+        this.pushMatrix();
+        this.translate(-35.5, 0.1, 0.5);
+        this.scale(7, 0.3, 7);
+        this.water.display();
+        this.popMatrix();
+        this.pushMatrix();
+        this.translate(28.5, 0.1, 0.5);
+        this.scale(7, 0.3, 7);
+        this.watertex.apply();          //quite useless
+        this.water.display();       
+        // WATER is represented MyUnitCubeQuad2. This object
+        // applies textures inside itself and has no diffuse
+        // light, only specular and ambient
 
         // DRAW TREE ROWS
+        this.popMatrix();
+        this.pushMatrix();
         this.translate(-8, 0, -36);
         this.scale(0.5, 0.5, 0.5);
         this.rotate(0, 0, 1, 0);
@@ -267,15 +398,27 @@ class MyScene extends CGFscene
         // VOXEL 1
         this.popMatrix();
         this.pushMatrix();
-        this.translate(-37, 0, -30);
-        this.rotate(15 * DTR, 0, 1, 0)
+        this.translate(-38, 0, -32);
+        this.rotate(30 * DTR, 0, 1, 0)
         this.vh2.display();
                 
         // VOXEL 2
         this.popMatrix();
         this.pushMatrix();
-        this.translate(25, 0, -35);
-        this.rotate(-15 * DTR,0, 1, 0)
+        this.translate(25, 0, -38);
+        this.rotate(-30 * DTR,0, 1, 0)
+        this.vh2.display();
+
+        // VOXEL 3
+        this.popMatrix();
+        this.pushMatrix();
+        this.translate(5, 0, 23);
+        this.vh2.display();
+
+        // VOXEL 4
+        this.popMatrix();
+        this.pushMatrix();
+        this.translate(-15, 0, 23);
         this.vh2.display();
         
         // CAMPFIRE
@@ -284,7 +427,7 @@ class MyScene extends CGFscene
         this.translate(15.5, 0.21, 9.5);
         this.scale(1.2, 1.4, 1.2);
         this.firetex.apply();
-        if(!this.day_night) this.fire.display();
+        if(!this.day_night && this.campfire_lights) this.fire.display();
         this.popMatrix();
         this.pushMatrix();
         this.translate(14.5, 0, 8.5);
@@ -297,13 +440,76 @@ class MyScene extends CGFscene
         this.pushMatrix();
         this.rotate(90 * DTR, 1, 0, 0);         // (ANGLE, X, Y, Z) --> Angle and around which axis
         this.scale(c*2,c*2,c*2);                // c is a global variable, represents hald the side of the huge cube
-        this.groundtex.apply();
+        if(this.day_night) this.groundtexday.apply();
+        else this.groundtexnight.apply();
         this.ground.display(); 
 
+        //DRAW SIDEWALK
         this.popMatrix();
-        this.pushMatrix(); 
+        this.pushMatrix();
+        this.translate(-2.5, 0, -23.3);
+        this.scale(5, 0.1, 8);
+        this.sidewalk.display();
+        this.popMatrix();
+        this.pushMatrix();
+        this.translate(-2.5, 0.01, -19.3);
+        this.scale(5, 0.1, 8);
+        this.sidewalk.display();
+        this.popMatrix();
+        this.pushMatrix();
+        this.translate(0, 0.02, -19.3);
+        this.scale(5, 0.1, 8);
+        this.sidewalk.display();
+        this.popMatrix();
+        this.pushMatrix();
+        this.translate(-5, 0.02, -19.3);
+        this.scale(5, 0.1, 8);
+        this.sidewalk.display();
+        // DRAW WELCOME HOME RUG
+        this.popMatrix();
+        this.pushMatrix();
+        this.translate(0.4, 0.09, -23.3);
+        this.scale(1.8, 0.1, 1.2);
+        this.welcome.display();
+
+        // DRAW FORTRESS
+        this.popMatrix();
+        this.pushMatrix();
+        this.translate(-20, 0, 15);
+        this.tower.display();
+        this.popMatrix();
+        this.pushMatrix();
+        this.translate(-15, 0, 15);
+        this.tower.display();
+        this.popMatrix();
+        this.pushMatrix();
+        this.translate(-15, 0, 10);
+        this.tower.display();
+        this.popMatrix();
+        this.pushMatrix();
+        this.translate(-20, 0, 10);
+        this.tower.display();
+        this.popMatrix();
+        this.pushMatrix();
+        this.translate(-20, 0, 10);
+        this.scale(5, 4, 5);
+        this.walls.display();
+        this.popMatrix();
+        this.pushMatrix();
+        this.translate(-17.5, 4, 12.5);
+        this.scale(1, 6, 1);
+        this.galaxytex.apply();
+        this.prism.display();
+        this.popMatrix();
+        this.pushMatrix();
+        this.translate(-19, 8, 11);
+        this.scale(4, 3, 3);
+        this.godlycube.display();
+
 
         // CUBE MAP
+        this.popMatrix();
+        this.pushMatrix();
         this.translate(0, 30, 0);
         if(this.day_night) this.McubeDay.apply();
         else this.McubeNight.apply();

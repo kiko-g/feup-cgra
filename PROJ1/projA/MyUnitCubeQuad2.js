@@ -1,10 +1,11 @@
 /**
- * My Unit Cube Quad
+ * My Unit Cube Quad 2
  * @constructor
  * @param scene - Reference to MyScene object
  */
 
-class MyUnitCubeQuad extends CGFobject
+
+class MyUnitCubeQuad2 extends CGFobject
 {
     constructor(scene, Side, Bottom, Top)
     {
@@ -19,28 +20,27 @@ class MyUnitCubeQuad extends CGFobject
 
     init()
     {
-        this.nearest = true;
         this.sidetex = new CGFappearance(this.scene);
         this.sidetex.setAmbient(1, 1, 1, 1);
-        this.sidetex.setDiffuse(1, 1, 1, 1);
+        this.sidetex.setDiffuse(0, 0, 0, 1);
         this.sidetex.setSpecular(1, 1, 1, 1);
-        this.sidetex.setShininess(20);
+        this.sidetex.setShininess(10);
         this.sidetex.loadTexture(this.sideTex);
         this.sidetex.setTextureWrap('REPEAT', 'REPEAT');
 
         this.bottomtex = new CGFappearance(this.scene);
-        this.bottomtex.setAmbient(1, 1, 1, 1);
-        this.bottomtex.setDiffuse(1, 1, 1, 1);
+        this.bottomtex.setAmbient(0.8, 0.8, 0.8, 1);
+        this.bottomtex.setDiffuse(0, 0, 0, 1);
         this.bottomtex.setSpecular(1, 1, 1, 1);
-        this.bottomtex.setShininess(20);
+        this.bottomtex.setShininess(10);
         this.bottomtex.loadTexture(this.bottomTex);
         this.bottomtex.setTextureWrap('REPEAT', 'REPEAT');
 
         this.toptex = new CGFappearance(this.scene);
         this.toptex.setAmbient(1, 1, 1, 1);
-        this.toptex.setDiffuse(1, 1, 1, 1);
+        this.toptex.setDiffuse(0, 0, 0, 1);
         this.toptex.setSpecular(1, 1, 1, 1);
-        this.toptex.setShininess(20);
+        this.toptex.setShininess(10);
         this.toptex.loadTexture(this.topTex);
         this.toptex.setTextureWrap('REPEAT', 'REPEAT');
     }

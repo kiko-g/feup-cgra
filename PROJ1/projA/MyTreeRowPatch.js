@@ -5,10 +5,10 @@
  */
 class MyTreeRowPatch extends CGFobject
 {
-    constructor(scene, trunkHeight, trunkRadius, treeTopHeight, treeTopRadius, trunkTexture, treeTopTexture)
+    constructor(scene, trunkHeight, trunkRadius, treeTopHeight, treeTopRadius, trunkTexture, treeTopTexture, lowerCone)
     {
         super(scene);
-        this.tree = new MyTree(scene, trunkHeight, trunkRadius, treeTopHeight, treeTopRadius, trunkTexture, treeTopTexture);
+        this.tree = new MyTree(scene, trunkHeight, trunkRadius, treeTopHeight, treeTopRadius, trunkTexture, treeTopTexture, lowerCone);
         this.TTR = treeTopRadius;
         this.treeRandTX = []; this.treeRandTZ = [];
         this.treeRandSX = []; this.treeRandSY = []; this.treeRandSZ = []; 
