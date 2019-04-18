@@ -110,13 +110,13 @@ class MyScene extends CGFscene
         this.watertex.loadTexture('images/water.jpg');
         this.watertex.setTextureWrap('REPEAT', 'REPEAT');
 
-        this.galaxytex = new CGFappearance(this);
-        this.galaxytex.setAmbient(1, 1, 1, 1);
-        this.galaxytex.setDiffuse(0, 0, 0, 0);
-        this.galaxytex.setSpecular(1, 1, 1, 1);
-        this.galaxytex.setShininess(10);
-        this.galaxytex.loadTexture('images/funkybg.jpg');
-        this.galaxytex.setTextureWrap('REPEAT', 'REPEAT');
+        this.oaktex = new CGFappearance(this);
+        this.oaktex.setAmbient(1, 1, 1, 1);
+        this.oaktex.setDiffuse(0, 0, 0, 0);
+        this.oaktex.setSpecular(1, 1, 1, 1);
+        this.oaktex.setShininess(10);
+        this.oaktex.loadTexture('images/oak2.jpg');
+        this.oaktex.setTextureWrap('REPEAT', 'REPEAT');
     }
 
 
@@ -498,7 +498,7 @@ class MyScene extends CGFscene
         this.pushMatrix();
         this.translate(-17.5, 4, 12.5);
         this.scale(1, 6, 1);
-        this.galaxytex.apply();
+        this.oaktex.apply();
         this.prism.display();
         this.popMatrix();
         this.pushMatrix();
