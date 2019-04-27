@@ -1,7 +1,9 @@
 
 /** Represents a plane with nrDivs divisions along both axis, with center at (0,0) */
-class Plane extends CGFobject{
-	constructor(scene, nrDivs, minS, maxS, minT, maxT) {
+class Plane extends CGFobject
+{
+    constructor(scene, nrDivs, minS, maxS, minT, maxT)
+    {
 		super(scene);
 		// nrDivs = 1 if not provided
 		nrDivs = typeof nrDivs !== 'undefined' ? nrDivs : 1;

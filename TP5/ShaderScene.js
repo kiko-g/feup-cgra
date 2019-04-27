@@ -1,5 +1,7 @@
-class ShaderScene extends CGFscene {
-	constructor() {
+class ShaderScene extends CGFscene
+{
+    constructor()
+    {
 		super();
 		this.texture = null;
 		this.appearance = null;
