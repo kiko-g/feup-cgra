@@ -8,6 +8,7 @@ uniform mat4 uNMatrix;
 
 uniform float normScale;
 
-void main() {
-	gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition+aVertexNormal*normScale*0.1, 1.0);
+void main()
+{
+	gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition+aVertexNormal*normScale*0.1, 1);
 }

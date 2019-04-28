@@ -83,7 +83,7 @@ class ShaderScene extends CGFscene
         this.shadersList = 
         {
 			'Flat Shading': 0,
-			'Passing a scale as uniform': 1,
+			'Scale as uniform': 1,
 			'Passing a var param from VS->FS': 2,
 			'Simple texturing': 3,
 			'Multiple textures in the FS': 4,
