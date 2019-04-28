@@ -8,19 +8,18 @@ class ShaderScene extends CGFscene
 
 		// initial configuration of interface
 		this.selectedObject = 0;
-		this.wireframe = false;
-		this.selectedExampleShader = 0;
+        this.wireframe = false;
+		this.selectedExampleShader = 6;
 		this.showShaderCode = false;
 
-		this.scaleFactor = 16.0;
+		this.scaleFactor = 10.0;
 	}
 
-	init(application) {
+    init(application)
+    {
 		// main initialization
 		super.init(application);
-
 		this.initCameras();
-
 		this.initLights();
 
 		this.gl.clearDepth(10000.0);
@@ -30,38 +29,39 @@ class ShaderScene extends CGFscene
 		this.gl.depthFunc(this.gl.LEQUAL);
 
 		// objects initialization
-
 		this.axis = new CGFaxis(this);
 		this.enableTextures(true);
 
-		this.objects=[
+        this.objects=
+        [
 			new Teapot(this),
 			new Plane(this, 50)
 		];
 
 		// Object interface variables
-		this.objectList = {
+        this.objectList =
+        {
 			'Teapot': 0,
-			'Plane': 1
+			'Plane': 1,
 		}
 
 		// Materials and textures initialization
 
 		this.appearance = new CGFappearance(this);
-		this.appearance.setAmbient(0.3, 0.3, 0.3, 1);
-		this.appearance.setDiffuse(0.7, 0.7, 0.7, 1);
-		this.appearance.setSpecular(0.0, 0.0, 0.0, 1);
+        this.appearance.setAmbient(1, 0, 1, 1);
+        this.appearance.setDiffuse(1, 0, 1, 1);
+        this.appearance.setSpecular(1, 0, 1, 1);
 		this.appearance.setShininess(120);
 
-		this.texture = new CGFtexture(this, "textures/texture.jpg");
+        this.texture = new CGFtexture(this, "textures/texture.jpg"); //texture
+        this.texture2 = new CGFtexture(this, "textures/texture.jpg");
 		this.appearance.setTexture(this.texture);
 		this.appearance.setTextureWrap('REPEAT', 'REPEAT');
 
-		this.texture2 = new CGFtexture(this, "textures/FEUP.jpg");
 
 		// shaders initialization
-
-		this.testShaders = [
+        this.testShaders =
+        [
 			new CGFshader(this.gl, "shaders/flat.vert", "shaders/flat.frag"),
 			new CGFshader(this.gl, "shaders/uScale.vert", "shaders/uScale.frag"),
 			new CGFshader(this.gl, "shaders/varying.vert", "shaders/varying.frag"),
@@ -76,16 +76,15 @@ class ShaderScene extends CGFscene
 		// additional texture will have to be bound to texture unit 1 later, when using the shader, with "this.texture2.bind(1);"
 		this.testShaders[4].setUniformsValues({ uSampler2: 1 });
 		this.testShaders[5].setUniformsValues({ uSampler2: 1 });
-		this.testShaders[6].setUniformsValues({ uSampler2: 1 });
-		this.testShaders[6].setUniformsValues({ timeFactor: 0 });
-
+        this.testShaders[6].setUniformsValues({ uSampler2: 1 });
+		this.testShaders[6].setUniformsValues({ timeFactor:0 });
 
 		// Shaders interface variables
-
-		this.shadersList = {
+        this.shadersList = 
+        {
 			'Flat Shading': 0,
 			'Passing a scale as uniform': 1,
-			'Passing a varying parameter from VS -> FS': 2,
+			'Passing a var param from VS->FS': 2,
 			'Simple texturing': 3,
 			'Multiple textures in the FS': 4,
 			'Multiple textures in VS and FS': 5,
@@ -104,22 +103,22 @@ class ShaderScene extends CGFscene
 		this.onShaderCodeVizChanged(this.showShaderCode);
 		this.onSelectedShaderChanged(this.selectedExampleShader);
 
-
 		// set the scene update period 
-		// (to invoke the update() method every 50ms or as close as possible to that )
-		this.setUpdatePeriod(50);
-
+		// (to invoke the update() method every 1ms or as close as possible to that )
+		this.setUpdatePeriod(1);
 	};
 
 	// configure cameras
-	initCameras() {
+    initCameras()
+    {
 		this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(20, 20, 100), vec3.fromValues(0, 0, 0));
 	};
 	
 	// initialize lights
-	initLights() {
-
-		if (this.lights.length > 0) {
+    initLights()
+    {
+        if (this.lights.length > 0)
+        {
 			this.lights[0].setPosition(0, 0, 10, 1);
 			this.lights[0].setAmbient(0.2, 0.2, 0.2, 1);
 			this.lights[0].setDiffuse(0.9, 0.9, 1.0, 1);
@@ -130,70 +129,62 @@ class ShaderScene extends CGFscene
 	};
 
 	// Interface event handlers
-
 	// Show/hide shader code
-	onShaderCodeVizChanged(v) {
-		if (v)
-			this.shadersDiv.style.display = "block";
-		else
-			this.shadersDiv.style.display = "none";
+    onShaderCodeVizChanged(v)
+    {
+		if(v) this.shadersDiv.style.display = "block";
+		else this.shadersDiv.style.display = "none";
 	}
 
 	// Called when selected shader changes
-	onSelectedShaderChanged(v) {
+    onSelectedShaderChanged(v)
+    {
 		// update shader code
 		this.vShaderDiv.innerHTML = "<xmp>" + getStringFromUrl(this.testShaders[v].vertexURL) + "</xmp>";
 		this.fShaderDiv.innerHTML = "<xmp>" + getStringFromUrl(this.testShaders[v].fragmentURL) + "</xmp>";
-
-		// update scale factor
 		this.onScaleFactorChanged(this.scaleFactor);
 	}
 
 	// called when a new object is selected
-	onSelectedObjectChanged(v) {
+    onSelectedObjectChanged(v)
+    {
 		// update wireframe mode when the object changes
 		this.onWireframeChanged(this.wireframe);
 	}
 
 	// updates the selected object's wireframe mode
-	onWireframeChanged(v) {
-		if (v)
-			this.objects[this.selectedObject].setLineMode();
-		else
-			this.objects[this.selectedObject].setFillMode();
-
+    onWireframeChanged(v)
+    {
+		if(v) this.objects[this.selectedObject].setLineMode();
+		else this.objects[this.selectedObject].setFillMode();
 	}
 
 	// called when the scale factor changes on the interface
-	onScaleFactorChanged(v) {
+    onScaleFactorChanged(v)
+    {
 		this.testShaders[this.selectedExampleShader].setUniformsValues({ normScale: this.scaleFactor });
 	}
 
 	// called periodically (as per setUpdatePeriod() in init())
-	update(t) {
+    update(t)
+    {
 		// only shader 6 is using time factor
-		if (this.selectedExampleShader == 6)
-			this.testShaders[6].setUniformsValues({ timeFactor: t / 100 % 1000 });
+		if(this.selectedExampleShader == 6) this.testShaders[6].setUniformsValues({ timeFactor: t / 200 % 1000 });
 	}
 
 	// main display function
-	display() {
+    display()
+    {
 		// Clear image and depth buffer every time we update the scene
 		this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
 		this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
-
 		// Initialize Model-View matrix as identity (no transformation)
 		this.updateProjectionMatrix();
 		this.loadIdentity();
-
-		// Apply transformations corresponding to the camera position relative to the origin
 		this.applyViewMatrix();
-
 		// Update all lights used
 		this.lights[0].update();
-
-		// Draw axis
 		this.axis.display();
 
 		// aplly main appearance (including texture in default texture unit 0)
@@ -204,15 +195,15 @@ class ShaderScene extends CGFscene
 		this.pushMatrix();
 
 		// bind additional texture to texture unit 1
-		this.texture2.bind(1);
+		this.texture2.bind(0);
 
 		//Uncomment following lines in case texture must have wrapping mode 'REPEAT'
 		//this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_S, this.gl.REPEAT);
 		//this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_T, this.gl.REPEAT);
 
-		if (this.selectedObject==0) {
+        if (this.selectedObject==0)
+        {
 			// teapot (scaled and rotated to conform to our axis)
-
 			this.pushMatrix();
 	
 			this.translate(0, -6, 0);
@@ -222,7 +213,8 @@ class ShaderScene extends CGFscene
 	
 			this.popMatrix();
 		}
-		else {
+        else
+        {
 			this.pushMatrix();
 			
 			this.scale(25, 25, 25);

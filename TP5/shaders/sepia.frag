@@ -5,8 +5,8 @@ precision highp float;
 varying vec2 vTextureCoord;
 uniform sampler2D uSampler;
 
-void main() {
-
+void main()
+{
 	vec4 color = texture2D(uSampler, vTextureCoord);
 
 	vec4 colorSepia = color;
