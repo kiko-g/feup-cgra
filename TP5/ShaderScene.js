@@ -7,12 +7,14 @@ class ShaderScene extends CGFscene
 		this.appearance = null;
 
 		// initial configuration of interface
-		this.selectedObject = 1;
+		this.selectedObject = 0;
         this.wireframe = false;
-		this.selectedExampleShader = 6;
+		this.selectedExampleShader = 11;
 		this.showShaderCode = false;
 
-		this.scaleFactor = 10.0;
+        this.scaleFactor = 10.0;
+        this.speedFactor = 1.0;
+        this.selectedTexture = 0;
 	}
 
     init(application)
@@ -55,7 +57,10 @@ class ShaderScene extends CGFscene
 
         this.texture = new CGFtexture(this, "textures/texture.jpg"); //texture
         this.texture2 = new CGFtexture(this, "textures/texture.jpg");
-		this.appearance.setTexture(this.texture);
+        this.watertex = new CGFtexture(this, "textures/waterTex.jpg");
+        this.watermap = new CGFtexture(this, "textures/waterMap.jpg");
+
+		this.appearance.setTexture(this.watertex);
 		this.appearance.setTextureWrap('REPEAT', 'REPEAT');
 
 
@@ -72,6 +77,8 @@ class ShaderScene extends CGFscene
             new CGFshader(this.gl, "shaders/texture1.vert", "shaders/sepia.frag"),              //7
             new CGFshader(this.gl, "shaders/texture1.vert", "shaders/convolution.frag"),        //8
             new CGFshader(this.gl, "shaders/shadteap.vert", "shaders/shadteap.frag"),           //9
+            new CGFshader(this.gl, "shaders/texture1.vert", "shaders/grayscale.frag"),          //10
+            new CGFshader(this.gl, "shaders/water.vert", "shaders/water.frag"),                 //11
 		];
 
 		// additional texture will have to be bound to texture unit 1 later, when using the shader, with "this.texture2.bind(1);"
@@ -92,7 +99,15 @@ class ShaderScene extends CGFscene
 			'Animation example': 6,
 			'Sepia': 7,
             'Convolution': 8,
-            'Shaders no Teapot (1)': 9,
+            'Shaders Teapot Y+B': 9,        //Yellow + Blue
+            'Grayscale': 10,
+            'Water': 11,
+        };
+        
+        this.texturesList = 
+        {
+			'Default': 0,
+			'Water': 1, 
 		};
 
 		// shader code panels references
@@ -103,7 +118,8 @@ class ShaderScene extends CGFscene
 		// force initial setup of shader code panels
 
 		this.onShaderCodeVizChanged(this.showShaderCode);
-		this.onSelectedShaderChanged(this.selectedExampleShader);
+        this.onSelectedShaderChanged(this.selectedExampleShader);
+        this.onSelectedTextureChanged(this.selectedTexture);
 
 		// set the scene update period 
 		// (to invoke the update() method every 1ms or as close as possible to that )
@@ -131,7 +147,14 @@ class ShaderScene extends CGFscene
 	};
 
 	// Interface event handlers
-	// Show/hide shader code
+    // Show/hide shader code
+    onSelectedTextureChanged(v)
+    {
+        if(v==0) this.selectedTexture = 0;
+        else this.selectedTexture = 1;
+    }
+
+
     onShaderCodeVizChanged(v)
     {
 		if(v) this.shadersDiv.style.display = "block";
@@ -164,14 +187,20 @@ class ShaderScene extends CGFscene
 	// called when the scale factor changes on the interface
     onScaleFactorChanged(v)
     {
-		this.testShaders[this.selectedExampleShader].setUniformsValues({ normScale: this.scaleFactor });
+        this.testShaders[this.selectedExampleShader].setUniformsValues({ normScale: this.scaleFactor });
+        this.testShaders[this.selectedExampleShader].setUniformsValues({ speedScale: this.speedFactor });
 	}
 
 	// called periodically (as per setUpdatePeriod() in init())
     update(t)
     {
 		// only shader 6 is using time factor
-		if(this.selectedExampleShader == 6) this.testShaders[6].setUniformsValues({ timeFactor: t / 200 % 1000 });
+        if(this.selectedExampleShader == 6) this.testShaders[6].setUniformsValues({ timeFactor: t / 200 % 1000 });
+        if(this.selectedExampleShader == 11) 
+        {
+            this.selectedTexture = 1;       //always water
+            this.selectedObject = 1;        //always plane
+        }
 	}
 
 	// main display function
@@ -186,8 +215,11 @@ class ShaderScene extends CGFscene
 		this.loadIdentity();
 		this.applyViewMatrix();
 		// Update all lights used
-		this.lights[0].update();
-		this.axis.display();
+        this.lights[0].update();
+        this.pushMatrix();
+        this.scale(3, 3, 3);
+        this.axis.display();
+        this.popMatrix();
 
 		// aplly main appearance (including texture in default texture unit 0)
 		this.appearance.apply();
@@ -197,7 +229,8 @@ class ShaderScene extends CGFscene
 		this.pushMatrix();
 
 		// bind additional texture to texture unit 1
-		this.texture2.bind(0);
+        if(this.selectedTexture==0) this.texture.bind(0);
+        else this.watertex.bind(1);
 
 		//Uncomment following lines in case texture must have wrapping mode 'REPEAT'
 		//this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_S, this.gl.REPEAT);
@@ -219,7 +252,7 @@ class ShaderScene extends CGFscene
         {
 			this.pushMatrix();
 			
-			this.scale(25, 25, 25);
+			this.scale(20, 20, 20);
 			this.objects[1].display();
 			
 			this.popMatrix();

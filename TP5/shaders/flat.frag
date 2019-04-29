@@ -2,7 +2,8 @@
 precision highp float;
 #endif
 
-struct lightProperties {
+struct lightProperties
+{
     vec4 position;                  
     vec4 ambient;                   
     vec4 diffuse;                   
@@ -20,6 +21,7 @@ struct lightProperties {
 #define NUMBER_OF_LIGHTS 8
 uniform lightProperties uLight[NUMBER_OF_LIGHTS];
 
-void main() {
-		gl_FragColor =  vec4(0.6,0.6,0.9, 1.0) * uLight[0].diffuse;
+void main()
+{
+		gl_FragColor =  vec4(0.6, 0.6, 0.9, 1.0) * uLight[0].diffuse;
 }
