@@ -5,9 +5,9 @@ precision highp float;
 varying vec4 coords;
 varying vec4 normal;
 
-void main() {
-	if (coords.x > 0.0)
-		gl_FragColor =  normal;
+void main()
+{
+	if (coords.x > 0.0)	gl_FragColor =  normal;
 	else
 	{
 		gl_FragColor.rgb = abs(coords.xyz)/3.0;

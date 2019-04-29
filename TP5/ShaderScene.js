@@ -7,7 +7,7 @@ class ShaderScene extends CGFscene
 		this.appearance = null;
 
 		// initial configuration of interface
-		this.selectedObject = 0;
+		this.selectedObject = 1;
         this.wireframe = false;
 		this.selectedExampleShader = 6;
 		this.showShaderCode = false;
@@ -62,15 +62,16 @@ class ShaderScene extends CGFscene
 		// shaders initialization
         this.testShaders =
         [
-			new CGFshader(this.gl, "shaders/flat.vert", "shaders/flat.frag"),
-			new CGFshader(this.gl, "shaders/uScale.vert", "shaders/uScale.frag"),
-			new CGFshader(this.gl, "shaders/varying.vert", "shaders/varying.frag"),
-			new CGFshader(this.gl, "shaders/texture1.vert", "shaders/texture1.frag"),
-			new CGFshader(this.gl, "shaders/texture2.vert", "shaders/texture2.frag"),
-			new CGFshader(this.gl, "shaders/texture3.vert", "shaders/texture3.frag"),
-			new CGFshader(this.gl, "shaders/texture3anim.vert", "shaders/texture3anim.frag"),
-			new CGFshader(this.gl, "shaders/texture1.vert", "shaders/sepia.frag"),
-			new CGFshader(this.gl, "shaders/texture1.vert", "shaders/convolution.frag")
+			new CGFshader(this.gl, "shaders/flat.vert", "shaders/flat.frag"),                   //0
+			new CGFshader(this.gl, "shaders/uScale.vert", "shaders/uScale.frag"),               //1
+            new CGFshader(this.gl, "shaders/varying.vert", "shaders/varying.frag"),             //2
+            new CGFshader(this.gl, "shaders/texture1.vert", "shaders/texture1.frag"),           //3
+            new CGFshader(this.gl, "shaders/texture2.vert", "shaders/texture2.frag"),           //4
+            new CGFshader(this.gl, "shaders/texture3.vert", "shaders/texture3.frag"),           //5
+            new CGFshader(this.gl, "shaders/texture3anim.vert", "shaders/texture3anim.frag"),   //6
+            new CGFshader(this.gl, "shaders/texture1.vert", "shaders/sepia.frag"),              //7
+            new CGFshader(this.gl, "shaders/texture1.vert", "shaders/convolution.frag"),        //8
+            new CGFshader(this.gl, "shaders/shadteap.vert", "shaders/shadteap.frag"),           //9
 		];
 
 		// additional texture will have to be bound to texture unit 1 later, when using the shader, with "this.texture2.bind(1);"
@@ -90,7 +91,8 @@ class ShaderScene extends CGFscene
 			'Multiple textures in VS and FS': 5,
 			'Animation example': 6,
 			'Sepia': 7,
-			'Convolution': 8
+            'Convolution': 8,
+            'Shaders no Teapot (1)': 9,
 		};
 
 		// shader code panels references
