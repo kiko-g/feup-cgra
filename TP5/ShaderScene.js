@@ -7,7 +7,7 @@ class ShaderScene extends CGFscene
 		this.appearance = null;
 
 		// initial configuration of interface
-		this.selectedObject = 0;
+		this.selectedObject = 1;
         this.wireframe = false;
 		this.selectedExampleShader = 11;
 		this.showShaderCode = false;
@@ -56,7 +56,7 @@ class ShaderScene extends CGFscene
 		this.appearance.setShininess(120);
 
         this.texture = new CGFtexture(this, "textures/texture.jpg"); //texture
-        this.texture2 = new CGFtexture(this, "textures/texture.jpg");
+        this.texture2 = new CGFtexture(this, "textures/FEUP.jpg");
         this.watertex = new CGFtexture(this, "textures/waterTex.jpg");
         this.watermap = new CGFtexture(this, "textures/waterMap.jpg");
 
@@ -85,7 +85,9 @@ class ShaderScene extends CGFscene
 		this.testShaders[4].setUniformsValues({ uSampler2: 1 });
 		this.testShaders[5].setUniformsValues({ uSampler2: 1 });
         this.testShaders[6].setUniformsValues({ uSampler2: 1 });
-		this.testShaders[6].setUniformsValues({ timeFactor:0 });
+        this.testShaders[6].setUniformsValues({ timeFactor:0 });
+        this.testShaders[11].setUniformsValues({ uSampler2: 2 });
+        this.testShaders[11].setUniformsValues({ uSampler3: 3 });
 
 		// Shaders interface variables
         this.shadersList = 
@@ -196,11 +198,6 @@ class ShaderScene extends CGFscene
     {
 		// only shader 6 is using time factor
         if(this.selectedExampleShader == 6) this.testShaders[6].setUniformsValues({ timeFactor: t / 200 % 1000 });
-        if(this.selectedExampleShader == 11) 
-        {
-            this.selectedTexture = 1;       //always water
-            this.selectedObject = 1;        //always plane
-        }
 	}
 
 	// main display function
@@ -228,9 +225,10 @@ class ShaderScene extends CGFscene
 		this.setActiveShader(this.testShaders[this.selectedExampleShader]);
 		this.pushMatrix();
 
-		// bind additional texture to texture unit 1
-        if(this.selectedTexture==0) this.texture.bind(0);
-        else this.watertex.bind(1);
+        // bind additional texture to texture unit 1
+        this.texture2.bind(1);
+        this.watertex.bind(2);
+        this.watermap.bind(3);
 
 		//Uncomment following lines in case texture must have wrapping mode 'REPEAT'
 		//this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_S, this.gl.REPEAT);
@@ -252,7 +250,7 @@ class ShaderScene extends CGFscene
         {
 			this.pushMatrix();
 			
-			this.scale(20, 20, 20);
+			this.scale(25, 25, 25);
 			this.objects[1].display();
 			
 			this.popMatrix();
