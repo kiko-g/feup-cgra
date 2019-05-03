@@ -3,29 +3,33 @@
  * @constructor
  * @param scene - Reference to MyScene object
  */
-class MyLSystem extends CGFobject {
-	constructor(scene) {
+class MyLSystem extends CGFobject
+{
+    constructor(scene) 
+    {
         super(scene);
         this.init();
     }
 
-    init(){
+    init()
+    {
         // cria o lexico da gramática
         this.initGrammar()
-
     }
 
     // cria o lexico da gramática
-    initGrammar(){
-        this.grammar = {
+    initGrammar()
+    {
+        this.grammar = 
+        {
             "F": new MyRectangle(this.scene, 0.2, 1),
             "X": new MyRectangle(this.scene, 0.5, 0.5)
         };
     }
 
-
-    // gera o sistema L com os par�metros atuais da cena
-    generate(_axiom, _productions, _angle, _iterations, _scale){
+    // gera o sistema L com os par�metros atuais da cena
+    generate(_axiom, _productions, _angle, _iterations, _scale)
+    {
         // copia o axioma da cena para iniciar a sequência de desenvolvimento
         this.axiom = _axiom;
 
@@ -47,22 +51,29 @@ class MyLSystem extends CGFobject {
 
   
     // desenvolve o axioma ao longo de uma sequência de desenvolvimento com um determinado número de iterações
-    iterate(){
+    iterate()
+    {
         var i, j;
-        for (i=0; i < this.iterations; ++i){
+        for (i=0; i < this.iterations; ++i)
+        {
             var newString = "";
-
             // substitui cada um dos caracteres da cadeia de caracteres de acordo com as produções
-            for (j=0; j<this.axiom.length; ++j){
+            for (j=0; j<this.axiom.length; ++j)
+            {
                 var axiomProductions=this.productions[this.axiom[j]];
                 // aplicar producoes
-                if (axiomProductions === undefined){
+                if (axiomProductions === undefined)
+                {
                     // caso nao se aplique nenhuma producao deixa estar o caracter original
                     newString += this.axiom[j];
-                }else if (axiomProductions.length == 1) {
+                }
+                else if (axiomProductions.length == 1)
+                {
                     // caso apenas exista uma producao, aplica-a
                     newString += axiomProductions[0];
-                } else {
+                } 
+                else
+                {
                     // sistema estocastico - varias producoes sao aplicaveis - seleciona aleatoriamente
                     newString += axiomProductions[Math.floor(Math.random() * axiomProductions.length)];                    
                 }
@@ -74,17 +85,20 @@ class MyLSystem extends CGFobject {
         console.log("(length: "+this.axiom.length+")");
     }
 
-    display(){
+    display()
+    {
         this.scene.pushMatrix();
         this.scene.scale(this.scale, this.scale, this.scale);
 
         var i;
 
         // percorre a cadeia de caracteres
-        for (i=0; i<this.axiom.length; ++i){
+        for (i=0; i<this.axiom.length; ++i)
+        {
 
             // verifica se sao caracteres especiais
-            switch(this.axiom[i]){
+            switch(this.axiom[i])
+            {
                 case "+":
                     // roda a esquerda
                     this.scene.rotate(this.angle, 0, 0, 1);
