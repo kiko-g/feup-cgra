@@ -29,9 +29,9 @@ class MyInterface extends CGFinterface
 
 		this.gui.add(this.scene, 'selectedExampleShader', this.scene.shadersList).name('Shader examples').onChange(this.scene.onSelectedShaderChanged.bind(this.scene));
         this.gui.add(this.scene, 'showShaderCode').name('Show Shader Code').onChange(this.scene.onShaderCodeVizChanged.bind(this.scene));
-        this.gui.add(this.scene, 'selectedTexture', this.scene.texturesList).name('Selected Texture').onChange(this.scene.onSelectedTextureChanged.bind(this.scene));
+        //this.gui.add(this.scene, 'selectedTexture', this.scene.texturesList).name('Selected Texture').onChange(this.scene.onSelectedTextureChanged.bind(this.scene));
 
-        this.gui.add(this.scene, 'scaleFactor',-50,50).onChange(this.scene.onScaleFactorChanged.bind(this.scene));
+        this.gui.add(this.scene, 'scaleFactor',-30,30).onChange(this.scene.onScaleFactorChanged.bind(this.scene));
         this.gui.add(this.scene, 'speedFactor',-5,5).onChange(this.scene.onScaleFactorChanged.bind(this.scene));
         
 		return true;
