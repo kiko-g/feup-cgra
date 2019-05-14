@@ -1,9 +1,9 @@
 /**
- * MyLSystem
+ * MyLSPlant
  * @constructor
  * @param scene - Reference to MyScene object
  */
-class MyLSystem extends CGFobject {
+class MyLSPlant extends CGFobject {
 	constructor(scene) {
         super(scene);
         this.init();
@@ -18,13 +18,14 @@ class MyLSystem extends CGFobject {
     // cria o lexico da gramática
     initGrammar(){
         this.grammar = {
-            "F": new MyRectangle(this.scene, 0.2, 1),
-            "X": new MyRectangle(this.scene, 0.5, 0.5)
+            "F": new MyBranch(this.scene),
+            "X": new MyLeaf(this.scene)
+
         };
     }
 
 
-    // gera o sistema L com os par�metros atuais da cena
+    // gera o sistema L com os par�metros atuais da cena
     generate(_axiom, _productions, _angle, _iterations, _scale){
         // copia o axioma da cena para iniciar a sequência de desenvolvimento
         this.axiom = _axiom;
@@ -104,7 +105,22 @@ class MyLSystem extends CGFobject {
                     // pop
                     this.scene.popMatrix();
                     break;
+                
+                case "\\":
+                    this.scene.rotate(this.angle, 1, 0, 0);
+                    break;
 
+                case "/":
+                    this.scene.rotate(this.angle, -1, 0, 0);
+                    break;
+
+                case "^":
+                    this.scene.rotate(this.angle, 0, 1, 0);
+                    break;
+
+                case "&":
+                    this.scene.rotate(this.angle, 0, -1, 1);
+                    break;
                 // processa primitiva definida na gramatica, se existir
                 default:
                     var primitive=this.grammar[this.axiom[i]];

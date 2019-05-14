@@ -2,18 +2,11 @@
 * MyScene
 * @constructor
 */
-class MyScene extends CGFscene
-{
-    constructor()
-    {
+class MyScene extends CGFscene {
+    constructor() {
         super();
     }
-
-    // AXIOM:     F++F++F
-    // RULE:      F++F--F--F++F
-    // ANGLE:     60
-    init(application) 
-    {
+    init(application) {
         super.init(application);
         this.initCameras();
         this.initLights();
@@ -29,21 +22,19 @@ class MyScene extends CGFscene
 
         //Objects connected to MyInterface
         this.axiom = "X";
-        this.ruleF = "FF";
+        this.ruleF = "FF"; 
         this.ruleX = "F[-X][X]F[-X]+FX";
-        this.angle = 30.0;
-        this.iterations = 4;
-        this.scaleFactor = 0.5;
-        this.lSystem = new MyLSystem(this);
+        this.angle = 60.0;
+        this.iterations = 2;
+        this.scaleFactor = 1;
+        this.lSystem = new MyLSPlant(this);
 
-        this.doGenerate = function ()
-        {
-            this.lSystem.generate
-            (
+        this.doGenerate = function () {
+            this.lSystem.generate(
                 this.axiom,
                 {
-                    "F": [ this.ruleF ],
-                    "X": [ this.ruleX ],
+                    "F": [ "FF" ],
+                    "X": [ "F[-X][X]F[-X]+X", "F[-X][X]+X", "F[+X]-X", "F[/X][X]F[\\\\X]+X", "F[\\X][X]/X", "F[/X]\\X", "F[^X][X]F[&X]^X", "F[^X]&X", "F[&X]^X" ]
                 },
                 this.angle,
                 this.iterations,
@@ -59,28 +50,22 @@ class MyScene extends CGFscene
         
     }
 
-    initLights()
-    {
+    initLights() {
         this.lights[0].setPosition(15, 2, 5, 1);
         this.lights[0].setDiffuse(1.0, 1.0, 1.0, 1.0);
         this.lights[0].enable();
         this.lights[0].update();
     }
-    initCameras()
-    {
+    initCameras() {
         this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
     }
-    
-    setDefaultAppearance()
-    {
+    setDefaultAppearance() {
         this.setAmbient(0.2, 0.4, 0.8, 1.0);
         this.setDiffuse(0.2, 0.4, 0.8, 1.0);
         this.setSpecular(0.2, 0.4, 0.8, 1.0);
         this.setShininess(10.0);
     }
-
-    display()
-    {
+    display() {
         // ---- BEGIN Background, camera and axis setup
         // Clear image and depth buffer everytime we update the scene
         this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
@@ -99,7 +84,6 @@ class MyScene extends CGFscene
         // ---- BEGIN Primitive drawing section
 
         this.lSystem.display();
-
         // ---- END Primitive drawing section
     }
 }
