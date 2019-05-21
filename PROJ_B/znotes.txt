@@ -1,0 +1,4 @@
+d = vt
+delta = currtime - lasttime
+
+ignore first "lasttime"
