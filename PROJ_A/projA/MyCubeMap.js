@@ -27,7 +27,7 @@
  * @param scene - Reference to MyScene object
  */
 
-var c = 40;
+var c = 40; //constante
 class MyCubeMap extends CGFobject
 {
     constructor(scene)
