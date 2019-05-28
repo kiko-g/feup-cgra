@@ -12,7 +12,7 @@ class MyScene extends CGFscene
         this.initLights();
 
         //Background color
-        this.gl.clearColor(0.0, 0.0, 0.05, 1.0);
+        this.gl.clearColor(0, 0.2, 0.3, 1.0);
 
         this.gl.clearDepth(100.0);
         this.gl.enable(this.gl.DEPTH_TEST);
@@ -24,7 +24,13 @@ class MyScene extends CGFscene
         //Initialize scene objects
         this.axis = new CGFaxis(this);
         this.plane = new Plane(this, 32);
-        this.bird = new MyBird(this, "images/water.jpg", "images/water.jpg", "images/water.jpg", "images/water.jpg", "images/water.jpg");
+        this.bird = new MyBird(this, 
+            "images/grey.jpg",
+        "images/bodyfur.jpg", 
+        "images/headfur.jpg",
+        "images/nose.jpg",
+        "images/eye.png",
+        "images/white.png");
 
         //Objects connected to MyInterface
     }
@@ -32,6 +38,7 @@ class MyScene extends CGFscene
     initLights()
     {
         this.lights[0].setPosition(15, 2, 5, 1);
+        this.lights[0].setAmbient(0.2, 0.2, 0.2, 1);
         this.lights[0].setDiffuse(1.0, 1.0, 1.0, 1.0);
         this.lights[0].enable();
         this.lights[0].update();
@@ -73,7 +80,7 @@ class MyScene extends CGFscene
 
         
         this.pushMatrix();
-        this.rotate(-0.5 * Math.PI, 1, 0, 0);
+        //this.rotate(-0.5 * Math.PI, 1, 0, 0);
         this.bird.display();
         this.popMatrix();
 
