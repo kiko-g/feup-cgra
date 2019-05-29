@@ -12,7 +12,7 @@ class MyScene extends CGFscene
         this.initLights();
 
         //Background color
-        this.gl.clearColor(0, 0.2, 0.3, 1.0);
+        this.gl.clearColor(0.0, 0.2, 0.3, 1.0);
 
         this.gl.clearDepth(100.0);
         this.gl.enable(this.gl.DEPTH_TEST);
@@ -24,14 +24,17 @@ class MyScene extends CGFscene
         //Initialize scene objects
         this.axis = new CGFaxis(this);
         this.plane = new Plane(this, 32);
+        
+        //(order for below tex declarations)
+        //headT, mainT, wingsT, noseT, eyesT, white 
         this.bird = new MyBird(this, 
-            "images/grey.jpg",
-        "images/bodyfur.jpg", 
-        "images/headfur.jpg",
+        "images/darkgreen.png",
+        "images/body.jpg", 
+        "images/brown.png",
         "images/nose.jpg",
         "images/eye.png",
         "images/white.png");
-
+        
         //Objects connected to MyInterface
     }
 

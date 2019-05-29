@@ -3,36 +3,27 @@
  * @constructor
  * @param scene - Reference to MyScene object
  */
+
 class MyBird extends CGFobject 
 {
+    // This is a flying duck :)
     constructor(scene, headT, mainT, wingsT, noseT, eyesT, white)
     {
         super(scene);
-        this.birdbody = new MyBirdBody(scene, 20, mainT);
-        this.head = new MyBirdHead(scene, 20, white);
-        this.nose = new MyCone(scene, 7, 2, 1);
-        this.eye = new MyUnitCubeQuad(scene, white, white, eyesT);
-        this.wing = new MyQuad(scene);
-        this.wing2 = new MyTriangle(scene);
-        this.tail = new MyPyramid(scene, 8, 1);
-        this.mainBirdTex = mainT;
-        this.headTex = headT;
-        this.wingsTex = wingsT;
-        this.noseTex = noseT;
-        this.toup = 1;
+        this.birdbody   = new MyBirdBody(scene, 20, mainT);
+        this.head       = new MyBirdHead(scene, 20, headT, eyesT, white);
+        this.wing       = new MyQuad(scene);
+        this.wing2      = new MyTriangle(scene);
+        this.tail       = new MyPyramid(scene, 8, 1);
+        this.mainBirdTex    = mainT;
+        this.headTex        = headT;
+        this.wingsTex       = wingsT;
+        this.noseTex        = noseT;
         this.init();
     }
 
     init()
     {
-        this.nosetex = new CGFappearance(this.scene);
-        this.nosetex.setAmbient(1, 1, 1, 1);
-        this.nosetex.setDiffuse(1, 1, 1, 1);
-        this.nosetex.setSpecular(1, 1, 1, 1);
-        this.nosetex.setShininess(20);
-        this.nosetex.loadTexture(this.noseTex);
-        this.nosetex.setTextureWrap('REPEAT', 'REPEAT');
-
         this.headtex = new CGFappearance(this.scene);
         this.headtex.setAmbient(1, 1, 1, 1);
         this.headtex.setDiffuse(1, 1, 1, 1);
@@ -74,82 +65,56 @@ class MyBird extends CGFobject
         var n1 = Math.sqrt(2);
         this.scene.pushMatrix();
         this.scene.translate(0, 1, 0);
-        this.scene.scale(2, 0.8, 1);
+        this.scene.scale(1.5, 0.7, 1);
+        this.mainbirdtex.apply();               //BODY TEX
+        this.birdbody.display();                //DISPLAY BODY
+        this.scene.popMatrix();
+
+        this.scene.pushMatrix();
+        this.scene.translate(0, 0.1, 0);
+        this.scene.scale(0.8, 0.8, 0.8);
+        this.head.display();                    //DISPLAY HEAD 
+        this.scene.popMatrix();                 //Has its own texture inside "MyBirdHead.js"
+
+        this.scene.pushMatrix();
+        this.scene.translate(0.2, 1.2, 1.2);
+        this.scene.rotate(-DTR * 105, 1, 0, 0);
+        this.mainbirdtex.apply();              
+        this.wing.display();                    //DISPLAY RIGHT WING 1
+        this.scene.popMatrix();
+
+        this.scene.pushMatrix();
+        this.scene.translate(0.2, 1.2, -1.2);
+        this.scene.rotate(-DTR * 75, 1, 0, 0);
         this.mainbirdtex.apply();
-        this.birdbody.display();
+        this.wing.display();                    //DISPLAY LEFT WING 1
         this.scene.popMatrix();
 
         this.scene.pushMatrix();
-        this.scene.scale(1, 1, 0.9);
-        //this.scene.rotate(DTR * 90, 1, 0, 0);
-        //this.scene.rotate(DTR * 90, 0, 0, 1);
-        this.head.display();    //has its own texture inside "MyBirdHead.js"
-        this.scene.popMatrix();
-
-        this.scene.pushMatrix();
-        this.scene.translate(2.15, 2, 0.3);
-        this.scene.scale(0.1, 0.1, 0.1);
-        this.scene.rotate(-DTR * 90, 0, 0, 1);
-        this.eye.display();
-        this.scene.popMatrix();
-
-        this.scene.pushMatrix();
-        this.scene.translate(2.15, 2, -0.4);
-        this.scene.scale(0.1, 0.1, 0.1);
-        this.scene.rotate(-DTR * 90, 0, 0, 1);
-        this.eye.display();
-        this.scene.popMatrix();
-
-        this.scene.pushMatrix();
-        this.scene.translate(2.2, 1.8, -0.05); //0.05 is middle between the eyes zed coords
-        this.scene.scale(0.15, 0.1, 0.1);
-        this.scene.rotate(-DTR * 90, 0, 0, 1);
-        this.nosetex.apply();
-        this.nose.display();
-        this.scene.popMatrix();
-
-        this.scene.pushMatrix();
-        this.scene.translate(0.2, 1.2, 1.2); //0.05 is middle between the eyes zed coords
-        this.scene.scale(1.3, 1, 1);
-        this.scene.rotate(-DTR * 100, 1, 0, 0);
-        this.headtex.apply();
-        this.wing.display();
-        this.scene.popMatrix();
-
-        this.scene.pushMatrix();
-        this.scene.translate(0.2, 1.2, -1.2); //0.05 is middle between the eyes zed coords
-        this.scene.scale(1.3, 1, 1);
-        this.scene.rotate(-DTR * 80, 1, 0, 0);
-        this.headtex.apply();
-        this.wing.display();
-        this.scene.popMatrix();
-
-        this.scene.pushMatrix();
-        this.scene.translate(0.2, 1.28, 1.67); //0.05 is middle between the eyes zed coords
-        this.scene.scale(0.46, 0.5, 1);
+        this.scene.translate(0.2, 1.33, 1.67);
+        this.scene.scale(0.35, 0.5, 0.8);
         this.scene.rotate(-DTR * 90, 0, 1, 0);
         this.scene.rotate(-DTR * 90, 1, 0, 0);
-        this.headtex.apply();
-        this.wing2.display();
+        this.wingstex.apply();
+        this.wing2.display();                   //DISPLAY RIGHT WING 2
         this.scene.popMatrix();
 
         this.scene.pushMatrix();
-        this.scene.translate(0.2, 1.28, -1.67); //0.05 is middle between the eyes zed coords
-        this.scene.scale(0.46, 0.5, 1);
+        this.scene.translate(0.2, 1.33, -1.67);
+        this.scene.scale(0.35, 0.5, 0.8);
         this.scene.rotate(DTR * 90, 0, 1, 0);
         this.scene.rotate(DTR * 90, 1, 0, 0);
-        this.headtex.apply();
-        this.wing2.display();
+        this.wingstex.apply();
+        this.wing2.display();                   //DISPLAY LEFT WING 2
         this.scene.popMatrix();
 
         this.scene.pushMatrix();
-        this.scene.translate(-1.9, 1, 0);
-        this.scene.scale(0.5, 0.1, 0.1);
+        this.scene.translate(-1.4, 1, 0);
+        this.scene.scale(0.75, 0.15, 0.15);
         this.scene.rotate(DTR * 90, 0, 0, 1);
         this.headtex.apply();
-        this.tail.display();
+        this.tail.display();                    //DISPLAY TAIL
         this.scene.popMatrix();
-        
         /*
         */
     }
