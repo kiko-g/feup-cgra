@@ -19,6 +19,7 @@ class MyBird extends CGFobject
         this.headTex = headT;
         this.wingsTex = wingsT;
         this.noseTex = noseT;
+        this.toup = 1;
         this.init();
     }
 
