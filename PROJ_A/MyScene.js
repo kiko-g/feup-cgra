@@ -4,10 +4,7 @@
 */
 class MyScene extends CGFscene
 {
-    constructor()
-    {
-        super();
-    }
+    constructor() { super(); }
     init(application)
     {  
         super.init(application);
@@ -439,10 +436,10 @@ class MyScene extends CGFscene
         this.popMatrix();
         this.pushMatrix();
         this.rotate(90 * DTR, 1, 0, 0);         // (ANGLE, X, Y, Z) --> Angle and around which axis
-        this.scale(c*2,c*2,c*2);                // c is a global variable, represents hald the side of the huge cube
+        this.scale(c*2,c*2,c*2);                // c is a global variable, represents half the side of the huge cube
         if(this.day_night) this.groundtexday.apply();
         else this.groundtexnight.apply();
-        this.ground.display(); 
+        this.ground.display();
 
         //DRAW SIDEWALK
         this.popMatrix();
@@ -522,6 +519,8 @@ class MyScene extends CGFscene
         if(this.enableTex) this.enableTextures(true);
         else this.enableTextures(false);
     }
+
+    
     enableNormalViz()
     {
         this.amb.enableNormalViz();

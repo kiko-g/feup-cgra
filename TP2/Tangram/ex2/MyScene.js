@@ -79,7 +79,7 @@ class MyScene extends CGFscene
         this.loadIdentity();    
         this.applyViewMatrix();                                                             // Apply transformations corresponding to the camera position relative to the origin
         this.setDefaultAppearance();
-        if (this.displayAxis) this.axis.display();                                          // Draw axis
+        if(this.displayAxis) this.axis.display();                                          // Draw axis
         
         var a = this.scaleFactor;
         var scale = 
