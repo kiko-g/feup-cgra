@@ -24,6 +24,8 @@ class MyScene extends CGFscene
         this.axis = new CGFaxis(this);
         this.terrain = new MyTerrain(this);
         this.amb = new MyCubeMap(this);
+        this.branch = new MyTreeBranch(this, "images/wood.jpg");
+        this.house = new MyHouse(this, "images/oak2.jpg", "images/oak.jpg", "images/door.png", "images/window.jpg", "images/pillar2.jpg");
 
 
         // ==== Objects connected to MyInterface
@@ -109,20 +111,45 @@ class MyScene extends CGFscene
         this.pushMatrix();
         this.translate(0, 30, 0);
         this.McubeDay.apply();
-        this.amb.display();             //DISPLAY CUBE MAP (AMBIENT)
+        this.amb.display();                 //DISPLAY CUBE MAP (AMBIENT)
         this.popMatrix();
         
         this.pushMatrix();
         this.translate(10, 10, 10);
-        this.bird.display();
+        this.bird.display();                //DISPLAY BIRD
         this.popMatrix();
         
         this.pushMatrix();
-        this.scale(c*2, c*2, c*2);      //c is defined inside MyCubeMap and represents half of the side of the cube
+        this.scale(c*2, c*2, c*2); //c is defined inside MyCubeMap and represents half of the side of the cube
         this.rotate(-90 * DTR, 1, 0, 0);
-        this.terrain.display();           //DISPLAY TERRAIN
+        this.terrain.display();             //DISPLAY TERRAIN
         this.popMatrix();
 
+        this.pushMatrix();
+        this.translate(-17, 3.2, -3);
+        this.scale(0.7, 0.7, 0.8);
+        this.rotate(90*DTR, 0, 1, 0);
+        this.house.display();              //DISPLAY HOUSE
+        this.popMatrix();
+
+
+        //DISPLAY 5 BRANCHES
+        var h = 2.7; //branch height
+        this.pushMatrix();
+        this.translate(17, h, 12);
+        this.rotate(90*DTR, 0, 1, 0);
+        this.branch.display();
+        this.translate(2, 0, -1);  
+        this.rotate(45*DTR, 0, 1, 0);
+        this.branch.display();
+        // this.branch.display();  
+        // this.translate(0, 0, -1);
+        // this.branch.display();  
+        // this.translate(0, 0, 2);
+        // this.branch.display();  
+        this.popMatrix();
+
+        
 
         // ---- END Primitive drawing section =====================================================================================
         if (this.enableTex) this.enableTextures(true);
