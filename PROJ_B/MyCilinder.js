@@ -3,7 +3,8 @@
 * @constructor
 */
 class MyCilinder extends CGFobject {
-    constructor(scene, slices, height, radius) {
+    constructor(scene, slices, height, radius)
+    {
         super(scene);
         this.slices = slices;
         this.height = height;

@@ -10,99 +10,59 @@ class MyScene extends CGFscene
         super.init(application);
         this.initCameras();
         this.initLights();
-
-        //Background color
-        this.gl.clearColor(0.0, 0.2, 0.3, 1.0);
-
+        this.gl.clearColor(0.0, 0.2, 0.3, 1.0); //Background color 
         this.gl.clearDepth(100.0);
         this.gl.enable(this.gl.DEPTH_TEST);
         this.gl.enable(this.gl.CULL_FACE);
         this.gl.depthFunc(this.gl.LEQUAL);
         this.enableTextures(true);
-        this.setUpdatePeriod(50);
-
         
-        //MyInterface
-        this.day_night = true;
-
-        //Initialize scene objects
+        
+        // ==== Initialize scene objects ====
+        // headT, mainT wingsT, noseT, eyesT, tailT
+        this.bird = new MyBird(this, "images/darkgreen.png", "images/body.jpg", "images/brown.png", "images/nose.jpg", "images/eye.png", "images/tail.png");
         this.axis = new CGFaxis(this);
-        this.plane = new Plane(this, 32);
-        
-        //(order for below tex declarations)
-        //headT, mainT, wingsT, noseT, eyesT, white 
-        this.bird = new MyBird(this, 
-        "images/darkgreen.png",
-        "images/body.jpg", 
-        "images/brown.png",
-        "images/nose.jpg",
-        "images/eye.png",
-        "images/white.png");
+        this.terrain = new MyTerrain(this);
         this.amb = new MyCubeMap(this);
+        this.branch = new MyTreeBranch(this, "images/wood.jpg");
+        this.house = new MyHouse(this, "images/oak2.jpg", "images/oak.jpg", "images/door.png", "images/window.jpg", "images/pillar2.jpg");
 
-        //Initializing Materials
+
+        // ==== Objects connected to MyInterface
+        this.enableTex = true;
+        this.displayAxis = true;
+        //this.day_night = false;
+
+        
+        // ==== Initializing Materials
         this.McubeDay = new CGFappearance(this);
         this.McubeDay.setAmbient(1, 1, 1, 1);
         this.McubeDay.setDiffuse(1, 1, 1, 1);
         this.McubeDay.setSpecular(1, 1, 1, 1);
         this.McubeDay.setShininess(10);
-        this.McubeDay.loadTexture('images/cubemaptexday.png');
+        this.McubeDay.loadTexture("images/cubemaptexday.png");
         this.McubeDay.setTextureWrap('REPEAT', 'REPEAT');
 
-        this.McubeNight = new CGFappearance(this);
-        this.McubeNight.setAmbient(1, 1, 1, 1);
-        this.McubeNight.setDiffuse(1, 1, 1, 1);
-        this.McubeNight.setSpecular(1, 1, 1, 1);
-        this.McubeNight.setShininess(10);
-        this.McubeNight.loadTexture('images/cubemaptexnight.png');
-        this.McubeNight.setTextureWrap('REPEAT', 'REPEAT');
-
-        //Objects connected to MyInterface
+        // ========== END INIT
+        // ========== END INIT
+        // ========== END INIT
     }
 
     initLights()
     {
-        this.setGlobalAmbientLight(0.15, 0.15, 0.15, 1);
-        if(this.day_night)
-        {
-            //SUNLIGHT
-            this.lights[0].setPosition(20, 15, -20, 1);
-            this.lights[0].setAmbient(0.1, 0.1, 0.1, 1);
-            this.lights[0].setDiffuse(1, 1, 1, 1);
-            this.lights[0].setSpecular(1, 1, 1, 1);
-            this.lights[0].enable();
-            this.lights[0].update();
-            this.lights[0].setLinearAttenuation(1);
+        this.lights[0].setPosition(15, 2, 5, 1);
+        this.lights[0].setAmbient(0.1, 0.1, 0.1, 1);
+        this.lights[0].setDiffuse(1.0, 1.0, 1.0, 1.0);
+        this.lights[0].setSpecular(1.0, 1.0, 1.0, 1.0);
+        this.lights[0].enable();
+        this.lights[0].update();
 
-            this.lights[1].setPosition(20, 15, 20, 0);
-            this.lights[1].setAmbient(0.1, 0.1, 0.1, 1);
-            this.lights[1].setDiffuse(1, 1, 1, 1);
-            this.lights[1].setSpecular(1, 1, 1, 1);
-            this.lights[1].enable();
-            this.lights[1].update();
-            this.lights[1].setLinearAttenuation(1);
-
-        }
-
-        else
-        {
-            //MOONLIGHT
-            this.lights[0].setPosition(20, 15, -20, 1);
-            this.lights[0].setAmbient(0.05, 0.05, 0.05, 1);
-            this.lights[0].setDiffuse(0, 0, 0, 1);
-            this.lights[0].setSpecular(0, 0, 0, 1);
-            this.lights[0].enable();
-            this.lights[0].update();
-            this.lights[0].setLinearAttenuation(1);
-
-            this.lights[1].setPosition(20, 15, 20, 0);
-            this.lights[1].setAmbient(0.05, 0.05, 0.05, 1);
-            this.lights[1].setDiffuse(0, 0, 0, 1);
-            this.lights[1].setSpecular(0, 0, 0, 1);
-            this.lights[1].enable();
-            this.lights[1].update();
-            this.lights[1].setLinearAttenuation(1);
-        }
+        this.lights[1].setPosition(0, 0, 0, 1);
+        this.lights[1].setAmbient(0.05, 0.05, 0.05, 1);
+        this.lights[1].setDiffuse(1.0, 1.0, 1.0, 1.0);
+        this.lights[1].setSpecular(1.0, 1.0, 1.0, 1.0);
+        this.lights[1].enable();
+        this.lights[1].update();
     }
 
     initCameras()
@@ -130,10 +90,10 @@ class MyScene extends CGFscene
 
     setDefaultAppearance()
     {
-        this.setAmbient(0.2, 1.0, 0.8, 1.0);
+        this.setAmbient(0.2, 0.2, 0.2, 1.0);
         this.setDiffuse(0.2, 0.4, 0.8, 1.0);
         this.setSpecular(0.2, 0.4, 0.8, 1.0);
-        this.setShininess(10.0);
+        this.setShininess(100.0);
     }
 
     update(t){
@@ -142,48 +102,74 @@ class MyScene extends CGFscene
 
     display()
     {
-        // ---- BEGIN Background, camera and axis setup
+        var DTR = Math.PI / 180;
+        // ---- BEGIN Background, camera and axis setup 
+        // Clear image and depth buffer everytime we update the scene
         this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
-
-        // Clear image and depth buffer everytime we update the scene
-        // Initialize Model-View matrix as identity (no transformation)
-        // Apply transformations corresponding to the camera position relative to the origin
         this.updateProjectionMatrix();
-        this.loadIdentity();
-        this.applyViewMatrix();
-        // Draw axis
-        //Apply default appearance
-        this.axis.display();
-        this.setDefaultAppearance();
-
-        //Lights         
-        this.lights[0].update();
-        this.lights[1].update();
-
-
-        // ---- BEGIN Primitive drawing section
-
-        
+        this.loadIdentity();            // Initialize Model-View matrix as identity (no transformation)
+        this.applyViewMatrix();         // Apply transformations corresponding to the camera position relative to the origin
         this.pushMatrix();
-        //this.rotate(-0.5 * Math.PI, 1, 0, 0);
-        this.bird.display();
-
-        //this.pushMatrix();
-        //this.rotate(-0.5*Math.PI, 1, 0, 0);
-        //this.scale(10, 10, 10);
-        //this.plane.display();
-        //this.popMatrix();
-        
-        // CUBE MAP
+        this.translate(0, 5, 0);
+        this.scale(2, 2, 2);                             // LARGER AXIS
+        if(this.displayAxis) this.axis.display();        // DRAW AXIS
         this.popMatrix();
+        this.setDefaultAppearance();    //Apply default appearance
+        
+
+        // ---- BEGIN Primitive drawing section =====================================================================================
+        
         this.pushMatrix();
         this.translate(0, 30, 0);
-        if(this.day_night) this.McubeDay.apply();
-        else this.McubeNight.apply();
-        this.amb.display();
+        this.McubeDay.apply();
+        this.amb.display();                 //DISPLAY CUBE MAP (AMBIENT)
+        this.popMatrix();
+        
+        this.pushMatrix();
+        this.translate(10, 10, 10);
+        this.bird.display();                //DISPLAY BIRD
+        this.popMatrix();
+        
+        this.pushMatrix();
+        this.scale(c*2, c*2, c*2); //c is defined inside MyCubeMap and represents half of the side of the cube
+        this.rotate(-90 * DTR, 1, 0, 0);
+        this.terrain.display();             //DISPLAY TERRAIN
+        this.popMatrix();
+
+        this.pushMatrix();
+        this.translate(-17, 3.2, -3);
+        this.scale(0.7, 0.7, 0.8);
+        this.rotate(90*DTR, 0, 1, 0);
+        this.house.display();              //DISPLAY HOUSE
+        this.popMatrix();
 
 
-        // ---- END Primitive drawing section
+        //DISPLAY 5 BRANCHES
+        var h = 2.7; //branch height
+        this.pushMatrix();
+        this.translate(17, h, 12);
+        this.rotate(90*DTR, 0, 1, 0);
+        this.branch.display();
+        this.translate(2, 0, -1);  
+        this.rotate(45*DTR, 0, 1, 0);
+        this.branch.display();
+        // this.branch.display();  
+        // this.translate(0, 0, -1);
+        // this.branch.display();  
+        // this.translate(0, 0, 2);
+        // this.branch.display();  
+        this.popMatrix();
+
+        
+
+        // ---- END Primitive drawing section =====================================================================================
+        if (this.enableTex) this.enableTextures(true);
+        else this.enableTextures(false);
+    }
+
+    enableNormalViz()
+    {
+        //this.amb.enableNormalViz();
     }
 }

@@ -2,18 +2,18 @@ class ShaderScene extends CGFscene
 {
     constructor()
     {
-		super();
-		this.texture = null;
-		this.appearance = null;
+  		super();
+  		this.texture = null;
+  		this.appearance = null;
 
-		// initial configuration of interface
-		this.selectedObject = 1;
-		this.selectedExampleShader = 11;
+  		// initial configuration of interface
+  		this.selectedObject = 1;
+  		this.selectedExampleShader = 11;
         this.wireframe = false;
-		this.showShaderCode = false;
-        
-        this.scaleFactor = 5.0;
-        this.speedFactor = 1.0;
+  		this.showShaderCode = false;
+
+      this.scaleFactor = 5.0;
+      this.speedFactor = 1.0;
 	}
 
     init(application)
@@ -67,7 +67,7 @@ class ShaderScene extends CGFscene
         this.testShaders =
         [
 			new CGFshader(this.gl, "shaders/flat.vert", "shaders/flat.frag"),                   //0
-			new CGFshader(this.gl, "shaders/uScale.vert", "shaders/uScale.frag"),               //1
+            new CGFshader(this.gl, "shaders/uScale.vert", "shaders/uScale.frag"),               //1
             new CGFshader(this.gl, "shaders/varying.vert", "shaders/varying.frag"),             //2
             new CGFshader(this.gl, "shaders/texture1.vert", "shaders/texture1.frag"),           //3
             new CGFshader(this.gl, "shaders/texture2.vert", "shaders/texture2.frag"),           //4
@@ -78,7 +78,7 @@ class ShaderScene extends CGFscene
             new CGFshader(this.gl, "shaders/shadteap.vert", "shaders/shadteap.frag"),           //9
             new CGFshader(this.gl, "shaders/texture1.vert", "shaders/grayscale.frag"),          //10
             new CGFshader(this.gl, "shaders/water.vert", "shaders/water.frag"),                 //11
-		];
+		   ];
 
 		// additional texture will have to be bound to texture unit 1 later, when using the shader, with "this.texture2.bind(1);"
         this.testShaders[4].setUniformsValues({ uSampler2: 1 });    //passing FEUP texture
@@ -86,12 +86,12 @@ class ShaderScene extends CGFscene
         this.testShaders[6].setUniformsValues({ uSampler2: 1 });    //passing FEUP texture
         this.testShaders[6].setUniformsValues({ timeFactor:0 });
         this.testShaders[11].setUniformsValues({ uSampler2: 2 });   //passing WATER texture
-        this.testShaders[11].setUniformsValues({ uSampler3: 3 });   //passing WATER MAP texture 
+        this.testShaders[11].setUniformsValues({ uSampler3: 3 });   //passing WATER MAP texture
 
         //CTRL + F ---> "this.texture2.bind(1);" to see associations (texture binds)
 
 		// Shaders interface variables
-        this.shadersList = 
+        this.shadersList =
         {
 			'Flat Shading': 0,
 			'Scale as uniform': 1,
@@ -117,7 +117,7 @@ class ShaderScene extends CGFscene
 		this.onShaderCodeVizChanged(this.showShaderCode);
         this.onSelectedShaderChanged(this.selectedExampleShader);
 
-		// set the scene update period 
+		// set the scene update period
 		// (to invoke the update() method every 1ms or as close as possible to that)
 		this.setUpdatePeriod(1);
 	};
@@ -127,7 +127,7 @@ class ShaderScene extends CGFscene
     {
 		this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(20, 20, 100), vec3.fromValues(0, 0, 0));
 	};
-	
+
 	// initialize lights
     initLights()
     {
@@ -235,21 +235,21 @@ class ShaderScene extends CGFscene
         {
 			// teapot (scaled and rotated to conform to our axis)
 			this.pushMatrix();
-	
+
 			this.translate(0, -6, 0);
 			this.scale(0.5, 0.5, 0.5);
 			this.rotate(-Math.PI / 2, 1, 0, 0);
 			this.objects[0].display();
-	
+
 			this.popMatrix();
 		}
         else
         {
 			this.pushMatrix();
-			
+
 			this.scale(16, 16, 16);
 			this.objects[1].display();
-			
+
 			this.popMatrix();
 		}
 

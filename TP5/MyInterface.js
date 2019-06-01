@@ -1,25 +1,18 @@
 class MyInterface extends CGFinterface
 {
-
 	/**
 	* MyInterface
 	* @constructor
 	*/
 	constructor()
-	{
-		//call CGFinterface constructor 
-		super();
-		
-	};
-	/**
-	* init
-	* @param {CGFapplication} application
-	*/
-	init(application) 
+	//call CGFinterface constructor
+	{ super(); };
+	/** * init * @param {CGFapplication} application */
+	init(application)
 	{
 		// call CGFinterface init
 		super.init(application);
-		
+
 		// init GUI. For more information on the methods, check:
 		// http://workshop.chromeexperiments.com/examples/gui
 		this.gui = new dat.GUI();
@@ -33,7 +26,7 @@ class MyInterface extends CGFinterface
 
         this.gui.add(this.scene, 'scaleFactor',-30,30).onChange(this.scene.onScaleFactorChanged.bind(this.scene));
         this.gui.add(this.scene, 'speedFactor',-5,5).onChange(this.scene.onScaleFactorChanged.bind(this.scene));
-        
+
 		return true;
 	};
 }
