@@ -16,8 +16,31 @@ class MyScene extends CGFscene
         this.gl.enable(this.gl.CULL_FACE);
         this.gl.depthFunc(this.gl.LEQUAL);
         this.enableTextures(true);
-        
-        
+
+        // ==== Objects for LS System (Trees)
+        this.axiom = "X";
+        this.ruleF = "FF"; 
+        this.ruleX = "F[-X][X]F[-X]+FX";
+        this.angle = 60.0;
+        this.iterations = 2;
+        this.scaleFactor = 1;
+        this.lSystem = new MyLSPlant(this);
+
+        this.doGenerate = function () {
+            this.lSystem.generate(
+                this.axiom,
+                {
+                    "F": [ "FF" ],
+                    "X": [ "F[-X][X]F[-X]+X", "F[-X][X]+X", "F[+X]-X", "F[/X][X]F[\\\\X]+X", "F[\\X][X]/X", "F[/X]\\X", "F[^X][X]F[&X]^X", "F[^X]&X", "F[&X]^X" ]
+                },
+                this.angle,
+                this.iterations,
+                this.scaleFactor
+            );
+        }
+        // do initial generation
+        this.doGenerate();
+
         // ==== Initialize scene objects ====
         // headT, mainT wingsT, noseT, eyesT, tailT
         this.bird = new MyBird(this, "images/darkgreen.png", "images/body.jpg", "images/brown.png", "images/nose.jpg", "images/eye.png", "images/tail.png");
@@ -26,13 +49,12 @@ class MyScene extends CGFscene
         this.amb = new MyCubeMap(this);
         this.branch = new MyTreeBranch(this, "images/wood.jpg");
         this.house = new MyHouse(this, "images/oak2.jpg", "images/oak.jpg", "images/door.png", "images/window.jpg", "images/pillar2.jpg");
-
+        //this.treegroup = new MyTreeGroupPatch(this);
 
         // ==== Objects connected to MyInterface
         this.enableTex = true;
         this.displayAxis = true;
-        //this.day_night = false;
-
+        
         
         // ==== Initializing Materials
         this.McubeDay = new CGFappearance(this);
@@ -144,6 +166,12 @@ class MyScene extends CGFscene
         this.house.display();              //DISPLAY HOUSE
         this.popMatrix();
 
+        this.pushMatrix();
+        this.translate(15, 3.2, -3);
+        this.scale(0.7, 0.7, 0.8);
+        this.rotate(90*DTR, 0, 1, 0);
+        //this.treegroup.display();              //DISPLAY FORREST
+        this.popMatrix();
 
         //DISPLAY 5 BRANCHES
         var h = 2.7; //branch height

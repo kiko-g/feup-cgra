@@ -16,8 +16,7 @@ class MyInterface extends CGFinterface
         this.gui = new dat.GUI();
         
         var obj = this;
-        
-        this.gui.add(this.scene, 'day_night').name('Toggle day/night').onChange(this.scene.initLights.bind(this.scene));
+            
         this.initKeys();
         return true;
     }
