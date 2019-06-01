@@ -26,6 +26,7 @@ class MyScene extends CGFscene
         this.amb = new MyCubeMap(this);
         this.branch = new MyTreeBranch(this, "images/wood.jpg");
         this.house = new MyHouse(this, "images/oak2.jpg", "images/oak.jpg", "images/door.png", "images/window.jpg", "images/pillar2.jpg");
+        this.nest = new MyNest(this, "images/nest.jpg", 5);
 
 
         // ==== Objects connected to MyInterface
@@ -90,7 +91,6 @@ class MyScene extends CGFscene
     // ================================
     display()
     {
-        var DTR = Math.PI / 180;
         // ---- BEGIN Background, camera and axis setup 
         // Clear image and depth buffer everytime we update the scene
         this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
@@ -99,14 +99,15 @@ class MyScene extends CGFscene
         this.loadIdentity();            // Initialize Model-View matrix as identity (no transformation)
         this.applyViewMatrix();         // Apply transformations corresponding to the camera position relative to the origin
         this.pushMatrix();
-        this.translate(0, 5, 0);
+        this.translate(0, 5, 0);                         // VIEW AXIS MORE CLEARLY
         this.scale(2, 2, 2);                             // LARGER AXIS
         if(this.displayAxis) this.axis.display();        // DRAW AXIS
         this.popMatrix();
         this.setDefaultAppearance();    //Apply default appearance
         
-
+        
         // ---- BEGIN Primitive drawing section =====================================================================================
+        var DTR = Math.PI / 180;
         
         this.pushMatrix();
         this.translate(0, 30, 0);
@@ -115,7 +116,7 @@ class MyScene extends CGFscene
         this.popMatrix();
         
         this.pushMatrix();
-        this.translate(10, 10, 10);
+        this.translate(-10, 10, -10);
         this.bird.display();                //DISPLAY BIRD
         this.popMatrix();
         
@@ -133,22 +134,40 @@ class MyScene extends CGFscene
         this.popMatrix();
 
 
-        //DISPLAY 5 BRANCHES
+        //DISPLAY THE 3 BACK BRANCHES 
         var h = 2.7; //branch height
         this.pushMatrix();
         this.translate(17, h, 12);
         this.rotate(90*DTR, 0, 1, 0);
         this.branch.display();
-        this.translate(2, 0, -1);  
-        this.rotate(45*DTR, 0, 1, 0);
+        this.translate(0.4, 0.1, 2.8);
+        this.rotate(60*DTR, 0, 1, 0);
         this.branch.display();
-        // this.branch.display();  
-        // this.translate(0, 0, -1);
-        // this.branch.display();  
-        // this.translate(0, 0, 2);
-        // this.branch.display();  
+        this.rotate(30 * DTR, 0, 1, 0);
+        this.translate(-1.1, 0.1, 2.8);
+        this.branch.display(); 
         this.popMatrix();
 
+        //DISPLAY THE 2 FRONT BRANCHES 
+        this.pushMatrix(); 
+        this.translate(17, h, 11);
+        this.rotate(120 * DTR, 0, 1, 0);
+        this.branch.display();
+        this.popMatrix();
+
+        this.pushMatrix();
+        this.translate(19, h, 9.5);
+        this.rotate(150 * DTR, 0, 1, 0);
+        this.branch.display();
+        this.popMatrix();
+
+        //DISPLAYING NEST
+        this.pushMatrix();
+        this.translate(17, h, 11);
+        this.nest.display();
+        this.popMatrix();
+
+        
         
 
         // ---- END Primitive drawing section =====================================================================================

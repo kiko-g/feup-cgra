@@ -15,7 +15,7 @@ class MyTreeBranch extends CGFobject
     init()
     {
         this.woodtex = new CGFappearance(this.scene);
-        this.woodtex.setAmbient(0.1, 0.1, 0.1, 1);
+        this.woodtex.setAmbient(1, 1, 1, 1);
         this.woodtex.setDiffuse(1, 1, 1, 1);
         this.woodtex.setSpecular(1, 1, 1, 1);
         this.woodtex.setShininess(20);
