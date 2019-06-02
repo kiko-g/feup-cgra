@@ -31,7 +31,7 @@ class MyScene extends CGFscene
         this.nest = new MyNest(this, "images/nest.jpg", 25, 2); //make sure to use a amount of edges at least 5 times greater than the radius
         //notice that the ground of the nest is always a circle so edges of the nest should be above 10 or around that to simulate a circle (25)
         this.nestground = new MyCircle(this, 10);
-        //this.lightning = new MyLightning(this,30,4,0.7);
+        this.lightning = new MyLightning(this);
 
         // ==== Objects connected to MyInterface
         this.enableTex = true;
@@ -114,6 +114,8 @@ class MyScene extends CGFscene
             text += " S ";
             keysPressed=true;
         }
+
+
         if (keysPressed) console.log(text);
     }
 
@@ -121,6 +123,7 @@ class MyScene extends CGFscene
     {
         // this.checkKeys();
         // this.bird.updateBird(t);
+        this.lightning.update(t);
     }
     
 
@@ -178,10 +181,9 @@ class MyScene extends CGFscene
         this.popMatrix();
 
         this.pushMatrix();
-        this.translate(15, 3.2, 10);
-        this.scale(0.6, 0.6, 0.6);
-        this.rotate(90*DTR, 0, 1, 0);
-        //this.lightning.display();              //DISPLAY LIGHTNING
+        this.translate(0, 20.0, 0);
+        this.scale(2, 2, 2);
+        this.lightning.display();              //DISPLAY LIGHTNING
         this.popMatrix();
 
         // //DISPLAY THE 3 BACK BRANCHES 
@@ -208,13 +210,13 @@ class MyScene extends CGFscene
         this.pushMatrix();
         this.translate(16, 6.9, 13);
         this.rotate(90 * DTR, 0, 1, 0);
-        this.branches.display();
+   //     this.branches.display();
         this.popMatrix();
 
         //DISPLAYING NEST
         this.pushMatrix();
         this.translate(-9, -4.5, 14.5); //conflict with nest itself so y is -4.5...
-        this.nest.display();
+ //       this.nest.display();
         this.popMatrix();
         this.pushMatrix();
         this.translate(-9, 5.5, 14.5);

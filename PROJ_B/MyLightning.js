@@ -3,51 +3,112 @@
  * @constructor
  * @param scene - Reference to MyScene object
  */
-class MyLightning extends CGFobject
+class MyLightning extends MyLSystem
 {
-    constructor(scene, angle, iterations, scaleFactor)
+    constructor(scene)
     {
         super(scene);
         this.axiom = "X";
-        this.angle = angle;
-        this.iterations = iterations;
-        this.scaleFactor = scaleFactor;
+        this.initGrammar();
+        this.generate(
+            this.axiom,
+            {
+                "F": [ "FF" ],
+                "X": [ "F[-X][X]F[-X]+FX", "F[[-X-F]][FX-F]+FF" ]
+            },
+            25.0,
+            3,
+            0.5
+        );
 
-        this.lightning = new MyLSLightning(this.scene);
-        this.doGenerate = function () {
-            this.lightning.generate(
-                this.axiom,
-                {
-                    "F": [ "FF" ],
-                    "X": [ "F[-X][X]F[-X]+X", "F[-X][X]+X", "F[+X]-X", "F[/X][X]F[\\\\X]+X", "F[\\X][X]/X", "F[/X]\\X", "F[^X][X]F[&X]^X", "F[^X]&X", "F[&X]^X" ]
-                },
-                this.angle,
-                this.iterations,
-                this.scaleFactor
-            );
+
+        this.material1 = new CGFappearance(this.scene);
+        this.material1.setAmbient(1, 1, 1.0, 1.0);
+        this.material1.setDiffuse(0.0, 0.0, 0.0, 1.0);
+        this.material1.setSpecular(1, 1, 1.0, 1.0);
+        this.material1.setShininess(100.0);
+
+    }
+
+    initGrammar() {
+        this.raio = new MyQuad(this.scene);
+
+        this.grammar = {
+            "F": this.raio,
+            "X": this.raio
+        };
+    }
+
+    display(){
+        this.scene.pushMatrix();
+        this.scene.rotate(Math.PI, 0, 0, 1);
+        //this.scene.scale(0,0,-1);
+        this.scene.scale(this.scale, this.scale, this.scale);
+
+        var i;
+
+        // percorre a cadeia de caracteres
+        for (i=0; i<this.axiom.length; ++i){
+
+            // verifica se sao caracteres especiais
+            switch(this.axiom[i]){
+                case "+":
+                    // roda a esquerda
+                    this.scene.rotate(this.angle, 0, 0, 1);
+                    break;
+
+                case "-":
+                    // roda a direita
+                    this.scene.rotate(-this.angle, 0, 0, 1);
+                    break;
+
+                case "[":
+                    // push
+                    this.scene.pushMatrix();
+                    break;
+
+                case "]":
+                    // pop
+                    this.scene.popMatrix();
+                    break;
+                
+                case "\\":
+                    this.scene.rotate(this.angle, 1, 0, 0);
+                    break;
+
+                case "/":
+                    this.scene.rotate(this.angle, -1, 0, 0);
+                    break;
+
+                case "^":
+                    this.scene.rotate(this.angle, 0, 1, 0);
+                    break;
+
+                case "&":
+                    this.scene.rotate(this.angle, 0, -1, 1);
+                    break;
+                // processa primitiva definida na gramatica, se existir
+                default:
+                    var primitive=this.grammar[this.axiom[i]];
+
+                    if ( primitive )
+                    {
+                        
+                        this.scene.pushMatrix();
+                        this.material1.apply();
+                        this.scene.scale(0.2,1,3);
+                        primitive.display();
+                        this.scene.popMatrix();
+                        this.scene.translate(0, 1, 0);
+                    }
+                    break;
+            }
         }
-        this.doGenerate();
-
-        this.init();
-    }
-
-    init()
-    {
-    }
-
-    display()
-    {
-
-        this.scene.pushMatrix();
-        this.scene.scale(0, 0, -1);
-        this.lightning.display();
         this.scene.popMatrix();
-        this.scene.pushMatrix();
-
     }
     
     enableNormalViz()
     {
-        this.lightning.enableNormalViz();
+        this.raio.enableNormalViz();
     }
 }
