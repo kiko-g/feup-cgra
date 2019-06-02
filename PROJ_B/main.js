@@ -6,8 +6,8 @@ serialInclude(['../lib/CGF.js','MyScene.js','MyInterface.js', 'MyPrism.js',
 'MyCilinder.js', 'MyQuad.js', 'MyUnitCubeQuad.js', 'MyBird.js',
 'MyHouse.js', 'MyCubeMap.js', 'Plane.js', 'MyCircle.js',
 'MySemiSphere.js','MyCone.js', 'MyTriangle.js', 'MyTerrain.js',
-'MyTreeBranch.js', 'MyPyramid.js', 'MyTreeGroupPatch.js', 'MyLSystem.js','MyLeaf.js','MyBranch.js', 
-'MyLSPlant.js', 'MYDiamond.js', 'MyLightning','MyLightningPart','MyLSLightning',
+'MyTreeBranch.js', 'MyPyramid.js', 'MyTreeGroupPatch.js', 'MyLSystem.js','MyLeaf.js',
+'MyLSPlant.js', 'MyDiamond.js', 'MyLightning.js','MyLightningPart.js','MyLSLightning.js',
 'MyNest.js', 'MyTreeBranchesGroup.js',
 
 

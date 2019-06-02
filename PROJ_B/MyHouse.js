@@ -67,8 +67,6 @@ class MyHouse extends CGFobject
 
     display()
     {
-        var DTR = Math.PI/180;
-        var n1 = Math.sqrt(2) / 2;
         this.scene.pushMatrix();
         this.scene.scale(6, 6, 6);                      //BASE
         this.cube.display();

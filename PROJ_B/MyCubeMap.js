@@ -1,3 +1,9 @@
+/**
+ * MyCubeMap
+ * @constructor
+ * @param scene - Reference to MyScene object
+ */
+
 //                                                          6 ---------------7  
 // Let's define the 6 faces of                             /                /|
 // the Unit Cube as A, B, C, D, E and F                   /                / |
@@ -21,13 +27,9 @@
 // ZZ
 
 
-/**
- * MyCubeMap
- * @constructor
- * @param scene - Reference to MyScene object
- */
+//GLOBAL VARIABLES
+var c = 40; //HALF THE CUBE SIDE
 
-var c = 40;
 class MyCubeMap extends CGFobject
 {
     constructor(scene)

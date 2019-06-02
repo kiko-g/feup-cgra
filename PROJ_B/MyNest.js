@@ -29,7 +29,6 @@ class MyNest extends CGFobject
 
     display()
     {
-        var DTR = Math.PI / 180.0;
         var angle;
         var theta = DTR * 360.0 / this.edges;
         

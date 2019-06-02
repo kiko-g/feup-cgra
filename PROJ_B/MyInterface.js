@@ -8,18 +8,24 @@ class MyInterface extends CGFinterface
     init(application)
     {
         super.init(application);
-        // call CGFinterface init
-        // init GUI. For more information on the methods, check:
+        // call CGFinterface init ____ init GUI. For more information on the methods, check:
         // http://workshop.chromeexperiments.com/examples/gui
         var obj = this;
-        
         this.gui = new dat.GUI();
-        this.gui.add(this.scene, 'enableTex').name('Enable Textures');
-        this.gui.add(this.scene, 'displayAxis').name('Display Axis');
-        // this.gui.add(this.scene, 'scaleFactor', -30, 30).onChange(this.scene.onScaleFactorChanged.bind(this.scene));
-        // this.gui.add(this.scene, 'speedFactor', -5, 5).onChange(this.scene.onScaleFactorChanged.bind(this.scene));
+        var settings_dropdown = this.gui.addFolder('Global Settings');
+        var bird_dropdown = this.gui.addFolder('Bird Settings');
         
-        // this.initKeys();
+        settings_dropdown.add(this.scene, 'displayAxis').name('Display Axis');
+        settings_dropdown.add(this.scene, 'enableTex').name('Enable Textures');
+        settings_dropdown.add(this.scene, 'viewerPos', 0.0, 5.0).name('Viewer Distance (Position)');
+        settings_dropdown.add(this.scene, 'sceneLight', 0.0, 1.0).name('Scene Amb Light');
+        settings_dropdown.add(this.scene, 'msNumber', 10, 50).name('Miliseconds Update');
+        // 10 ms ---> 100 FPS            50ms --->     20  FPS
+
+        bird_dropdown.add(this.scene, 'birdScale', 0.1, 3.0).name('Bird Scale');
+        bird_dropdown.add(this.scene, 'birdSpeed', 0.3, 4.0).name('Bird Speed');
+        
+        this.initKeys();
         return true;
     }
     

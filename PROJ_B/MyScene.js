@@ -2,6 +2,11 @@
 * MyScene
 * @constructor
 */
+
+
+//GLOBAL VARIABLES
+var DTR = Math.PI / 180; //DEGREES TO RADIAN
+
 class MyScene extends CGFscene
 {
     constructor(){ super(); }
@@ -16,28 +21,38 @@ class MyScene extends CGFscene
         this.gl.enable(this.gl.CULL_FACE);
         this.gl.depthFunc(this.gl.LEQUAL);
         this.enableTextures(true);
-
-
-
+        this.setUpdatePeriod(this.msNumber);
+        
+        
+        
         // ==== Initialize scene objects ====
-        // headT, mainT wingsT, noseT, eyesT, tailT
-        this.bird = new MyBird(this, "images/darkgreen.png", "images/body.jpg", "images/brown.png", "images/nose.jpg", "images/eye.png", "images/tail.png");
+        this.nBranches = 5; //DISPLAYED BRANCHES
+        this.bird = new MyBird(this);
         this.axis = new CGFaxis(this);
         this.terrain = new MyTerrain(this);
         this.amb = new MyCubeMap(this);
-        this.branches = new MyTreeBranchesGroup(this, 5, "images/wood.jpg"); //notice that this is our "vector" of branches, similar to TreeGroupPatch in projA
-        this.house = new MyHouse(this, "images/oak2.jpg", "images/oak.jpg", "images/door.png", "images/window.jpg", "images/pillar2.jpg");
+        this.branchesVec = [];
+        for (var i = 0; i < this.nBranches; i++)
+        {
+            this.branchesVec.push(new MyTreeBranch(this, "images/wood.jpg", true));
+        }
+
+        this.house = new MyHouse(this, "images/oak2.jpg", "images/oak.jpg", "images/door.png", "images/window.jpg", "images/pillar2.jpg"); //textures are configurable here
         this.treegroup = new MyTreeGroupPatch(this, 3, 60.0, 4, 0.9);
         this.nest = new MyNest(this, "images/nest.jpg", 25, 2); //make sure to use a amount of edges at least 5 times greater than the radius
-        //notice that the ground of the nest is always a circle so edges of the nest should be above 10 or around that to simulate a circle (25)
+        //notice that the ground of the nest is always a circle so edges of the nest should be above 10 or around that to simulate a circle (25 in our case)
         this.nestground = new MyCircle(this, 10);
         //this.lightning = new MyLightning(this,30,4,0.7);
+        
 
         // ==== Objects connected to MyInterface
         this.enableTex = true;
         this.displayAxis = true;
-        this.scaleFactor = 5.0;
-        this.speedFactor = 1.0;
+        this.msNumber = 15; //aprox 67 FPS
+        this.birdSpeed = 2.0;
+        this.birdScale = 1.0;
+        this.sceneLight = 0.6;
+        this.viewerPos = 0.4;
         
         
         // ==== Initializing Materials
@@ -81,7 +96,8 @@ class MyScene extends CGFscene
 
     initCameras()
     {
-        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(45, 45, 45), vec3.fromValues(0, 0, 0));
+        this.camera = new CGFcamera(0.4, 0.1, 500,
+        vec3.fromValues(45, 45, 45), vec3.fromValues(0, 0, 0));
     }
 
     
@@ -90,84 +106,156 @@ class MyScene extends CGFscene
         this.setAmbient(0.2, 0.2, 0.2, 1.0);
         this.setDiffuse(0.2, 0.4, 0.8, 1.0);
         this.setSpecular(0.2, 0.4, 0.8, 1.0);
-        this.setShininess(100.0);
+        this.setShininess(50.0);
     }
     
 
 
-    // ==============================
-
+    // ==== INPUT ====
 
     checkKeys()
     {
-        var text = "Keys pressed: ";
-        var keysPressed=false;
-
-        if (this.gui.isKeyPressed("KeyW"))
+        var text = "Keys pressed:";
+        var keysPressed = false;
+        // ================================
+        if(this.gui.isKeyPressed("KeyW"))       //KEY TO MOVE FORWARD: W
         {
-            text += " W ";
-            keysPressed=true;
+            text += " W "; keysPressed = true;
         }
-        
-        if (this.gui.isKeyPressed("KeyS"))
+        // ================================
+        if (this.gui.isKeyPressed("KeyS"))      //KEY TO MOVE BACKWARDS: S
         {
-            text += " S ";
-            keysPressed=true;
+            text += " S "; keysPressed = true;
         }
+        // ================================
+        if (this.gui.isKeyPressed("KeyA"))      //KEY TO ROTATE LEFT: A
+        {
+            text += " A "; keysPressed = true;
+            this.bird.turn(10 * DTR);
+        }
+        // ================================
+        if (this.gui.isKeyPressed("KeyD"))      //KEY TO ROTATE RIGHT: D
+        {
+            text += " D "; keysPressed = true;
+            this.bird.turn(-10 * DTR);
+        }
+        // ================================
+        if (this.gui.isKeyPressed("KeyR"))      //KEY TO RESET BIRD: R
+        {
+            text += " R "; keysPressed = true;
+            this.bird.reset();
+        }
+        // ================================
+        if (this.gui.isKeyPressed("Digit5"))    //KEY TO STOP BIRD: % --> SHIFT + 5
+        {
+            text += " % "; keysPressed = true;
+            //make the bird stand still at his current position
+            this.bird.standStill();
+        }
+        // ================================
+        if (this.gui.isKeyPressed("KeyP"))      //KEY TO ATTEMP TO PICKUP BRANCH / FLY DOWN: P
+        {
+            text += " P "; keysPressed = true;
+            //if he's casually flying make him fly down (possibly picking up a branch)
+            if(this.bird.state == this.bird.states.casual) this.bird.flyDown();
+        }
+        // ================================
+        if (this.gui.isKeyPressed("KeyL"))      //KEY FOR LIGHTNING: L
+        {
+            text += " L "; keysPressed = true;
+            this.lightning.startAnimation(t, 1000);
+        }
+        // ================================
         if (keysPressed) console.log(text);
     }
 
     update(t)
     {
-        // this.checkKeys();
-        // this.bird.updateBird(t);
+        this.checkKeys();
+        this.bird.updateBird(t);
     }
     
+    catchBranch()
+    {
 
+        if (this.bird.treeBranch == null)
+        {
+            for (var i=0; i < this.nBranches; i++)
+            {
+                var xComp = (this.bird.x - this.branchesVec[i].x) * (this.bird.x - this.branchesVec[i].x);
+                var zComp = (this.bird.z - this.branchesVec[i].z) * (this.bird.z - this.branchesVec[i].z);
+                var distance = Math.sqrt(xComp + zComp);
+
+                if (distance <= this.bird.hitRadius + this.branchesVec[i].hitRadius) {
+                this.bird.addBranch(this.branchesVec[i]);
+                this.branchesVec.splice(i, 1);
+                break;
+                }
+        }
+        }
+        
+        //if he already has a branch allow him to drop it off in the nest
+        else 
+        {
+           var xComp = (this.bird.x - this.nest.x) * (this.bird.x - this.nest.x)
+           var zComp = (this.bird.z - this.nest.z) * (this.bird.z - this.nest.z)
+           var distance = Math.sqrt(xComp + zComp);
+
+           if (distance <= this.bird.hitRadius + this.nest.targetRadius)
+           {
+              this.nest.addBranch(this.bird.treeBranch);
+              this.bird.removeBranch();
+           }
+        }
+    }
 
 
     //====================================
     display()
     {
-        // ---- BEGIN Background, camera and axis setup 
+        // ---- INITIAL SETUP ----
         // Clear image and depth buffer everytime we update the scene
-        this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+        this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
         this.updateProjectionMatrix();
         this.loadIdentity();            // Initialize Model-View matrix as identity (no transformation)
         this.applyViewMatrix();         // Apply transformations corresponding to the camera position relative to the origin
+        this.setDefaultAppearance();    // Apply default appearance
+
+        // ---- GUI managed ----
+        this.setGlobalAmbientLight(this.sceneLight, this.sceneLight, this.sceneLight, 1);
+        this.scale(this.viewerPos, this.viewerPos, this.viewerPos);
+        
+        // ---- BEGIN Primitive drawing section =====================================================================================
         this.pushMatrix();
         this.translate(0, 5, 0);                         // VIEW AXIS MORE CLEARLY
         this.scale(2, 2, 2);                             // LARGER AXIS
         if(this.displayAxis) this.axis.display();        // DRAW AXIS
         this.popMatrix();
-        this.setDefaultAppearance();    //Apply default appearance
            
-        // ---- BEGIN Primitive drawing section =====================================================================================
-        var DTR = Math.PI / 180;
-        
         this.pushMatrix();
         this.translate(0, 30, 0);
         this.McubeDay.apply();
-        this.amb.display();                 //DISPLAY CUBE MAP (AMBIENT)
+        this.amb.display();                     //DISPLAY CUBE MAP (AMBIENT)
         this.popMatrix();
         
         this.pushMatrix();
-        this.translate(-10, 8, -10);        // 5 is about ground height in this point. 5+3 = 8
-        this.bird.display();                //DISPLAY BIRD
+        this.bird.setScale(this.birdScale);
+        this.bird.setSpeed(this.birdSpeed);
+        this.bird.display();                    //DISPLAY BIRD
         this.popMatrix();
         
         this.pushMatrix();
         this.scale(c*2, c*2, c*2); //c is defined inside MyCubeMap and represents half of the side of the cube
         this.rotate(-90 * DTR, 1, 0, 0);
-        this.terrain.display();             //DISPLAY TERRAIN
+        this.terrain.display();                 //DISPLAY TERRAIN
         this.popMatrix();
 
         this.pushMatrix();
         this.translate(-17, 6.2, -8);
         this.scale(0.7, 0.7, 0.7);
         this.rotate(45*DTR, 0, 1, 0);
-        this.house.display();               //DISPLAY HOUSE
+        this.house.display();                   //DISPLAY HOUSE
         this.popMatrix();
 
         this.pushMatrix();
@@ -181,35 +269,15 @@ class MyScene extends CGFscene
         this.translate(15, 3.2, 10);
         this.scale(0.6, 0.6, 0.6);
         this.rotate(90*DTR, 0, 1, 0);
-        //this.lightning.display();              //DISPLAY LIGHTNING
+        //this.lightning.display();             //DISPLAY LIGHTNING
         this.popMatrix();
 
-        // //DISPLAY THE 3 BACK BRANCHES 
-        // var h = 5.5; //branch height
+        //============================================= BRANCHES
         // this.pushMatrix();
-        // this.translate(17, h, 12);
-        // this.rotate(90*DTR, 0, 1, 0);
-        // this.branch.display();
-        // this.translate(0.4, 0.1, 2.8);
-        // this.rotate(60*DTR, 0, 1, 0);
-        // this.branch.display();
-        // this.rotate(30 * DTR, 0, 1, 0);
-        // this.translate(-1.1, 0.1, 2.8);
-        // this.branch.display(); 
+        // this.translate(16, 6.9, 13);
+        // this.rotate(90 * DTR, 0, 1, 0);
+        // this.branchesVec.display();
         // this.popMatrix();
-
-        // //DISPLAY THE 2 FRONT BRANCHES 
-        // this.pushMatrix(); 
-        // this.translate(17, h, 11);
-        // this.rotate(120 * DTR, 0, 1, 0);
-        // this.branch.display();
-        // this.popMatrix();
-
-        this.pushMatrix();
-        this.translate(16, 6.9, 13);
-        this.rotate(90 * DTR, 0, 1, 0);
-        this.branches.display();
-        this.popMatrix();
 
         //DISPLAYING NEST
         this.pushMatrix();
@@ -220,18 +288,13 @@ class MyScene extends CGFscene
         this.translate(-9, 5.5, 14.5);
         this.scale(2, 1, 2);
         this.rotate(-90*DTR, 1, 0, 0);
-        this.nestgroundtex.apply();
-        this.nestground.display();
+        this.nestgroundtex.apply();             //NEST GROUND (CIRCLE) 
+        this.nestground.display();              //DISPLAY NEST
         this.popMatrix();
 
 
         // ---- END Primitive drawing section =====================================================================================
         if (this.enableTex) this.enableTextures(true);
         else this.enableTextures(false);
-    }
-
-    enableNormalViz()
-    {
-        //this.amb.enableNormalViz();
     }
 }
