@@ -25,9 +25,9 @@ class MyScene extends CGFscene
         this.axis = new CGFaxis(this);
         this.terrain = new MyTerrain(this);
         this.amb = new MyCubeMap(this);
-        this.branch = new MyTreeBranch(this, "images/wood.jpg");
+        this.branches = new MyTreeBranchesGroup(this, 5, "images/wood.jpg"); //notice that this is our "vector" of branches, similar to TreeGroupPatch in projA
         this.house = new MyHouse(this, "images/oak2.jpg", "images/oak.jpg", "images/door.png", "images/window.jpg", "images/pillar2.jpg");
-        this.treegroup = new MyTreeGroupPatch(this,3,60.0,4,0.9);
+        this.treegroup = new MyTreeGroupPatch(this, 3, 60.0, 4, 0.9);
         this.nest = new MyNest(this, "images/nest.jpg", 25, 2); //make sure to use a amount of edges at least 5 times greater than the radius
         //notice that the ground of the nest is always a circle so edges of the nest should be above 10 or around that to simulate a circle (25)
         this.nestground = new MyCircle(this, 10);
@@ -119,8 +119,8 @@ class MyScene extends CGFscene
 
     update(t)
     {
-        this.checkKeys();
-        this.bird.updateBird(t);
+        // this.checkKeys();
+        // this.bird.updateBird(t);
     }
     
 
@@ -184,31 +184,31 @@ class MyScene extends CGFscene
         //this.lightning.display();              //DISPLAY LIGHTNING
         this.popMatrix();
 
-        //DISPLAY 5 BRANCHES
-        var h = 2.7; //branch height
-        this.pushMatrix();
-        this.translate(17, h, 12);
-        this.rotate(90*DTR, 0, 1, 0);
-        this.branch.display();
-        this.translate(0.4, 0.1, 2.8);
-        this.rotate(60*DTR, 0, 1, 0);
-        this.branch.display();
-        this.rotate(30 * DTR, 0, 1, 0);
-        this.translate(-1.1, 0.1, 2.8);
-        this.branch.display(); 
-        this.popMatrix();
+        // //DISPLAY THE 3 BACK BRANCHES 
+        // var h = 5.5; //branch height
+        // this.pushMatrix();
+        // this.translate(17, h, 12);
+        // this.rotate(90*DTR, 0, 1, 0);
+        // this.branch.display();
+        // this.translate(0.4, 0.1, 2.8);
+        // this.rotate(60*DTR, 0, 1, 0);
+        // this.branch.display();
+        // this.rotate(30 * DTR, 0, 1, 0);
+        // this.translate(-1.1, 0.1, 2.8);
+        // this.branch.display(); 
+        // this.popMatrix();
 
-        //DISPLAY THE 2 FRONT BRANCHES 
-        this.pushMatrix(); 
-        this.translate(17, h, 11);
-        this.rotate(120 * DTR, 0, 1, 0);
-        this.branch.display();
-        this.popMatrix();
+        // //DISPLAY THE 2 FRONT BRANCHES 
+        // this.pushMatrix(); 
+        // this.translate(17, h, 11);
+        // this.rotate(120 * DTR, 0, 1, 0);
+        // this.branch.display();
+        // this.popMatrix();
 
         this.pushMatrix();
-        this.translate(19, h+0.1, 9.5);
-        this.rotate(150 * DTR, 0, 1, 0);
-        this.branch.display();
+        this.translate(16, 6.9, 13);
+        this.rotate(90 * DTR, 0, 1, 0);
+        this.branches.display();
         this.popMatrix();
 
         //DISPLAYING NEST

@@ -19,7 +19,7 @@ class MyInterface extends CGFinterface
         // this.gui.add(this.scene, 'scaleFactor', -30, 30).onChange(this.scene.onScaleFactorChanged.bind(this.scene));
         // this.gui.add(this.scene, 'speedFactor', -5, 5).onChange(this.scene.onScaleFactorChanged.bind(this.scene));
         
-        this.initKeys();
+        // this.initKeys();
         return true;
     }
     
@@ -37,11 +37,13 @@ class MyInterface extends CGFinterface
         this.activeKeys[event.code]=true;
     };
     
-    processKeyUp(event){
+    processKeyUp(event)
+    {
         this.activeKeys[event.code]=false;  // called when a key is released, mark it as inactive in the array
     };
     
-    isKeyPressed(keyCode){
+    isKeyPressed(keyCode)
+    {
         return this.activeKeys[keyCode] || false; // returns true if a key is marked as pressed, false otherwise
     }
 }
