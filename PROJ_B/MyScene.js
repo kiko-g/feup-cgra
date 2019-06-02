@@ -17,29 +17,7 @@ class MyScene extends CGFscene
         this.gl.depthFunc(this.gl.LEQUAL);
         this.enableTextures(true);
 
-        // ==== Objects for LS System (Trees)
-        this.axiom = "X";
-        this.ruleF = "FF"; 
-        this.ruleX = "F[-X][X]F[-X]+FX";
-        this.angle = 60.0;
-        this.iterations = 2;
-        this.scaleFactor = 1;
-        // this.lSystem = new MyLSPlant(this);
 
-        // this.doGenerate = function () {
-        //     this.lSystem.generate(
-        //         this.axiom,
-        //         {
-        //             "F": [ "FF" ],
-        //             "X": [ "F[-X][X]F[-X]+X", "F[-X][X]+X", "F[+X]-X", "F[/X][X]F[\\\\X]+X", "F[\\X][X]/X", "F[/X]\\X", "F[^X][X]F[&X]^X", "F[^X]&X", "F[&X]^X" ]
-        //         },
-        //         this.angle,
-        //         this.iterations,
-        //         this.scaleFactor
-        //     );
-        // }
-        // // do initial generation
-        // this.doGenerate();
 
         // ==== Initialize scene objects ====
         // headT, mainT wingsT, noseT, eyesT, tailT
@@ -49,10 +27,8 @@ class MyScene extends CGFscene
         this.amb = new MyCubeMap(this);
         this.branch = new MyTreeBranch(this, "images/wood.jpg");
         this.house = new MyHouse(this, "images/oak2.jpg", "images/oak.jpg", "images/door.png", "images/window.jpg", "images/pillar2.jpg");
-        this.nest = new MyNest(this, "images/nest.jpg", 25, 2); //make sure to use a amount of edges at least 5 times greater than the radius
-        //notice that the ground of the nest is always a circle so edges of the nest should be above 10 or around that to simulate a circle (25)
-        this.nestground = new MyCircle(this,10);
-        //this.treegroup = new MyTreeGroupPatch(this);
+        this.treegroup = new MyTreeGroupPatch(this,3,60.0,4,0.9);
+        //this.lightning = new MyLightning(this,30,4,0.7);
 
         // ==== Objects connected to MyInterface
         this.enableTex = true;
@@ -148,8 +124,7 @@ class MyScene extends CGFscene
         if(this.displayAxis) this.axis.display();        // DRAW AXIS
         this.popMatrix();
         this.setDefaultAppearance();    //Apply default appearance
-        
-        
+           
         // ---- BEGIN Primitive drawing section =====================================================================================
         var DTR = Math.PI / 180;
         
@@ -179,13 +154,20 @@ class MyScene extends CGFscene
 
         this.pushMatrix();
         this.translate(15, 3.2, -3);
-        this.scale(0.7, 0.7, 0.8);
+        this.scale(0.6, 0.6, 0.6);
         this.rotate(90*DTR, 0, 1, 0);
-        //this.treegroup.display();              //DISPLAY FORREST
+        this.treegroup.display();              //DISPLAY FORREST
         this.popMatrix();
 
-        //DISPLAY THE 3 BACK BRANCHES 
-        var h = 5.5; //branch height
+        this.pushMatrix();
+        this.translate(15, 3.2, 10);
+        this.scale(0.6, 0.6, 0.6);
+        this.rotate(90*DTR, 0, 1, 0);
+        //this.lightning.display();              //DISPLAY LIGHTNING
+        this.popMatrix();
+
+        //DISPLAY 5 BRANCHES
+        var h = 2.7; //branch height
         this.pushMatrix();
         this.translate(17, h, 12);
         this.rotate(90*DTR, 0, 1, 0);

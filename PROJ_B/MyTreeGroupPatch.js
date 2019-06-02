@@ -5,15 +5,33 @@
  */
 class MyTreeGroupPatch extends CGFobject
 {
-    constructor(scene)
+    constructor(scene, spacing, angle, iterations, scaleFactor)
     {
         super(scene);
-        this.tree = new MyLSPlant(this.scene);
-        this.treeRandT = []; this.treeRandS = [];
+        this.spacing=spacing;
+        this.axiom = "X";
+        this.angle = angle;
+        this.iterations = iterations;
+        this.scaleFactor = scaleFactor;
+        this.trees = [];
+        this.treeRandT = [];
         for(var k=0; k<9; k++)
         {
             this.treeRandT.push(Math.random() * 0.2 + 1);      // MAX 1.2, MIN 1
-            this.treeRandS.push(Math.random() * 0.25 + 0.9);    // MAX 1.15, MIN 0.9
+            this.trees[k] = new MyLSPlant(this.scene);
+            this.doGenerate = function () {
+                this.trees[k].generate(
+                    this.axiom,
+                    {
+                        "F": [ "FF" ],
+                        "X": [ "F[-X][X]F[-X]+X", "F[-X][X]+X", "F[+X]-X", "F[/X][X]F[\\\\X]+X", "F[\\X][X]/X", "F[/X]\\X", "F[^X][X]F[&X]^X", "F[^X]&X", "F[&X]^X" ]
+                    },
+                    this.angle,
+                    this.iterations,
+                    this.scaleFactor
+                );
+            }
+            this.doGenerate();
         }
         this.init();
     }
@@ -22,28 +40,20 @@ class MyTreeGroupPatch extends CGFobject
     {
     }
 
-    initBuffers()
-    {
-        this.vertices = [];
-        this.indices = [];
-        this.normals = [];
-        this.texCoords = [];
-
-        this.primitiveType = this.scene.gl.TRIANGLES;
-        this.initGLBuffers();
-    }
-
     display()
     {
+        var counter=0;
         this.scene.pushMatrix();
         for(var j=0; j<3; j++)
         {
             for(var i=0; i<3; i++)
             {
                 this.scene.translate(1, 0, 1);
-                this.tree.display();
+                this.scene.translate(this.treeRandT[counter] * i * this.spacing*2, 0, this.treeRandT[counter] * j * this.spacing*2);
+                this.trees[counter].display();
                 this.scene.popMatrix();
                 this.scene.pushMatrix();
+                counter++;
             }
         }
         this.scene.popMatrix();
@@ -51,6 +61,6 @@ class MyTreeGroupPatch extends CGFobject
     
     enableNormalViz()
     {
-        this.tree.enableNormalViz();
+        this.trees.enableNormalViz();
     }
 }
