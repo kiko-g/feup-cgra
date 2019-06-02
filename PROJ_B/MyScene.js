@@ -42,8 +42,7 @@ class MyScene extends CGFscene
         this.nest = new MyNest(this, "images/nest.jpg", 25, 2); //make sure to use a amount of edges at least 5 times greater than the radius
         //notice that the ground of the nest is always a circle so edges of the nest should be above 10 or around that to simulate a circle (25 in our case)
         this.nestground = new MyCircle(this, 10);
-        //this.lightning = new MyLightning(this,30,4,0.7);
-        
+        this.lightning = new MyLightning(this);
 
         // ==== Objects connected to MyInterface
         this.enableTex = true;
@@ -173,6 +172,7 @@ class MyScene extends CGFscene
     {
         this.checkKeys();
         this.bird.updateBird(t);
+        this.lightning.update(t);
     }
     
     catchBranch()
@@ -266,10 +266,9 @@ class MyScene extends CGFscene
         this.popMatrix();
 
         this.pushMatrix();
-        this.translate(15, 3.2, 10);
-        this.scale(0.6, 0.6, 0.6);
-        this.rotate(90*DTR, 0, 1, 0);
-        //this.lightning.display();             //DISPLAY LIGHTNING
+        this.translate(0, 75.0, 0);
+        this.scale(10, 10, 10);
+        this.lightning.display();              //DISPLAY LIGHTNING
         this.popMatrix();
 
         //============================================= BRANCHES
