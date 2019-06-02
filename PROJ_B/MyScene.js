@@ -24,22 +24,22 @@ class MyScene extends CGFscene
         this.angle = 60.0;
         this.iterations = 2;
         this.scaleFactor = 1;
-        this.lSystem = new MyLSPlant(this);
+        // this.lSystem = new MyLSPlant(this);
 
-        this.doGenerate = function () {
-            this.lSystem.generate(
-                this.axiom,
-                {
-                    "F": [ "FF" ],
-                    "X": [ "F[-X][X]F[-X]+X", "F[-X][X]+X", "F[+X]-X", "F[/X][X]F[\\\\X]+X", "F[\\X][X]/X", "F[/X]\\X", "F[^X][X]F[&X]^X", "F[^X]&X", "F[&X]^X" ]
-                },
-                this.angle,
-                this.iterations,
-                this.scaleFactor
-            );
-        }
-        // do initial generation
-        this.doGenerate();
+        // this.doGenerate = function () {
+        //     this.lSystem.generate(
+        //         this.axiom,
+        //         {
+        //             "F": [ "FF" ],
+        //             "X": [ "F[-X][X]F[-X]+X", "F[-X][X]+X", "F[+X]-X", "F[/X][X]F[\\\\X]+X", "F[\\X][X]/X", "F[/X]\\X", "F[^X][X]F[&X]^X", "F[^X]&X", "F[&X]^X" ]
+        //         },
+        //         this.angle,
+        //         this.iterations,
+        //         this.scaleFactor
+        //     );
+        // }
+        // // do initial generation
+        // this.doGenerate();
 
         // ==== Initialize scene objects ====
         // headT, mainT wingsT, noseT, eyesT, tailT
@@ -49,7 +49,9 @@ class MyScene extends CGFscene
         this.amb = new MyCubeMap(this);
         this.branch = new MyTreeBranch(this, "images/wood.jpg");
         this.house = new MyHouse(this, "images/oak2.jpg", "images/oak.jpg", "images/door.png", "images/window.jpg", "images/pillar2.jpg");
-        this.nest = new MyNest(this, "images/nest.jpg", 5);
+        this.nest = new MyNest(this, "images/nest.jpg", 25, 2); //make sure to use a amount of edges at least 5 times greater than the radius
+        //notice that the ground of the nest is always a circle so edges of the nest should be above 10 or around that to simulate a circle (25)
+        this.nestground = new MyCircle(this,10);
         //this.treegroup = new MyTreeGroupPatch(this);
 
         // ==== Objects connected to MyInterface
@@ -65,6 +67,14 @@ class MyScene extends CGFscene
         this.McubeDay.setShininess(10);
         this.McubeDay.loadTexture("images/cubemaptexday.png");
         this.McubeDay.setTextureWrap('REPEAT', 'REPEAT');
+
+        this.nestgroundtex = new CGFappearance(this);
+        this.nestgroundtex.setAmbient(1, 1, 1, 1);
+        this.nestgroundtex.setDiffuse(0.4, 0.4, 0.4, 1);
+        this.nestgroundtex.setSpecular(1, 1, 1, 1);
+        this.nestgroundtex.setShininess(10);
+        this.nestgroundtex.loadTexture("images/nest2.jpg");
+        this.nestgroundtex.setTextureWrap('REPEAT', 'REPEAT');
 
         // ========== END INIT
         // ========== END INIT
@@ -161,9 +171,9 @@ class MyScene extends CGFscene
         this.popMatrix();
 
         this.pushMatrix();
-        this.translate(-17, 3.2, -3);
-        this.scale(0.7, 0.7, 0.8);
-        this.rotate(90*DTR, 0, 1, 0);
+        this.translate(-17, 6.2, -8);
+        this.scale(0.7, 0.7, 0.7);
+        this.rotate(45*DTR, 0, 1, 0);
         this.house.display();              //DISPLAY HOUSE
         this.popMatrix();
 
@@ -175,7 +185,7 @@ class MyScene extends CGFscene
         this.popMatrix();
 
         //DISPLAY THE 3 BACK BRANCHES 
-        var h = 2.7; //branch height
+        var h = 5.5; //branch height
         this.pushMatrix();
         this.translate(17, h, 12);
         this.rotate(90*DTR, 0, 1, 0);
@@ -196,15 +206,22 @@ class MyScene extends CGFscene
         this.popMatrix();
 
         this.pushMatrix();
-        this.translate(19, h, 9.5);
+        this.translate(19, h+0.1, 9.5);
         this.rotate(150 * DTR, 0, 1, 0);
         this.branch.display();
         this.popMatrix();
 
         //DISPLAYING NEST
         this.pushMatrix();
-        this.translate(17, h, 11);
+        this.translate(-9, -4.5, 14.5); //conflict with nest itself so y is -4.5...
         this.nest.display();
+        this.popMatrix();
+        this.pushMatrix();
+        this.translate(-9, 5.5, 14.5);
+        this.scale(2, 1, 2);
+        this.rotate(-90*DTR, 1, 0, 0);
+        this.nestgroundtex.apply();
+        this.nestground.display();
         this.popMatrix();
 
         
