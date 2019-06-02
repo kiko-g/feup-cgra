@@ -181,7 +181,7 @@ class MyScene extends CGFscene
         this.translate(15, 3.2, 10);
         this.scale(0.6, 0.6, 0.6);
         this.rotate(90*DTR, 0, 1, 0);
-        //this.lightning.display();              //DISPLAY LIGHTNING
+        this.lightning.display();              //DISPLAY LIGHTNING
         this.popMatrix();
 
         // //DISPLAY THE 3 BACK BRANCHES 

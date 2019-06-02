@@ -18,7 +18,7 @@ class MyLSPlant extends CGFobject {
     // cria o lexico da gramática
     initGrammar(){
         this.grammar = {
-            "F": new MyTreeBranch(this.scene),
+            "F": new MyTreeBranch(this.scene, "images/wood.jpg", 0),
             "X": new MyLeaf(this.scene)
 
         };
