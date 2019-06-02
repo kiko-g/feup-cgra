@@ -57,6 +57,8 @@ class MyScene extends CGFscene
         // ==== Objects connected to MyInterface
         this.enableTex = true;
         this.displayAxis = true;
+        this.scaleFactor = 5.0;
+        this.speedFactor = 1.0;
         
         
         // ==== Initializing Materials
@@ -67,7 +69,7 @@ class MyScene extends CGFscene
         this.McubeDay.setShininess(10);
         this.McubeDay.loadTexture("images/cubemaptexday.png");
         this.McubeDay.setTextureWrap('REPEAT', 'REPEAT');
-
+        
         this.nestgroundtex = new CGFappearance(this);
         this.nestgroundtex.setAmbient(1, 1, 1, 1);
         this.nestgroundtex.setDiffuse(0.4, 0.4, 0.4, 1);
@@ -75,12 +77,12 @@ class MyScene extends CGFscene
         this.nestgroundtex.setShininess(10);
         this.nestgroundtex.loadTexture("images/nest2.jpg");
         this.nestgroundtex.setTextureWrap('REPEAT', 'REPEAT');
-
+        
         // ========== END INIT
         // ========== END INIT
         // ========== END INIT
     }
-
+    
     initLights()
     {
         this.lights[0].setPosition(15, 2, 5, 1);
@@ -103,24 +105,7 @@ class MyScene extends CGFscene
         this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(45, 45, 45), vec3.fromValues(0, 0, 0));
     }
 
-    checkKeys(){
-        var text = "Keys pressed: ";
-        var keysPressed=false;
-
-        if (this.gui.isKeyPressed("KeyW")){
-            text+= " W ";
-            keysPressed=true;
-        }
-        
-        if (this.gui.isKeyPressed("KeyS")){
-            text+= " S ";
-            keysPressed=true;
-        }
-        if (keysPressed)
-            console.log(text);
-
-    }
-
+    
     setDefaultAppearance()
     {
         this.setAmbient(0.2, 0.2, 0.2, 1.0);
@@ -128,11 +113,41 @@ class MyScene extends CGFscene
         this.setSpecular(0.2, 0.4, 0.8, 1.0);
         this.setShininess(100.0);
     }
+    
 
-    update(t){
-        this.checkKeys();
+
+    // ==============================
+
+
+    checkKeys()
+    {
+        var text = "Keys pressed: ";
+        var keysPressed=false;
+
+        if (this.gui.isKeyPressed("KeyW"))
+        {
+            text += " W ";
+            keysPressed=true;
+        }
+        
+        if (this.gui.isKeyPressed("KeyS"))
+        {
+            text += " S ";
+            keysPressed=true;
+        }
+        if (keysPressed) console.log(text);
     }
 
+    update(t)
+    {
+        this.checkKeys();
+        this.bird.updateBird(t);
+    }
+    
+
+
+
+    //====================================
     display()
     {
         // ---- BEGIN Background, camera and axis setup 
@@ -160,7 +175,7 @@ class MyScene extends CGFscene
         this.popMatrix();
         
         this.pushMatrix();
-        this.translate(-10, 10, -10);
+        this.translate(-10, 8, -10);        // 5 is about ground height in this point. 5+3 = 8
         this.bird.display();                //DISPLAY BIRD
         this.popMatrix();
         
@@ -174,14 +189,14 @@ class MyScene extends CGFscene
         this.translate(-17, 6.2, -8);
         this.scale(0.7, 0.7, 0.7);
         this.rotate(45*DTR, 0, 1, 0);
-        this.house.display();              //DISPLAY HOUSE
+        this.house.display();               //DISPLAY HOUSE
         this.popMatrix();
 
         this.pushMatrix();
         this.translate(15, 3.2, -3);
         this.scale(0.7, 0.7, 0.8);
         this.rotate(90*DTR, 0, 1, 0);
-        //this.treegroup.display();              //DISPLAY FORREST
+        // this.treegroup.display();        //DISPLAY FOREST
         this.popMatrix();
 
         //DISPLAY THE 3 BACK BRANCHES 
@@ -224,8 +239,6 @@ class MyScene extends CGFscene
         this.nestground.display();
         this.popMatrix();
 
-        
-        
 
         // ---- END Primitive drawing section =====================================================================================
         if (this.enableTex) this.enableTextures(true);

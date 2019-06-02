@@ -4,7 +4,6 @@
  * @param scene - Reference to MyScene object
  */
 
-var x = Math.sqrt(2);
 
 class MyTriangle extends CGFobject
 {
@@ -13,8 +12,11 @@ class MyTriangle extends CGFobject
         super(scene);
         this.initBuffers();
     }
-    initBuffers() {
-        this.vertices = [
+    initBuffers()
+    {
+        var x = Math.sqrt(2);
+        this.vertices = 
+        [
             0,-x, 0,    //0
             x, 0, 0,	//1
             0, x, 0,    //2

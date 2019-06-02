@@ -32,6 +32,7 @@ class MyBird extends CGFobject
 
     init()
     {
+        //REGULAR TEXTURES
         this.nosetex = new CGFappearance(this.scene);
         this.nosetex.setAmbient(0.1, 0.1, 0.1, 1.0);
         this.nosetex.setDiffuse(1., 1., 1., 1.);
@@ -71,18 +72,19 @@ class MyBird extends CGFobject
         this.mainbirdtex.setShininess(20);
         this.mainbirdtex.loadTexture(this.mainBirdTex);
         this.mainbirdtex.setTextureWrap('REPEAT', 'REPEAT');
-    }
-
-    initBuffers()
-    {
-        this.vertices   = [];
-        this.indices    = [];
-        this.normals    = [];
-        this.texCoords  = [];
-        this.primitiveType = this.scene.gl.TRIANGLES;
-        this.initGLBuffers();
+        //END OF REGULAR TEXTURES DEFINITION
     }
     
+
+    updateBird(t)
+    {
+        
+    }
+
+
+
+
+
     display()
     {
         var r = this.radius;
