@@ -181,8 +181,8 @@ class MyScene extends CGFscene
         this.popMatrix();
 
         this.pushMatrix();
-        this.translate(0, 20.0, 0);
-        this.scale(2, 2, 2);
+        this.translate(0, 75.0, 0);
+        this.scale(10, 10, 10);
         this.lightning.display();              //DISPLAY LIGHTNING
         this.popMatrix();
 
@@ -210,13 +210,13 @@ class MyScene extends CGFscene
         this.pushMatrix();
         this.translate(16, 6.9, 13);
         this.rotate(90 * DTR, 0, 1, 0);
-   //     this.branches.display();
+        this.branches.display();
         this.popMatrix();
 
         //DISPLAYING NEST
         this.pushMatrix();
         this.translate(-9, -4.5, 14.5); //conflict with nest itself so y is -4.5...
- //       this.nest.display();
+        this.nest.display();
         this.popMatrix();
         this.pushMatrix();
         this.translate(-9, 5.5, 14.5);

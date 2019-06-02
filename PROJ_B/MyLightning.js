@@ -14,7 +14,7 @@ class MyLightning extends MyLSystem
             this.axiom,
             {
                 "F": [ "FF" ],
-                "X": [ "F[-X][X]F[-X]+FX", "F[[-X-F]][FX-F]+FF" ]
+                "X": [ "F[-X][X]F[-X]+FX", "F[[-X-F]][F+X-F]+FF", "X[[-F+F-F]][+X][+F]-F-X" ]
             },
             25.0,
             3,
@@ -24,7 +24,7 @@ class MyLightning extends MyLSystem
 
         this.material1 = new CGFappearance(this.scene);
         this.material1.setAmbient(1, 1, 1.0, 1.0);
-        this.material1.setDiffuse(0.0, 0.0, 0.0, 1.0);
+        this.material1.setDiffuse(0.8, 0.8, 0.8, 1.0);
         this.material1.setSpecular(1, 1, 1.0, 1.0);
         this.material1.setShininess(100.0);
 
@@ -35,14 +35,13 @@ class MyLightning extends MyLSystem
 
         this.grammar = {
             "F": this.raio,
-            "X": this.raio
+            //"X": this.raio
         };
     }
 
     display(){
         this.scene.pushMatrix();
         this.scene.rotate(Math.PI, 0, 0, 1);
-        //this.scene.scale(0,0,-1);
         this.scene.scale(this.scale, this.scale, this.scale);
 
         var i;
@@ -96,7 +95,7 @@ class MyLightning extends MyLSystem
                         
                         this.scene.pushMatrix();
                         this.material1.apply();
-                        this.scene.scale(0.2,1,3);
+                        this.scene.scale(0.1,1,3);
                         primitive.display();
                         this.scene.popMatrix();
                         this.scene.translate(0, 1, 0);
