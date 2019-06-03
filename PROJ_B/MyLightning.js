@@ -63,7 +63,8 @@ class MyLightning extends MyLSystem
         }
     }
 
-    display(){
+    display()
+    {
         this.scene.pushMatrix();
         this.scene.rotate(Math.PI, 0, 0, 1);
         this.scene.scale(this.scale, this.scale, this.scale);
@@ -71,7 +72,8 @@ class MyLightning extends MyLSystem
         var i;
 
         // percorre a cadeia de caracteres
-        for (i=0; i<this.depth; ++i){
+        for (i=0; i<this.depth; ++i)
+        {
 
             // verifica se sao caracteres especiais
             switch(this.axiom[i]){

@@ -15,6 +15,7 @@ class MyInterface extends CGFinterface
         var settings_dropdown = this.gui.addFolder('Global Settings');
         var bird_dropdown = this.gui.addFolder('Bird Settings');
         
+        settings_dropdown.open();
         settings_dropdown.add(this.scene, 'displayAxis').name('Display Axis');
         settings_dropdown.add(this.scene, 'enableTex').name('Enable Textures');
         settings_dropdown.add(this.scene, 'viewerPos', 0.0, 5.0).name('Viewer Distance (Position)');
@@ -22,8 +23,9 @@ class MyInterface extends CGFinterface
         settings_dropdown.add(this.scene, 'msNumber', 5, 50).name('Miliseconds Update');
         // 10 ms ---> 200 FPS            50ms --->     20  FPS
 
-        bird_dropdown.add(this.scene, 'birdScaleF', 0.1, 3.0).name('Bird Scale');
-        bird_dropdown.add(this.scene, 'birdSpeedF', 0.3, 4.0).name('Bird Speed');
+        bird_dropdown.open();
+        bird_dropdown.add(this.scene, 'birdScaleF', 0.5, 2.0).name('Bird Scale');
+        bird_dropdown.add(this.scene, 'birdSpeedF', 0.1, 3.0).name('Bird Speed');
         
         this.initKeys();
         return true;
