@@ -24,7 +24,7 @@ class MyCircle extends CGFobject
         this.normals.push(0, 0, 1);
         this.texCoords.push(0.5, 0.5);
 
-        for(var i = 0; i <= this.sides; i++)
+        for(var i=0; i <= this.sides; i++)
         {
            this.vertices.push(Math.cos(angle*i), Math.sin(angle*i), 0);
            this.normals.push(0, 0, 1);

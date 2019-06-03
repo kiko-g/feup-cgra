@@ -11,13 +11,9 @@ class MyBird extends CGFobject
     {
         super(scene);
         this.radius = 0.6;
-        this.speed = 2.0;
-        this.scale = 1.0;
+        this.birdspeed = 2.0;
+        this.scaleF = 1.0;
         this.states = { casual: 0, flyDown: 1, flyUp: 2, stopped: 3 }
-        //stopped case works like a reset but in a different position
-        this.x = x0; //set
-        this.y = y0; //set
-        this.z = z0; //set
         this.x0 = x0;
         this.y0 = y0;
         this.z0 = z0;
@@ -41,13 +37,20 @@ class MyBird extends CGFobject
         this.noseTex = "images/nose.jpg";
         this.tailTex = "images/tail.png";
         
-        //helpful movement variables
-        this.rate = 360 * DTR / (1000 / scene.msNumber);
-        this.lastUpdate = 0;
-        this.targetRadius = 2;
-        this.alpha = 0;
         this.init();
         this.resetBird();
+
+        //wing variables 
+        this.wingAngle0 = 0*DTR;
+        this.wingAngle  = 0*DTR;         //outside wing initial angle - birdwing - startAangle
+        this.wingVariation = 30 * DTR;    //the variation of the angle when flapping - birdwing - amplitude
+
+        //helpful movement variables
+        this.birdrotangle = -90*DTR;
+        this.floatVariation = 360 * DTR / (1000 / scene.msNumber); //wbble rate
+        this.floatParameter = 0; //wobble coef
+        this.lastUpdate = 0;
+        this.targetRadius = 2;
     }
 
     init()
@@ -95,22 +98,57 @@ class MyBird extends CGFobject
         //END OF REGULAR TEXTURES DEFINITION
     }
     
+
     // DISPLAY
+    setWingAngle(factor) { this.wingAngle = this.wingVariation * Math.cos(factor); }
+    displayOutsideLeftWing() //different methods, because these displays will vary, less confusing
+    {
+        this.scene.pushMatrix();
+        this.scene.translate(1, 1, 1);
+        this.scene.translate(0.2, 0.3, -1.58);
+        this.scene.scale(0.354, 0.5, 0.8);
+        this.scene.scale(0.8, 0.8, 0.8);
+        this.scene.rotate(DTR * 90, 0, 1, 0);           //initial wing setup
+        this.scene.rotate(DTR * 90, 1, 0, 0);           //initial wing setup
+        this.scene.rotate(-this.wingAngle - Math.cos(this.wingFlapFactor) * this.wingVariation, 0, 1, 0);     //actual wing movement
+        this.wingstex.apply();                          //Texture for the outside part of the wing
+        this.leftwing2.display();                       //DISPLAY LEFT WING 2 (FRONT VIEW)
+        this.scene.popMatrix();
+    }
+
+    displayOutsideRightWing()
+    {
+        this.scene.pushMatrix();
+        this.scene.translate(1, 1, 1);
+        this.scene.translate(0.2, 0.3, 1.58);
+        this.scene.scale(0.354, 0.5, 0.8);
+        this.scene.scale(0.8, 0.8, 0.8);
+        this.scene.rotate(-DTR * 90, 0, 1, 0);          //initial wing setup
+        this.scene.rotate(-DTR * 90, 1, 0, 0);          //initial wing setup
+        this.scene.rotate(this.wingAngle + Math.cos(this.wingFlapFactor) * this.wingVariation, 0, 1, 0);     //actual wing movement
+        this.wingstex.apply();                          //Texture for the outside part of the wing
+        this.rightwing2.display();                      //DISPLAY RIGHT WING 2 (FRONT VIEW)
+        this.scene.popMatrix();
+    }
+
+    toggleTreeBranch() { if(this.branchPickedUp != null) this.branchPickedUp.display(); }
+    
     display()
     {
         var r = this.radius;
         this.scene.pushMatrix();
-        this.scene.translate(-this.x0, this.y0, this.z0);         // y0 = 5+3 = 8 (ground height is 5)
-        this.scene.scale(this.scaleFactor, this.scaleFactor, this.scaleFactor);
+        this.scene.translate(this.x, this.y, this.z);         // y0 = 5+3 = 8 (ground height is 5)
+        this.scene.scale(this.scaleF, this.scaleF, this.scaleF);
+        this.scene.rotate(-this.birdrotangle, 0, 1, 0);
         //DISPLAYING BODY
         this.scene.pushMatrix();
         this.scene.translate(1, 1, 1);          //RECENTER (Applied to all)
         this.scene.scale(1.4, 0.8, 1);
-        this.scene.rotate(90 * DTR, 1, 0, 0);   
+        this.scene.rotate(90 * DTR, 1, 0, 0);
         this.mainbirdtex.apply();               //BODY TEX
         this.belly.display();                   //Semisphere, one half of the belly
         this.scene.popMatrix();
-
+        
         this.scene.pushMatrix();
         this.scene.translate(1, 1, 1);
         this.scene.scale(1.4, 0.8, 1);
@@ -206,138 +244,124 @@ class MyBird extends CGFobject
         this.scene.popMatrix();
         
         this.scene.pushMatrix();
-        this.scene.translate(1, 1, 1);
-        this.scene.translate(0.2, 0.3, 1.58);
-        this.scene.scale(0.354, 0.5, 0.8);
-        this.scene.scale(0.8, 0.8, 0.8);
-        this.scene.rotate(-DTR * 90, 0, 1, 0);
-        this.scene.rotate(-DTR * 90, 1, 0, 0);
-        this.wingstex.apply();                  //Texture for the outside part of the wing
-        this.rightwing2.display();              //DISPLAY RIGHT WING 2 (FRONT VIEW)
+        this.displayOutsideRightWing();
         this.scene.popMatrix();
-        
         this.scene.pushMatrix();
-        this.scene.translate(1, 1, 1);
-        this.scene.translate(0.2, 0.3, -1.58);
-        this.scene.scale(0.354, 0.5, 0.8);
-        this.scene.scale(0.8, 0.8, 0.8);
-        this.scene.rotate(DTR * 90, 0, 1, 0);
-        this.scene.rotate(DTR * 90, 1, 0, 0);
-        this.wingstex.apply();                  //Texture for the outside part of the wing
-        this.leftwing2.display();               //DISPLAY LEFT WING 2 (FRONT VIEW)
+        this.displayOutsideLeftWing();
+        this.scene.popMatrix();
+        this.scene.pushMatrix();
+        this.toggleTreeBranch();
         this.scene.popMatrix();
     }
     // END OF DISPLAY
     
-    updateBird(t)
+    
+    getBranch(thebranch)
+    {
+        this.branchPickedUp = thebranch;
+        this.branchPickedUp.x = 0;
+        this.branchPickedUp.y = 10;
+        this.branchPickedUp.z = -2;
+        this.branchPickedUp.rot = 0 * DTR;
+    }
+    
+    flyDown() { this.currentState = this.states.flyDown; }
+    rmBranch() { this.branchPickedUp = null; }
+    updateBird(t) //switch structure for each situation
     {
         if (t - this.lastUpdate >= 15) // +/- 67 updates per sec (basically FPS) 
         { 
-            this.x += this.speed * Math.sin(this.angle);
-            this.z += this.speed * Math.cos(this.angle);
+            this.x += this.birdspeed * Math.sin(this.birdrotangle);
+            this.z += this.birdspeed * Math.cos(this.birdrotangle);
             
             switch(this.currentState)
             {
                 case this.states.casual: //case 0
                 {
-                    this.wobbleCoeficient += this.wobbleRate;
-                    this.wobbleCoeficient %= 2 * Math.PI;
-                    this.y += 0.05 * Math.sin(this.wobbleCoeficient);
+                    this.floatParameter += this.floatVariation;
+                    this.floatParameter %= 360*DTR;
+                    this.y += 0.05 * Math.sin(this.floatParameter);
                     break;
                 }
                 
                 
-                case this.states.flyDown:
+                case this.states.flyDown: //case 1
                 {
                     if (this.y <= 0)
                     {
                         this.currentState = this.states.flyUp;
                         this.y += 0.2;
-                        this.scene.catchBranch();
+                        //this.scene.catchBranch();
                     }
                     else this.y -= 0.2;
                     break;
                 }
+
                 case this.states.flyUp: //case 2
                 {
-                     if (this.y >= 4) this.currentState = this.states.casual;
-                     else this.y += 0.2;
-                     break;
+                    if (this.y >= 4) this.currentState = this.states.casual;
+                    else this.y += 0.2;
+                    break;
+                }
+
+                case this.states.stopped: //case 3
+                {   
+                    if(this.y >= 0)
+                    {
+                        this.birdspeed = 0;
+                        this.wingAngle = 0;
+                        this.wingVariation = 25 * DTR;
+                        this.wingFlapFactor = 0;
+                        this.wingFlapMultiplier = 30 * DTR;
+                        break;
+                    }
+                    break;
                 }
             }
                 
-                this.wingFlapFactor += (this.speed + 0.5) * this.wingFlapMultiplier;
-                this.wingFlapFactor %= 2 * Math.PI;
-                this.leftWing.setAngle(this.wingFlapFactor);
-                this.rightWing.setAngle(this.wingFlapFactor);
-                this.lastUpdate = t;
-            }
+            this.wingFlapFactor += (this.birdspeed + 0.5) * this.wingFlapMultiplier;
+            this.wingFlapFactor %= 360*DTR;
+            this.setWingAngle(this.wingFlapFactor);
+            this.lastUpdate = t;
         }
-        
+    }
+
+
+    setSpeedFactor(newspeedfactor){ this.speedFactor = newspeedfactor; }
+    setScaleFactor(newscalefactor){ this.scaleFactor = newscalefactor; }
+    standStill() { this.currentState = this.states.stopped; }                      // %
+    moveAgain()
+    { 
+        this.birdspeed = 0;
+        this.birdrotangle = 0;
+        this.wingAngle = 0 * DTR;
+        this.wingVariation = 25 * DTR;
+        this.wingFlapFactor = 0;
+        this.wingFlapMultiplier = 30 * DTR;
+        this.setSpeed(0.5); this.curentState = this.states.casual; 
+    }   // &
+
+    turn(v) { this.birdrotangle -= v * this.speedFactor; }
+    accelerate(v)
+    {
+        var a = v * this.speedFactor;
+        this.birdspeed -= a;
+        this.birdspeed = Math.min(Math.max(this.birdspeed, -Math.abs(a)), Math.abs(a));
+    }
+
+
     resetBird()
     {
         this.x = this.x0;
         this.y = this.y0;
         this.z = this.z0;
         this.currentState = this.states.casual;
-        this.speed = 0;
-        this.angle = 0;
-        this.wingAddedAngle = 0;
-        this.wingAmplitude = Math.PI * 7 / 48;
+        this.birdspeed = 0;
+        this.birdrotangle = 0;
+        this.wingAngle = 0*DTR;
+        this.wingVariation = 25 * DTR;
         this.wingFlapFactor = 0;
-        this.wingFlapMultiplier = Math.PI / 6;
+        this.wingFlapMultiplier = 30 * DTR;
         this.branchPickedUp = null;
     }
-    
-    setWingAngle()
-    {
-
-    }
-
-    flyDown()
-    {
-        this.currentState = this.states.flyDown;
-    }
-
-    standStill()
-    {
-        this.currentState = this.states.stopped;
-    }
-
-    setSpeed(newspeed) { this.speed = newspeed; }
-    setScale(newscale) { this.scale = newscale; }
-
-    turn(v)
-    { 
-        this.angle += v * this.speed;
-    }
-    
-    accelerate(v)
-    {
-        var a = v * this.speed;
-        this.speed += a;
-        this.speed = clamp(this.speed, -Math.abs(a), Math.abs(a));
-    }
-    
-
-    toggleTreeBranch()
-    {
-        if(this.pickedBranch != null) this.pickedBranch.display();
-    }
-
-    getBranch(thebranch)
-    {
-        this.branchPickedUp = theranch;
-        this.branchPickedUp.x = 0;
-        this.branchPickedUp.y = 10;
-        this.branchPickedUp.z = -2;
-        this.branchPickedUp.rot = 0 * DTR;
-    }
-
-    rmBranch()
-    {
-        this.branchPickedUp = null;
-    }
-
-
 }

@@ -4,25 +4,12 @@
 */
 class MyPyramid extends CGFobject
 {
-    constructor(scene, slices, stacks, pT)
+    constructor(scene, slices, stacks)
     {
         super(scene);
         this.slices = slices;
         this.stacks = stacks;
         this.initBuffers();
-        this.tex = pT;
-        this.init();
-    }
-
-    init()
-    {
-        this.T = new CGFappearance(this.scene);
-        this.T.setAmbient(1, 1, 1, 1);
-        this.T.setDiffuse(1, 1, 1, 1);
-        this.T.setSpecular(1, 1, 1, 1);
-        this.T.setShininess(20);
-        this.T.loadTexture(this.tex);
-        this.T.setTextureWrap('REPEAT', 'REPEAT');
     }
 
     initBuffers()
@@ -36,7 +23,7 @@ class MyPyramid extends CGFobject
         var theta = 2 * Math.PI/this.slices;
 
         // All vertices have to be declared for a given face even if they are shared with others, as the normals in each face will be different
-        for(var i = 0; i < this.slices; i++)
+        for(var i=0; i < this.slices; i++)
         {
             var sa  = Math.sin(ang);
             var saa = Math.sin(ang+theta);

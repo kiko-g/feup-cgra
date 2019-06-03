@@ -21,7 +21,7 @@ class MyCilinder extends CGFobject {
         var theta = 0;
         var alpha = 2 * Math.PI / this.slices;
 
-        for (var i = 0; i < this.slices + 1; i++) {
+        for (var i=0; i < this.slices + 1; i++) {
             this.vertices.push(Math.cos(theta) * this.radius, 0, -Math.sin(theta) * this.radius);
             this.normals.push(Math.cos(theta), Math.cos(Math.PI / 4.0), -Math.sin(theta));
 
@@ -34,7 +34,7 @@ class MyCilinder extends CGFobject {
             theta += alpha;
         }
 
-        for (var i = 0; i < this.slices; i++) {
+        for (var i=0; i < this.slices; i++) {
             this.indices.push(i * 2, i * 2 + 2, i * 2 + 3);
             this.indices.push(i * 2, i * 2 + 3, i * 2 + 1);
         }

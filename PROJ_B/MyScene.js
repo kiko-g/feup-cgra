@@ -21,13 +21,14 @@ class MyScene extends CGFscene
         this.gl.enable(this.gl.CULL_FACE);
         this.gl.depthFunc(this.gl.LEQUAL);
         this.enableTextures(true);
+        this.msNumber = 15; //aprox 67 FPS
         this.setUpdatePeriod(this.msNumber);
         
         
         
         // ==== Initialize scene objects ====
         this.nBranches = 5; //DISPLAYED BRANCHES
-        this.bird = new MyBird(this);
+        this.bird = new MyBird(this, -10, 10, -10);
         this.axis = new CGFaxis(this);
         this.terrain = new MyTerrain(this);
         this.amb = new MyCubeMap(this);
@@ -48,9 +49,9 @@ class MyScene extends CGFscene
         this.enableTex = true;
         this.displayAxis = true;
         this.msNumber = 15; //aprox 67 FPS
-        this.birdSpeed = 2.0;
-        this.birdScale = 1.0;
-        this.sceneLight = 0.6;
+        this.birdSpeedF = 2.0;  //differente from the actual speed of the bird
+        this.birdScaleF = 1.0;  //scale of the bird
+        this.sceneLight = 0.2;  //this may disturb viewing the axis with colors
         this.viewerPos = 0.4;
         
         
@@ -112,7 +113,7 @@ class MyScene extends CGFscene
 
     // ==== INPUT ====
 
-    checkKeys()
+    checkKeys(t)
     {
         var text = "Keys pressed:";
         var keysPressed = false;
@@ -120,29 +121,31 @@ class MyScene extends CGFscene
         if(this.gui.isKeyPressed("KeyW"))       //KEY TO MOVE FORWARD: W
         {
             text += " W "; keysPressed = true;
+            this.bird.accelerate(0.3);
         }
         // ================================
         if (this.gui.isKeyPressed("KeyS"))      //KEY TO MOVE BACKWARDS: S
         {
             text += " S "; keysPressed = true;
+            this.bird.accelerate(-0.3);
         }
         // ================================
         if (this.gui.isKeyPressed("KeyA"))      //KEY TO ROTATE LEFT: A
         {
             text += " A "; keysPressed = true;
-            this.bird.turn(10 * DTR);
+            this.bird.turn(-15 * DTR);
         }
         // ================================
         if (this.gui.isKeyPressed("KeyD"))      //KEY TO ROTATE RIGHT: D
         {
             text += " D "; keysPressed = true;
-            this.bird.turn(-10 * DTR);
+            this.bird.turn(15 * DTR);
         }
         // ================================
         if (this.gui.isKeyPressed("KeyR"))      //KEY TO RESET BIRD: R
         {
             text += " R "; keysPressed = true;
-            this.bird.reset();
+            this.bird.resetBird();
         }
         // ================================
         if (this.gui.isKeyPressed("Digit5"))    //KEY TO STOP BIRD: % --> SHIFT + 5
@@ -151,14 +154,20 @@ class MyScene extends CGFscene
             //make the bird stand still at his current position
             this.bird.standStill();
         }
+        if (this.gui.isKeyPressed("Digit6"))    //KEY TO STOP BIRD: % --> SHIFT + 5
+        {
+            text += " & "; keysPressed = true;
+            this.bird.moveAgain();
+            //to make him move after a stop (%)
+        }
         // ================================
         if (this.gui.isKeyPressed("KeyP"))      //KEY TO ATTEMP TO PICKUP BRANCH / FLY DOWN: P
         {
             text += " P "; keysPressed = true;
-            //if he's casually flying make him fly down (possibly picking up a branch)
             if(this.bird.state == this.bird.states.casual) this.bird.flyDown();
+            //if he's casually flying make him fly down (possibly picking up a branch)
         }
-        // ================================
+        //================================
         if (this.gui.isKeyPressed("KeyL"))      //KEY FOR LIGHTNING: L
         {
             text += " L "; keysPressed = true;
@@ -170,14 +179,13 @@ class MyScene extends CGFscene
 
     update(t)
     {
-        this.checkKeys();
+        this.checkKeys(t);
         this.bird.updateBird(t);
-        this.lightning.update(t);
+        // this.lightning.update(t);
     }
     
     catchBranch()
     {
-
         if (this.bird.treeBranch == null)
         {
             for (var i=0; i < this.nBranches; i++)
@@ -186,12 +194,13 @@ class MyScene extends CGFscene
                 var zComp = (this.bird.z - this.branchesVec[i].z) * (this.bird.z - this.branchesVec[i].z);
                 var distance = Math.sqrt(xComp + zComp);
 
-                if (distance <= this.bird.hitRadius + this.branchesVec[i].hitRadius) {
-                this.bird.addBranch(this.branchesVec[i]);
-                this.branchesVec.splice(i, 1);
-                break;
+                if (distance <= this.bird.targetRadius + this.branchesVec[i].targetRadius)
+                {
+                    this.bird.addBranch(this.branchesVec[i]);
+                    this.branchesVec.splice(i, 1);
+                    break;
                 }
-        }
+            }
         }
         
         //if he already has a branch allow him to drop it off in the nest
@@ -201,7 +210,7 @@ class MyScene extends CGFscene
            var zComp = (this.bird.z - this.nest.z) * (this.bird.z - this.nest.z)
            var distance = Math.sqrt(xComp + zComp);
 
-           if (distance <= this.bird.hitRadius + this.nest.targetRadius)
+           if (distance <= this.bird.targetRadius + this.nest.targetRadius)
            {
               this.nest.addBranch(this.bird.treeBranch);
               this.bird.removeBranch();
@@ -240,8 +249,8 @@ class MyScene extends CGFscene
         this.popMatrix();
         
         this.pushMatrix();
-        this.bird.setScale(this.birdScale);
-        this.bird.setSpeed(this.birdSpeed);
+        this.bird.setScaleFactor(this.birdScaleF);
+        this.bird.setSpeedFactor(this.birdSpeedF);
         this.bird.display();                    //DISPLAY BIRD
         this.popMatrix();
         
@@ -262,7 +271,7 @@ class MyScene extends CGFscene
         this.translate(15, 3.2, -3);
         this.scale(0.6, 0.6, 0.6);
         this.rotate(90*DTR, 0, 1, 0);
-        this.treegroup.display();              //DISPLAY FORREST
+        this.treegroup.display();              //DISPLAY FOREST
         this.popMatrix();
 
         this.pushMatrix();
@@ -273,18 +282,20 @@ class MyScene extends CGFscene
 
         //============================================= BRANCHES
         // this.pushMatrix();
-        // this.translate(16, 6.9, 13);
-        // this.rotate(90 * DTR, 0, 1, 0);
-        // this.branchesVec.display();
-        // this.popMatrix();
+        this.translate(16, 6.9, 13);
+        this.rotate(90 * DTR, 0, 1, 0);
+        for (var i = 0; i < this.nBranches; ++i)
+            this.branchesVec[i].display();
+        this.popMatrix();
 
         //DISPLAYING NEST
         this.pushMatrix();
-        this.translate(-9, -4.5, 14.5); //conflict with nest itself so y is -4.5...
+        this.nest.x = -9; this.nest.y = -4.5; this.nest.z = 14.5
+        this.translate(this.nest.x, this.nest.y, this.nest.z); //conflict with nest itself so y is -4.5...
         this.nest.display();
         this.popMatrix();
         this.pushMatrix();
-        this.translate(-9, 5.5, 14.5);
+        this.translate(this.nest.x, 5.5, this.nest.z);
         this.scale(2, 1, 2);
         this.rotate(-90*DTR, 1, 0, 0);
         this.nestgroundtex.apply();             //NEST GROUND (CIRCLE) 
