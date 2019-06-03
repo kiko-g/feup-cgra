@@ -33,8 +33,14 @@ class MyScene extends CGFscene
         this.terrain = new MyTerrain(this);
         this.amb = new MyCubeMap(this);
         this.branchesVec = [];
+        this.xR = [];
+        this.zR = [];
+        this.rotR = [];
         for (var i = 0; i < this.nBranches; i++)
         {
+            this.xR.push(Math.random() * 3 + 7);                // X between 2 and 3
+            this.zR.push(Math.random() * 3 + 7);                // Y between 2 and 3
+            this.rotR.push(Math.random() * 360 * DTR);          // Angle between 0 and 360
             this.branchesVec.push(new MyTreeBranch(this, "images/wood.jpg", true));
         }
 
@@ -186,36 +192,36 @@ class MyScene extends CGFscene
     
     catchBranch()
     {
-        if (this.bird.treeBranch == null)
-        {
-            for (var i=0; i < this.nBranches; i++)
-            {
-                var xComp = (this.bird.x - this.branchesVec[i].x) * (this.bird.x - this.branchesVec[i].x);
-                var zComp = (this.bird.z - this.branchesVec[i].z) * (this.bird.z - this.branchesVec[i].z);
-                var distance = Math.sqrt(xComp + zComp);
+        // if (this.bird.treeBranch == null)
+        // {
+        //     for (var i=0; i < this.nBranches; i++)
+        //     {
+        //         var xComp = (this.bird.x - this.branchesVec[i].x) * (this.bird.x - this.branchesVec[i].x);
+        //         var zComp = (this.bird.z - this.branchesVec[i].z) * (this.bird.z - this.branchesVec[i].z);
+        //         var distance = Math.sqrt(xComp + zComp);
 
-                if (distance <= this.bird.targetRadius + this.branchesVec[i].targetRadius)
-                {
-                    this.bird.addBranch(this.branchesVec[i]);
-                    this.branchesVec.splice(i, 1);
-                    break;
-                }
-            }
-        }
+        //         if (distance <= this.bird.targetRadius + this.branchesVec[i].targetRadius)
+        //         {
+        //             this.bird.addBranch(this.branchesVec[i]);
+        //             this.branchesVec.splice(i, 1);
+        //             break;
+        //         }
+        //     }
+        // }
         
-        //if he already has a branch allow him to drop it off in the nest
-        else 
-        {
-           var xComp = (this.bird.x - this.nest.x) * (this.bird.x - this.nest.x)
-           var zComp = (this.bird.z - this.nest.z) * (this.bird.z - this.nest.z)
-           var distance = Math.sqrt(xComp + zComp);
+        // //if he already has a branch allow him to drop it off in the nest
+        // else 
+        // {
+        //    var xComp = (this.bird.x - this.nest.x) * (this.bird.x - this.nest.x)
+        //    var zComp = (this.bird.z - this.nest.z) * (this.bird.z - this.nest.z)
+        //    var distance = Math.sqrt(xComp + zComp);
 
-           if (distance <= this.bird.targetRadius + this.nest.targetRadius)
-           {
-              this.nest.addBranch(this.bird.treeBranch);
-              this.bird.removeBranch();
-           }
-        }
+        //    if (distance <= this.bird.targetRadius + this.nest.targetRadius)
+        //    {
+        //       this.nest.addBranch(this.bird.treeBranch);
+        //       this.bird.removeBranch();
+        //    }
+        // }
     }
 
 
@@ -282,10 +288,15 @@ class MyScene extends CGFscene
 
         //============================================= BRANCHES
         // this.pushMatrix();
-        this.translate(16, 6.9, 13);
         this.rotate(90 * DTR, 0, 1, 0);
-        for (var i = 0; i < this.nBranches; ++i)
+        for (var i = 0; i < this.nBranches; i++)
+        {
+            this.pushMatrix();
+            this.translate(this.xR[i], 8, this.zR[i]);
+            this.rotate(this.rotR[i], 0, 1, 0);
             this.branchesVec[i].display();
+            this.popMatrix();
+        }
         this.popMatrix();
 
         //DISPLAYING NEST
