@@ -19,7 +19,7 @@ class MyUnitCubeQuad extends CGFobject
 
     init()
     {
-        this.nearest = true;
+        this.nearest = false;
         this.sidetex = new CGFappearance(this.scene);
         this.sidetex.setAmbient(1, 1, 1, 1);
         this.sidetex.setDiffuse(1, 1, 1, 1);
@@ -68,40 +68,40 @@ class MyUnitCubeQuad extends CGFobject
         if (this.scene.nearestVoxel) this.scene.gl.texParameteri(this.scene.gl.TEXTURE_2D, this.scene.gl.TEXTURE_MAG_FILTER, this.scene.gl.NEAREST);
         else this.scene.gl.texParameteri(this.scene.gl.TEXTURE_2D, this.scene.gl.TEXTURE_MAG_FILTER, this.scene.gl.LINEAR);
         this.quad.display();
-        
         this.scene.popMatrix();
+        
+        
         this.scene.pushMatrix();
-
         this.scene.translate(0.5, 0.5, 1);
         this.quad.display();
-        
         this.scene.popMatrix();
+        
+        
         this.scene.pushMatrix();
-
         this.scene.translate(0, 0.5, 0.5);
         this.scene.rotate(90 * DTR, 0, 1, 0);
         this.quad.display();
-
         this.scene.popMatrix();
-        this.scene.pushMatrix();
 
+        
+        this.scene.pushMatrix();
         this.scene.translate(1, 0.5, 0.5);
         this.scene.rotate(90 * DTR, 0, 1, 0);
         this.quad.display();
-
         this.scene.popMatrix();
-        this.scene.pushMatrix();
 
+        
+        this.scene.pushMatrix();
         this.scene.translate(0.5, 1, 0.5);
         this.scene.rotate(-90 * DTR, 1, 0, 0);
         this.toptex.apply();
         if(this.scene.nearestVoxel) this.scene.gl.texParameteri(this.scene.gl.TEXTURE_2D, this.scene.gl.TEXTURE_MAG_FILTER, this.scene.gl.NEAREST);
         else this.scene.gl.texParameteri(this.scene.gl.TEXTURE_2D, this.scene.gl.TEXTURE_MAG_FILTER, this.scene.gl.LINEAR);        
         this.quad.display();
-
         this.scene.popMatrix();
-        this.scene.pushMatrix();
 
+        
+        this.scene.pushMatrix();
         this.scene.translate(0.5, 0, 0.5);
         this.scene.rotate(-90 * DTR, 1, 0, 0);
         this.bottomtex.apply();

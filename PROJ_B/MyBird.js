@@ -40,13 +40,8 @@ class MyBird extends CGFobject
         this.init();
         this.resetBird();
 
-        //wing variables 
-        this.wingAngle0 = 0*DTR;
-        this.wingAngle  = 0*DTR;         //outside wing initial angle - birdwing - startAangle
-        this.wingVariation = 30 * DTR;    //the variation of the angle when flapping - birdwing - amplitude
-
         //helpful movement variables
-        this.birdrotangle = -90*DTR;
+        this.birdrotangle = 0*DTR;
         this.floatVariation = 360 * DTR / (1000 / scene.msNumber); //wbble rate
         this.floatParameter = 0; //wobble coef
         this.lastUpdate = 0;
@@ -100,17 +95,15 @@ class MyBird extends CGFobject
     
 
     // DISPLAY
-    setWingAngle(factor) { this.wingAngle = this.wingVariation * Math.cos(factor); }
+    setWingAngle(v) { this.wingAngle = this.wingVariation * Math.cos(v); }
     displayOutsideLeftWing() //different methods, because these displays will vary, less confusing
     {
         this.scene.pushMatrix();
-        this.scene.translate(1, 1, 1);
         this.scene.translate(0.2, 0.3, -1.58);
-        this.scene.scale(0.354, 0.5, 0.8);
-        this.scene.scale(0.8, 0.8, 0.8);
+        this.scene.scale(0.354*0.8, 0.5*0.8, 0.8*0.8);
         this.scene.rotate(DTR * 90, 0, 1, 0);           //initial wing setup
         this.scene.rotate(DTR * 90, 1, 0, 0);           //initial wing setup
-        this.scene.rotate(-this.wingAngle - Math.cos(this.wingFlapFactor) * this.wingVariation, 0, 1, 0);     //actual wing movement
+        this.scene.rotate(-this.wingAngle - Math.cos(this.flapwingF) * this.wingVariation, 0, 1, 0);     //actual wing movement
         this.wingstex.apply();                          //Texture for the outside part of the wing
         this.leftwing2.display();                       //DISPLAY LEFT WING 2 (FRONT VIEW)
         this.scene.popMatrix();
@@ -119,30 +112,27 @@ class MyBird extends CGFobject
     displayOutsideRightWing()
     {
         this.scene.pushMatrix();
-        this.scene.translate(1, 1, 1);
         this.scene.translate(0.2, 0.3, 1.58);
-        this.scene.scale(0.354, 0.5, 0.8);
-        this.scene.scale(0.8, 0.8, 0.8);
+        this.scene.scale(0.354*0.8, 0.5*0.8, 0.8*0.8);
         this.scene.rotate(-DTR * 90, 0, 1, 0);          //initial wing setup
         this.scene.rotate(-DTR * 90, 1, 0, 0);          //initial wing setup
-        this.scene.rotate(this.wingAngle + Math.cos(this.wingFlapFactor) * this.wingVariation, 0, 1, 0);     //actual wing movement
+        this.scene.rotate(this.wingAngle + Math.cos(this.flapwingF) * this.wingVariation, 0, 1, 0);     //actual wing movement
         this.wingstex.apply();                          //Texture for the outside part of the wing
         this.rightwing2.display();                      //DISPLAY RIGHT WING 2 (FRONT VIEW)
         this.scene.popMatrix();
     }
 
-    toggleTreeBranch() { if(this.branchPickedUp != null) this.branchPickedUp.display(); }
+    togglePickedBranch() { if(this.branchPickedUp != null) this.branchPickedUp.display(); }
     
     display()
     {
         var r = this.radius;
         this.scene.pushMatrix();
-        this.scene.translate(this.x, this.y, this.z);         // y0 = 5+3 = 8 (ground height is 5)
+        this.scene.translate(this.x, this.y+5, this.z);
         this.scene.scale(this.scaleF, this.scaleF, this.scaleF);
-        this.scene.rotate(-this.birdrotangle, 0, 1, 0);
+        this.scene.rotate(this.birdrotangle, 0, 1, 0);
         //DISPLAYING BODY
         this.scene.pushMatrix();
-        this.scene.translate(1, 1, 1);          //RECENTER (Applied to all)
         this.scene.scale(1.4, 0.8, 1);
         this.scene.rotate(90 * DTR, 1, 0, 0);
         this.mainbirdtex.apply();               //BODY TEX
@@ -150,7 +140,6 @@ class MyBird extends CGFobject
         this.scene.popMatrix();
         
         this.scene.pushMatrix();
-        this.scene.translate(1, 1, 1);
         this.scene.scale(1.4, 0.8, 1);
         this.scene.rotate(-90 * DTR, 1, 0, 0);
         this.scene.rotate(180 * DTR, 0, 0, 1);
@@ -160,15 +149,13 @@ class MyBird extends CGFobject
         
         //DISPLAYING HEAD 
         this.scene.pushMatrix();
-        this.scene.translate(1, 1, 1);
         this.scene.translate(1.25, 0.4, 0);
         this.scene.scale(0.9, 0.9, 0.9);
         this.headtex.apply();                   //head main texture
-        this.mainhead.display();                //cilinder, head 
+        this.mainhead.display();              //cilinder, head 
         this.scene.popMatrix();
         
         this.scene.pushMatrix();
-        this.scene.translate(1, 1, 1);
         this.scene.translate(1.25, 1.03, 0);
         this.scene.scale(0.9, 0.9, 0.9);
         this.scene.scale(r, 0.25, r);
@@ -178,45 +165,36 @@ class MyBird extends CGFobject
         this.scene.popMatrix();
         
         this.scene.pushMatrix();
-        this.scene.translate(1, 1, 1);
         this.scene.translate(1.25, 0.4, 0);
-        this.scene.scale(0.9, 0.9, 0.9);
-        this.scene.scale(r, r, r);
+        this.scene.scale(0.9*r, 0.9*r, 0.9*r);
         this.scene.rotate(90 * DTR, 1, 0, 0);
         this.headtex.apply();                   //head main texture
         this.neck.display();                    //circle to cover head beneath
         this.scene.popMatrix();
         
         this.scene.pushMatrix();
-        this.scene.translate(1, 1, 1);
         this.scene.translate(1.65, 1.0, 0.28);
-        this.scene.scale(0.1, 0.1, 0.1);
-        this.scene.scale(0.8, 0.8, 0.8);
+        this.scene.scale(0.08, 0.08, 0.08);
         this.scene.rotate(-DTR * 90, 0, 0, 1);
         this.eye.display();                     //DISPLAY FIRST EYE
         this.scene.popMatrix();                 //Eye has its own textures (CUBE)
         
         this.scene.pushMatrix();
-        this.scene.translate(1, 1, 1);
         this.scene.translate(1.65, 1.0, -0.38);
-        this.scene.scale(0.1, 0.1, 0.1);
-        this.scene.scale(0.8, 0.8, 0.8);
+        this.scene.scale(0.08, 0.08, 0.08);
         this.scene.rotate(-DTR * 90, 0, 0, 1);
         this.eye.display();                     //DISPLAY SECOND EYE
         this.scene.popMatrix();                 //Eye has its own textures (CUBE)
         
         this.scene.pushMatrix();
-        this.scene.translate(1, 1, 1);
         this.scene.translate(1.8, 0.75, 0);
-        this.scene.scale(0.24, 0.14, 0.14);
-        this.scene.scale(0.8, 0.8, 0.8);
+        this.scene.scale(0.24*0.8, 0.14*0.8, 0.14*0.8);
         this.scene.rotate(-DTR * 90, 0, 0, 1);
         this.nosetex.apply();                   //NOSE TEX
         this.nose.display();                    //DISPLAY NOSE
         this.scene.popMatrix();
         
         this.scene.pushMatrix();
-        this.scene.translate(1, 1, 1);
         this.scene.translate(-1.3, 0, 0);
         this.scene.scale(0.6, 0.1, 0.1);
         this.scene.rotate(DTR * 90, 0, 0, 1);
@@ -226,32 +204,24 @@ class MyBird extends CGFobject
         
         //DISPLAYING WINGS
         this.scene.pushMatrix();
-        this.scene.translate(1, 1, 1);
         this.scene.translate(0.2, 0.2, 1.2);
         this.scene.scale(0.8, 0.8, 0.8);
         this.scene.rotate(-DTR * 105, 1, 0, 0);
-        this.mainbirdtex.apply();               //BODY TEX
+        this.mainbirdtex.apply();               //BODY TEX = INSIDE WING TEX
         this.wing.display();                    //DISPLAY RIGHT WING 1 (FRONT VIEW)
         this.scene.popMatrix();
         
         this.scene.pushMatrix();
-        this.scene.translate(1, 1, 1);
         this.scene.translate(0.2, 0.2, -1.2);
         this.scene.scale(0.8, 0.8, 0.8);
         this.scene.rotate(-DTR * 75, 1, 0, 0);
-        this.mainbirdtex.apply();               //BODY TEX
+        this.mainbirdtex.apply();               //BODY TEX = INSIDE WING TEX
         this.wing.display();                    //DISPLAY LEFT WING 1 (FRONT VIEW)
         this.scene.popMatrix();
         
-        this.scene.pushMatrix();
         this.displayOutsideRightWing();
-        this.scene.popMatrix();
-        this.scene.pushMatrix();
         this.displayOutsideLeftWing();
-        this.scene.popMatrix();
-        this.scene.pushMatrix();
-        this.toggleTreeBranch();
-        this.scene.popMatrix();
+        this.togglePickedBranch();
     }
     // END OF DISPLAY
     
@@ -271,8 +241,8 @@ class MyBird extends CGFobject
     {
         if (t - this.lastUpdate >= 15) // +/- 67 updates per sec (basically FPS) 
         { 
-            this.x += this.birdspeed * Math.sin(this.birdrotangle);
-            this.z += this.birdspeed * Math.cos(this.birdrotangle);
+            this.x += this.birdspeed * Math.cos(this.birdrotangle);
+            this.z += this.birdspeed * (-Math.sin(this.birdrotangle));
             
             switch(this.currentState)
             {
@@ -280,18 +250,18 @@ class MyBird extends CGFobject
                 {
                     this.floatParameter += this.floatVariation;
                     this.floatParameter %= 360*DTR;
-                    this.y += 0.05 * Math.sin(this.floatParameter);
+                    this.y += 0.02 * Math.cos(this.floatParameter);
                     break;
                 }
                 
                 
                 case this.states.flyDown: //case 1
                 {
-                    if (this.y <= 0)
+                    if (this.y >= 5)
                     {
                         this.currentState = this.states.flyUp;
                         this.y += 0.2;
-                        //this.scene.catchBranch();
+                        this.scene.catchBranch();
                     }
                     else this.y -= 0.2;
                     break;
@@ -311,41 +281,44 @@ class MyBird extends CGFobject
                         this.birdspeed = 0;
                         this.wingAngle = 0;
                         this.wingVariation = 25 * DTR;
-                        this.wingFlapFactor = 0;
-                        this.wingFlapMultiplier = 30 * DTR;
+                        this.flapwingF = 0;
+                        this.flapwingFreq = 30 * DTR;
                         break;
                     }
                     break;
                 }
             }
                 
-            this.wingFlapFactor += (this.birdspeed + 0.5) * this.wingFlapMultiplier;
-            this.wingFlapFactor %= 360*DTR;
-            this.setWingAngle(this.wingFlapFactor);
+            this.flapwingF += (this.birdspeed + 0.5) * this.flapwingFreq;
+            this.flapwingF %= 360*DTR;
+            this.setWingAngle(this.flapwingF);
             this.lastUpdate = t;
         }
     }
 
-
-    setSpeedFactor(newspeedfactor){ this.speedFactor = newspeedfactor; }
-    setScaleFactor(newscalefactor){ this.scaleFactor = newscalefactor; }
-    standStill() { this.currentState = this.states.stopped; }                      // %
+    
+    //birdspeed is different from speedFactor
+    //setSpeed(v)
+    setSpeedFactor(v) { this.speedFactor = v; } 
+    setBirdScale(v){ this.scaleF = v; }
+    standStill() { this.currentState = this.states.stopped; }  // %
     moveAgain()
     { 
         this.birdspeed = 0;
         this.birdrotangle = 0;
         this.wingAngle = 0 * DTR;
         this.wingVariation = 25 * DTR;
-        this.wingFlapFactor = 0;
-        this.wingFlapMultiplier = 30 * DTR;
-        this.setSpeed(0.5); this.curentState = this.states.casual; 
+        this.flapwingF = 0;
+        this.flapwingFreq = 30 * DTR;
+        this.setSpeedFactor(0.5);
+        this.curentState = this.states.casual; 
     }   // &
 
-    turn(v) { this.birdrotangle -= v * this.speedFactor; }
+    turn(v) { this.birdrotangle += v * this.speedFactor; }
     accelerate(v)
     {
         var a = v * this.speedFactor;
-        this.birdspeed -= a;
+        this.birdspeed += a;
         this.birdspeed = Math.min(Math.max(this.birdspeed, -Math.abs(a)), Math.abs(a));
     }
 
@@ -358,10 +331,11 @@ class MyBird extends CGFobject
         this.currentState = this.states.casual;
         this.birdspeed = 0;
         this.birdrotangle = 0;
+        this.wingAngle0 = 0 * DTR;
         this.wingAngle = 0*DTR;
-        this.wingVariation = 25 * DTR;
-        this.wingFlapFactor = 0;
-        this.wingFlapMultiplier = 30 * DTR;
+        this.wingVariation = 20 * DTR;
+        this.flapwingF = 0;
+        this.flapwingFreq = 90 * DTR;   //measures "intensity" of flapping
         this.branchPickedUp = null;
     }
 }

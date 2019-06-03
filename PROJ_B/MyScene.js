@@ -21,44 +21,35 @@ class MyScene extends CGFscene
         this.gl.enable(this.gl.CULL_FACE);
         this.gl.depthFunc(this.gl.LEQUAL);
         this.enableTextures(true);
-        this.msNumber = 15; //aprox 67 FPS
+        this.msNumber = 5; //aprox 67 FPS
         this.setUpdatePeriod(this.msNumber);
         
         
         
         // ==== Initialize scene objects ====
         this.nBranches = 5; //DISPLAYED BRANCHES
-        this.bird = new MyBird(this, -10, 10, -10);
-        this.axis = new CGFaxis(this);
-        this.terrain = new MyTerrain(this);
-        this.amb = new MyCubeMap(this);
+        this.bird       = new MyBird(this, 5, 5, 5);
+        this.axis       = new CGFaxis(this);
+        this.terrain    = new MyTerrain(this);
+        this.amb        = new MyCubeMap(this);
         this.branchesVec = [];
-        this.xR = [];
-        this.zR = [];
-        this.rotR = [];
         for (var i = 0; i < this.nBranches; i++)
-        {
-            this.xR.push(Math.random() * 3 + 7);                // X between 2 and 3
-            this.zR.push(Math.random() * 3 + 7);                // Y between 2 and 3
-            this.rotR.push(Math.random() * 360 * DTR);          // Angle between 0 and 360
-            this.branchesVec.push(new MyTreeBranch(this, "images/wood.jpg", true));
-        }
-
-        this.house = new MyHouse(this, "images/oak2.jpg", "images/oak.jpg", "images/door.png", "images/window.jpg", "images/pillar2.jpg"); //textures are configurable here
-        this.treegroup = new MyTreeGroupPatch(this, 3, 60.0, 4, 0.9);
-        this.nest = new MyNest(this, "images/nest.jpg", 25, 2); //make sure to use a amount of edges at least 5 times greater than the radius
+        this.branchesVec.push(new MyTreeBranch(this, "images/wood.jpg", true));
+        
+        this.house      = new MyHouse(this, "images/oak2.jpg", "images/oak.jpg", "images/door.png", "images/window.jpg", "images/pillar2.jpg"); //textures are configurable here
+        this.treegroup  = new MyTreeGroupPatch(this, 3, 60.0, 4, 0.9);
+        this.nest       = new MyNest(this, "images/nest2.jpg", 25, 2.4); //make sure to use a amount of edges at least 5 times greater than the radius
         //notice that the ground of the nest is always a circle so edges of the nest should be above 10 or around that to simulate a circle (25 in our case)
         this.nestground = new MyCircle(this, 10);
-        this.lightning = new MyLightning(this);
-
+        this.lightning  = new MyLightning(this);
+        
         // ==== Objects connected to MyInterface
         this.enableTex = true;
         this.displayAxis = true;
-        this.msNumber = 15; //aprox 67 FPS
-        this.birdSpeedF = 2.0;  //differente from the actual speed of the bird
         this.birdScaleF = 1.0;  //scale of the bird
-        this.sceneLight = 0.2;  //this may disturb viewing the axis with colors
-        this.viewerPos = 0.4;
+        this.birdSpeedF = 1.0;  //differente from the actual speed of the bird
+        this.sceneLight = 0.1;  //this may disturb viewing the axis with colors
+        this.viewerPos = 0.4;   //scene scale
         
         
         // ==== Initializing Materials
@@ -75,7 +66,7 @@ class MyScene extends CGFscene
         this.nestgroundtex.setDiffuse(0.4, 0.4, 0.4, 1);
         this.nestgroundtex.setSpecular(1, 1, 1, 1);
         this.nestgroundtex.setShininess(10);
-        this.nestgroundtex.loadTexture("images/nest2.jpg");
+        this.nestgroundtex.loadTexture("images/nest.jpg");
         this.nestgroundtex.setTextureWrap('REPEAT', 'REPEAT');
         
         // ========== END INIT
@@ -192,36 +183,36 @@ class MyScene extends CGFscene
     
     catchBranch()
     {
-        // if (this.bird.treeBranch == null)
-        // {
-        //     for (var i=0; i < this.nBranches; i++)
-        //     {
-        //         var xComp = (this.bird.x - this.branchesVec[i].x) * (this.bird.x - this.branchesVec[i].x);
-        //         var zComp = (this.bird.z - this.branchesVec[i].z) * (this.bird.z - this.branchesVec[i].z);
-        //         var distance = Math.sqrt(xComp + zComp);
+        if (this.bird.branchPickedUp == null)
+        {
+            for (var i=0; i < this.nBranches; i++)
+            {
+                var cat_distx = (this.bird.x - this.branchesVec[i].x) * (this.bird.x - this.branchesVec[i].x);
+                var cat_distz = (this.bird.z - this.branchesVec[i].z) * (this.bird.z - this.branchesVec[i].z);
+                var distance = Math.sqrt(cat_distx + cat_distz);
 
-        //         if (distance <= this.bird.targetRadius + this.branchesVec[i].targetRadius)
-        //         {
-        //             this.bird.addBranch(this.branchesVec[i]);
-        //             this.branchesVec.splice(i, 1);
-        //             break;
-        //         }
-        //     }
-        // }
+                if (distance <= this.bird.targetRadius + this.branchesVec[i].targetRadius)
+                {
+                    this.bird.getBranch(this.branchesVec[i]);
+                    this.branchesVec.splice(i, 1); //pop 1 counting from i, our current position
+                    break;
+                }
+            }
+        }
         
-        // //if he already has a branch allow him to drop it off in the nest
-        // else 
-        // {
-        //    var xComp = (this.bird.x - this.nest.x) * (this.bird.x - this.nest.x)
-        //    var zComp = (this.bird.z - this.nest.z) * (this.bird.z - this.nest.z)
-        //    var distance = Math.sqrt(xComp + zComp);
+        //if he already has a branch allow him to drop it off in the nest
+        else 
+        {
+           var cat_distx = (this.bird.x - this.nest.x) * (this.bird.x - this.nest.x)
+           var cat_distz = (this.bird.z - this.nest.z) * (this.bird.z - this.nest.z)
+           var distance = Math.sqrt(cat_distx + cat_distz);
 
-        //    if (distance <= this.bird.targetRadius + this.nest.targetRadius)
-        //    {
-        //       this.nest.addBranch(this.bird.treeBranch);
-        //       this.bird.removeBranch();
-        //    }
-        // }
+           if (distance <= this.bird.targetRadius + this.nest.targetRadius)
+           {
+              this.nest.branchContainer.push(this.bird.branchPickedUp);
+              this.bird.rmBranch();
+           }
+        }
     }
 
 
@@ -240,6 +231,7 @@ class MyScene extends CGFscene
         // ---- GUI managed ----
         this.setGlobalAmbientLight(this.sceneLight, this.sceneLight, this.sceneLight, 1);
         this.scale(this.viewerPos, this.viewerPos, this.viewerPos);
+        this.setUpdatePeriod(this.msNumber);
         
         // ---- BEGIN Primitive drawing section =====================================================================================
         this.pushMatrix();
@@ -255,7 +247,7 @@ class MyScene extends CGFscene
         this.popMatrix();
         
         this.pushMatrix();
-        this.bird.setScaleFactor(this.birdScaleF);
+        this.bird.setBirdScale(this.birdScaleF);
         this.bird.setSpeedFactor(this.birdSpeedF);
         this.bird.display();                    //DISPLAY BIRD
         this.popMatrix();
@@ -287,27 +279,26 @@ class MyScene extends CGFscene
         this.popMatrix();
 
         //============================================= BRANCHES
-        // this.pushMatrix();
-        this.rotate(90 * DTR, 0, 1, 0);
+        this.pushMatrix();
         for (var i = 0; i < this.nBranches; i++)
         {
             this.pushMatrix();
-            this.translate(this.xR[i], 8, this.zR[i]);
-            this.rotate(this.rotR[i], 0, 1, 0);
+            this.translate(this.branchesVec[i].x, this.branchesVec[i].y, this.branchesVec[i].z);
+            this.rotate(this.branchesVec[i].rot, 0, 1, 0);
             this.branchesVec[i].display();
             this.popMatrix();
         }
         this.popMatrix();
 
+        //=============================================
         //DISPLAYING NEST
         this.pushMatrix();
-        this.nest.x = -9; this.nest.y = -4.5; this.nest.z = 14.5
-        this.translate(this.nest.x, this.nest.y, this.nest.z); //conflict with nest itself so y is -4.5...
+        this.translate(this.nest.x, this.nest.y, this.nest.z); //conflict with nest itself so y is -4.5...~
         this.nest.display();
         this.popMatrix();
         this.pushMatrix();
-        this.translate(this.nest.x, 5.5, this.nest.z);
-        this.scale(2, 1, 2);
+        this.translate(this.nest.x, this.nest.y, this.nest.z);
+        this.scale(this.nest.r, 1, this.nest.r);
         this.rotate(-90*DTR, 1, 0, 0);
         this.nestgroundtex.apply();             //NEST GROUND (CIRCLE) 
         this.nestground.display();              //DISPLAY NEST

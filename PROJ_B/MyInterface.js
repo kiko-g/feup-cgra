@@ -19,8 +19,8 @@ class MyInterface extends CGFinterface
         settings_dropdown.add(this.scene, 'enableTex').name('Enable Textures');
         settings_dropdown.add(this.scene, 'viewerPos', 0.0, 5.0).name('Viewer Distance (Position)');
         settings_dropdown.add(this.scene, 'sceneLight', 0.0, 1.0).name('Scene Amb Light');
-        settings_dropdown.add(this.scene, 'msNumber', 10, 50).name('Miliseconds Update');
-        // 10 ms ---> 100 FPS            50ms --->     20  FPS
+        settings_dropdown.add(this.scene, 'msNumber', 5, 50).name('Miliseconds Update');
+        // 10 ms ---> 200 FPS            50ms --->     20  FPS
 
         bird_dropdown.add(this.scene, 'birdScaleF', 0.1, 3.0).name('Bird Scale');
         bird_dropdown.add(this.scene, 'birdSpeedF', 0.3, 4.0).name('Bird Speed');
