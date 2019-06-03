@@ -273,18 +273,6 @@ class MyScene extends CGFscene
         this.treegroup.display();              //DISPLAY FOREST
         this.popMatrix();
 
-
-        this.pushMatrix();
-
-        if (this.lightningOn){
-            this.pushMatrix();
-            this.translate(0, 70.0, 0);
-            this.scale(15, 15, 15);
-            this.lightning.display();              //DISPLAY LIGHTNING
-        }
-
-        this.popMatrix();
-
         //============================================= BRANCHES
         this.pushMatrix();
         for (var i = 0; i < this.nBranches; i++)
@@ -312,6 +300,17 @@ class MyScene extends CGFscene
         this.popMatrix();
 
 
+
+        this.pushMatrix();
+
+        if (this.lightningOn){
+            this.translate(0, 70.0, 0);
+            this.scale(15, 15, 15);
+            this.lightning.display();              //DISPLAY LIGHTNING
+        }
+
+        this.popMatrix();
+        
         // ---- END Primitive drawing section =====================================================================================
         if (this.enableTex) this.enableTextures(true);
         else this.enableTextures(false);
