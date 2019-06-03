@@ -169,7 +169,7 @@ class MyScene extends CGFscene
         if (this.gui.isKeyPressed("KeyL"))      //KEY FOR LIGHTNING: L
         {
             text += " L "; keysPressed = true;
-            this.lightning.startAnimation(t, 1000);
+            this.lightning.startAnimation(t);
         }
         // ================================
         if (keysPressed) console.log(text);
@@ -179,7 +179,7 @@ class MyScene extends CGFscene
     {
         this.checkKeys(t);
         this.bird.updateBird(t);
-        // this.lightning.update(t);
+        this.lightning.update(t);
     }
     
     catchBranch()
@@ -273,14 +273,17 @@ class MyScene extends CGFscene
         this.treegroup.display();              //DISPLAY FOREST
         this.popMatrix();
 
-        this.lightning.startAnimation(t);
+
+        this.pushMatrix();
+
         if (this.lightningOn){
             this.pushMatrix();
             this.translate(0, 70.0, 0);
             this.scale(15, 15, 15);
             this.lightning.display();              //DISPLAY LIGHTNING
-            this.popMatrix();
         }
+
+        this.popMatrix();
 
         //============================================= BRANCHES
         this.pushMatrix();
