@@ -239,11 +239,10 @@ class MyBird extends CGFobject
     rmBranch() { this.branchPickedUp = null; }
     updateBird(t) //switch structure for each situation
     {
-        if (t - this.lastUpdate >= 15) // +/- 67 updates per sec (basically FPS) 
+        if (t - 10 >= this.lastUpdate) // 100 updates per sec (basically FPS) 
         { 
-            this.x += this.birdspeed * Math.cos(this.birdrotangle);
-            this.z += this.birdspeed * (-Math.sin(this.birdrotangle));
-            
+            this.z += this.birdspeed * (-Math.sin(this.birdrotangle));  //we dont exactly know why but we had to change the signal
+            this.x += this.birdspeed * Math.cos(this.birdrotangle);     
             switch(this.currentState)
             {
                 case this.states.casual: //case 0
@@ -257,34 +256,30 @@ class MyBird extends CGFobject
                 
                 case this.states.flyDown: //case 1
                 {
-                    if (this.y >= 5)
+                    if(this.y >= 4)
                     {
                         this.currentState = this.states.flyUp;
                         this.y += 0.2;
                         this.scene.catchBranch();
                     }
-                    else this.y -= 0.2;
+                    else this.y -= 0.1;
                     break;
                 }
 
                 case this.states.flyUp: //case 2
                 {
                     if (this.y >= 4) this.currentState = this.states.casual;
-                    else this.y += 0.2;
+                    else this.y += 0.1;
                     break;
                 }
 
                 case this.states.stopped: //case 3
-                {   
-                    if(this.y >= 0)
-                    {
-                        this.birdspeed = 0;
-                        this.wingAngle = 0;
-                        this.wingVariation = 25 * DTR;
-                        this.flapwingF = 0;
-                        this.flapwingFreq = 30 * DTR;
-                        break;
-                    }
+                {
+                    this.birdspeed = 0;
+                    this.wingAngle = 0;
+                    this.wingVariation = 25 * DTR;
+                    this.flapwingF = 0;
+                    this.flapwingFreq = 30 * DTR;
                     break;
                 }
             }
@@ -301,17 +296,11 @@ class MyBird extends CGFobject
     //setSpeed(v)
     setSpeedFactor(v) { this.speedFactor = v; } 
     setBirdScale(v){ this.scaleF = v; }
-    standStill() { this.currentState = this.states.stopped; }  // %
-    moveAgain()
-    { 
-        this.birdspeed = 0;
-        this.birdrotangle = 0;
-        this.wingAngle = 0 * DTR;
-        this.wingVariation = 25 * DTR;
-        this.flapwingF = 0;
-        this.flapwingFreq = 30 * DTR;
-        this.setSpeedFactor(0.5);
-        this.curentState = this.states.casual; 
+    fullStop() { this.currentState = this.states.stopped; }  // %
+    holdStill(t)
+    {   
+        setSpeedFactor(0.5);
+        this.currentState = this.states.casual;
     }   // &
 
     turn(v) { this.birdrotangle += v * this.speedFactor; }
