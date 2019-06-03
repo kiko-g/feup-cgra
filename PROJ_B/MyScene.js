@@ -146,17 +146,17 @@ class MyScene extends CGFscene
             this.bird.resetBird();
         }
         // ================================
-        if (this.gui.isKeyPressed("Digit5"))    //KEY TO STOP BIRD: % --> SHIFT + 5
+        if (this.gui.isKeyPressed("Digit0"))    //KEY TO STOP BIRD: SHIFT + 0 (=) or 0
         {
-            text += " % "; keysPressed = true;
+            text += " 5 "; keysPressed = true;
             //make the bird stand still at his current position
-            this.bird.standStill();
+            //with this your able to control the bird better also (no automatic move)
+            this.bird.fullStop();
         }
-        if (this.gui.isKeyPressed("Digit6"))    //KEY TO STOP BIRD: % --> SHIFT + 5
+        if (this.gui.isKeyPressed("Digit6"))    //KEY TO temp STOP BIRD: SHIFT + 6 (&) or 6
         {
-            text += " & "; keysPressed = true;
-            this.bird.moveAgain();
-            //to make him move after a stop (%)
+            text += " 6 "; keysPressed = true;
+            this.bird.holdStill(t);
         }
         // ================================
         if (this.gui.isKeyPressed("KeyP"))      //KEY TO ATTEMP TO PICKUP BRANCH / FLY DOWN: P
