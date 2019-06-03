@@ -50,7 +50,6 @@ class MyScene extends CGFscene
         this.birdSpeedF = 1.0;  //differente from the actual speed of the bird
         this.sceneLight = 0.1;  //this may disturb viewing the axis with colors
         this.viewerPos = 0.4;   //scene scale
-        this.lightningOn = true;
         
         
         // ==== Initializing Materials
@@ -303,9 +302,9 @@ class MyScene extends CGFscene
 
         this.pushMatrix();
 
-        if (this.lightningOn){
+        if (this.lightning.lightningOn()){
             this.translate(0, 70.0, 0);
-            this.scale(15, 15, 15);
+            this.scale(10, 10, 10);
             this.lightning.display();              //DISPLAY LIGHTNING
         }
 
@@ -315,4 +314,5 @@ class MyScene extends CGFscene
         if (this.enableTex) this.enableTextures(true);
         else this.enableTextures(false);
     }
+
 }

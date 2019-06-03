@@ -136,4 +136,9 @@ class MyLightning extends MyLSystem
     {
         this.raio.enableNormalViz();
     }
+    lightningOn() 
+    { 
+        if (this.time == 0) return false;
+        else return true;
+    }
 }
